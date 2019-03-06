@@ -49,12 +49,12 @@
     <app-breadcrumb></app-breadcrumb>
     <div class="rightside-content-hold" [ngClass]="{'has-footer':isShowFooterConsole}">
       <router-outlet></router-outlet>
-    </div>
-    <div class="footer-console-bar" *ngIf="isShowFooterConsole">
-      <pre #footerBarScroll class="message" (click)="onShowConsolePanel()">{{consoleMsg}}</pre>
-    </div>
+      <div class="footer-console-bar" *ngIf="isShowFooterConsole">
+        <pre #footerBarScroll class="message" (click)="onShowConsolePanel()">{{consoleMsg}}</pre>
+      </div>
+  </div>
   </mat-sidenav-content>
-  <!-- Notificaation bar -->
+  <!-- Notification bar -->
   <mat-sidenav #notificationPanel mode="over" class="" align="end" (open)="onOpenNotify($event)" (close)="onCloseNotify($event)" class="notification-sidenav">
     <div class="navigation-hold" fxLayout="column">
       <app-notifications *ngIf="isSidenotOpen" [notificPanel]="notificationPanel"></app-notifications>

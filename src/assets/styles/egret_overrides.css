@@ -43,7 +43,7 @@ app-breadcrumb{
 .rightside-content-hold {
   padding: 104px .03rem 10%;
   overflow-x: hidden;
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
   display: block;
   position: absolute;
   top: 0;
@@ -52,7 +52,7 @@ app-breadcrumb{
 }
 
 .rightside-content-hold.has-footer {
-  padding: 104px .03rem 10%;
+  /* padding: 104px .03rem 10%; */
 }
 
 @-webkit-keyframes silde_to_top {
