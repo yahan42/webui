@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { T } from '../../translate-marker';
 
@@ -240,4 +240,6 @@ export class NavigationService {
   publishNavigationChange(menuType: string) {
     this.menuItems.next(this.defaultMenu);
   }
+
+  sidenavExpanded = new EventEmitter();
 }
