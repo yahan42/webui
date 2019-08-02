@@ -45,7 +45,7 @@ xpaths = {
 
 }
 
-dataset_list = [f'dataset {x}' for x in range(1001)]
+dataset_list = [f'dataset {x}' for x in range(5)]
 
 
 def test_01_nav_store_pool(browser):
