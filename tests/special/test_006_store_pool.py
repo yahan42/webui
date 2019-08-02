@@ -8,7 +8,7 @@ import time
 cwd = str(os.getcwd())
 sys.path.append(cwd)
 from function import take_screenshot, wait_on_element, error_check
-
+from rest import post
 from source import pool1, pool2
 
 
@@ -45,7 +45,7 @@ xpaths = {
 
 }
 
-dataset_list = [f'dataset {x}' for x in range(5)]
+dataset_list = [f'dataset {x}' for x in range(1001)]
 
 
 def test_01_nav_store_pool(browser):
@@ -82,8 +82,10 @@ def test_02_create_a_pool(browser):
     browser.find_element_by_xpath(xpaths['forwardButton']).click()
     # Enter User Full name
     browser.find_element_by_xpath(xpaths['newpoolName']).send_keys(pool1)
-    # Select the disk
+    # Select the 3 disk
     browser.find_element_by_xpath(xpaths['disk1Checkbox']).click()
+    browser.find_element_by_xpath(xpaths['disk2Checkbox']).click()
+    browser.find_element_by_xpath(xpaths['disk3Checkbox']).click()
     # Select the disk
     browser.find_element_by_xpath(xpaths['diskselectedmoveButton']).click()
     # Click on create new Pool button
@@ -115,59 +117,10 @@ def test_03_looking_if_the_new_pool_exist(browser):
     take_screenshot(browser, script_name, test_name)
 
 
-def test_04_create_newpool2(browser):
-    test_name = sys._getframe().f_code.co_name
-    time.sleep(1)
-    # Click create new pool option
-    browser.find_element_by_xpath(xpaths['addAction']).click()
-    # Click create Pool Button
-    browser.find_element_by_xpath(xpaths['forwardButton']).click()
-    # Enter User Full name
-    browser.find_element_by_xpath(xpaths['newpoolName']).send_keys(pool2)
-    # Select the 2 disks
-    browser.find_element_by_xpath(xpaths['disk2Checkbox']).click()
-    browser.find_element_by_xpath(xpaths['disk3Checkbox']).click()
-    # Select the disk
-    browser.find_element_by_xpath(xpaths['diskselectedmoveButton']).click()
-    # Click on create new Pool button
-    browser.find_element_by_xpath(xpaths['createButton']).click()
-    # check box confirmation
-    browser.find_element_by_xpath(xpaths['confirmCheckbox']).click()
-    # Click OK Button
-    browser.find_element_by_xpath(xpaths['createpoolButton']).click()
-    xpath = xpaths['addAction']
-    wait = wait_on_element(browser, xpath, script_name, test_name)
-    assert wait, f'Creating the new pool {pool2} timeout'
-    # taking screenshot
-    take_screenshot(browser, script_name, test_name)
-    no_error = error_check(browser)
-    assert no_error['result'], no_error['traceback']
-
-
-def test_05_looking_if_the_new_pool_exist(browser):
-    test_name = sys._getframe().f_code.co_name
-    xpath = xpaths['pool2Table']
-    wait = wait_on_element(browser, xpath, script_name, test_name)
-    assert wait, 'Loading pool table timeout'
-    # get the ui element
-    ui_element = browser.find_element_by_xpath(xpaths['pool2Table'])
-    element_text = ui_element.text
-    # assert response
-    assert pool2 in element_text, element_text
-    # taking screenshot
-    take_screenshot(browser, script_name, test_name)
-
-
 @pytest.mark.parametrize('dataset', dataset_list)
-def test_06_created_dataset_name_(browser, dataset):
-    test_name = sys._getframe().f_code.co_name
-    xpath = xpaths['pool2MatIcon']
-    wait_element = wait_on_element(browser, xpath, script_name, test_name)
-    assert wait_element, f'Wait on element timeout: {xpath}'
-    browser.find_element_by_xpath(xpaths['pool2MatIcon']).click()
-    browser.find_element_by_xpath(xpaths['pool2AddDataset']).click()
-    browser.find_element_by_xpath(xpaths['datasetName']).send_keys(dataset)
-    browser.find_element_by_xpath(xpaths['saveDataset']).click()
+def test_04_created_dataset_name_(browser, dataset):
+    results = post("/pool/dataset/", {"name": f"{pool1}/{dataset}"})
+    assert results.status_code == 200, results.text
 
 
 def test_06_return_to_dashboard(browser):

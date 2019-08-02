@@ -1,11 +1,11 @@
 import requests
 import json
 from config import ip
-from source import user, password
+from source import username, password
 
 header = {'Content-Type': 'application/json', 'Vary': 'accept'}
-authentification = (user, password)
-api_url = f"{ip}/api/v2.0"
+authentification = (username, password)
+api_url = f"http://{ip}/api/v2.0"
 
 
 def get(testpath):
