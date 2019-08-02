@@ -166,14 +166,11 @@ def test_06_created_dataset_name_(browser, dataset):
     assert wait_element, f'Wait on element timeout: {xpath}'
     browser.find_element_by_xpath(xpaths['pool2MatIcon']).click()
     browser.find_element_by_xpath(xpaths['pool2AddDataset']).click()
-    xpath = xpaths['datasetName']
-    wait_element = wait_on_element(browser, xpath, script_name, test_name)
-    assert wait_element, f'Wait on element timeout: {xpath}'
     browser.find_element_by_xpath(xpaths['datasetName']).send_keys(dataset)
     browser.find_element_by_xpath(xpaths['saveDataset']).click()
 
 
-def test_07_return_to_dashboard(browser):
+def test_06_return_to_dashboard(browser):
     # Close the System Tab
     browser.find_element_by_xpath(xpaths['toDashboard']).click()
     time.sleep(1)

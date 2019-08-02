@@ -6,8 +6,8 @@ import os
 import time
 cwd = str(os.getcwd())
 sys.path.append(cwd)
-from function import take_screenshot, pool1, pool2, wait_on_element
-from function import is_element_present
+from source import pool1, pool2
+from function import take_screenshot, wait_on_element, is_element_present
 
 skip_mesages = "Skipping first run"
 script_name = os.path.basename(__file__).partition('.')[0]
