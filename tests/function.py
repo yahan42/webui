@@ -1,12 +1,10 @@
 # /usr/bin/env python3.6
 
-from source import *
+import os
+from time import sleep
 from subprocess import run, PIPE
-
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
-import os
-import time
 
 cwd = str(os.getcwd())
 
@@ -85,7 +83,7 @@ def wait_on_element(driver, xpath, scriptname, testname):
             return False
         else:
             num += 1
-        time.sleep(1)
+        sleep(1)
     return True
 
 
@@ -109,7 +107,7 @@ def error_check(driver):
 
 # screenshot function
 def take_screenshot(driver, scriptname, testname):
-    time.sleep(1)
+    sleep(1)
     png_file = cwd + "/screenshot/" + scriptname + "-" + testname + ".png"
     driver.save_screenshot(png_file)
 
@@ -129,7 +127,7 @@ def status_check(driver, which):
 
 def status_change(driver, which):
     driver.find_element_by_xpath(services_switch_xpath[which]).click()
-    time.sleep(2)
+    sleep(2)
     if is_element_present(driver, xpaths['turnoffConfirm']):
         driver.find_element_by_xpath(xpaths['turnoffConfirm']).click()
-        time.sleep(2)
+        sleep(2)
