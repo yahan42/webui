@@ -1,6 +1,7 @@
 # Author: Rishabh Chauhan
 # License: BSD
 
+import pytest
 import sys
 import os
 import time
@@ -36,8 +37,15 @@ xpaths = {
     'breadcrumbBar2': "//*[@id='breadcrumb-bar']/ul/li[2]/a",
     'pool1Table': f"//mat-panel-title[contains(.,'{pool1}')]",
     'pool2Table': f"//mat-panel-title[contains(.,'{pool2}')]",
-    'toDashboard': "//span[contains(.,'Dashboard')]"
+    'toDashboard': "//span[contains(.,'Dashboard')]",
+    'pool2MatIcon': f"//mat-icon[@id='actions_menu_button__{pool2}']",
+    'pool2AddDataset': f"//span[@id='action_button__{pool2}_Add Dataset']/button/span",
+    'datasetName': "//input[@placeholder='Name']",
+    'saveDataset': "//button[@id='save_button']"
+
 }
+
+dataset_list = [f'dataset {x}' for x in range(1001)]
 
 
 def test_01_nav_store_pool(browser):
@@ -148,6 +156,18 @@ def test_05_looking_if_the_new_pool_exist(browser):
     assert pool2 in element_text, element_text
     # taking screenshot
     take_screenshot(browser, script_name, test_name)
+
+
+@pytest.mark.parametrize('dataset', dataset_list)
+def test_06_created_dataset_name_(browser, dataset):
+    test_name = sys._getframe().f_code.co_name
+    xpath = xpaths['pool2MatIcon']
+    wait_element = wait_on_element(browser, xpath, script_name, test_name)
+    assert wait_element, f'Wait on element timeout: {xpath}'
+    browser.find_element_by_xpath(xpaths['pool2MatIcon']).click()
+    browser.find_element_by_xpath(xpaths['pool2AddDataset']).click()
+    browser.find_element_by_xpath(xpaths['datasetName']).send_keys(dataset)
+    browser.find_element_by_xpath(xpaths['saveDataset']).click()
 
 
 def test_06_return_to_dashboard(browser):
