@@ -1439,4 +1439,19 @@ $primary-dark: darken( map-get($md-primary, 500), 8% );
 
   // end of reset encryption form
 
+
+  .doc-guilabel {
+    background-color: #e6ede9;
+    display: inline;
+    font-family:'Inconsolata', monospace, "materialdesignicons";
+    font-size: 100%;
+    color: black;
+    padding-right: 1px;
+    padding-left: 1px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
  } // end of ix theme

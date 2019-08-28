@@ -79,7 +79,7 @@ export const helptext_system_general = {
 
   stg_timezone: {
     placeholder: T("Timezone"),
-    tooltip: T("Select a time zone.")
+    tooltip: T('Select a <p class="doc-guilabel">time zone</p>.')
   },
 
   stg_sysloglevel: {
