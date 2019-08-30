@@ -4,7 +4,7 @@ from config import ip
 from source import username, password
 
 header = {'Content-Type': 'application/json', 'Vary': 'accept'}
-authentification = (username, password)
+authentification = (username, 'abcd1234')
 api_url = f"http://{ip}/api/v2.0"
 
 
