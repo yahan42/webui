@@ -20,7 +20,7 @@ def test_01_setting_auxilary_parameters_for_mount_smbfs():
 @pytest.mark.parametrize('dataset', dataset_list)
 def test_02_creating_a_smb_share_with_(dataset):
     payload = {"comment": "My Test SMB Share",
-               "path": f'/tmp/{pool1}/{dataset}',
+               "path": f'/mnt/{pool1}/{dataset}',
                "name": f'smb share {dataset.split()[1]}',
                "guestok": True,
                "vfsobjects": ["streams_xattr"]}
