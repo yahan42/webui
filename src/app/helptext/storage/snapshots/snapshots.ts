@@ -13,6 +13,9 @@ snapshot_add_name_tooltip: T('Add a name for the new snapshot'),
 snapshot_add_naming_schema_placeholder: T('Naming Schema'),
 snapshot_add_naming_schema_tooltip: T('Add a naming schema for the new snapshot'),
 
+snapshot_add_new_naming_schema_placeholder: T('New Naming Schema'),
+snapshot_add_new_naming_schema_tooltip: T(''),
+
 snapshot_add_recursive_placeholder: T('Recursive'),
 snapshot_add_recursive_tooltip: T('Set to include child datasets of the chosen dataset.'),
 

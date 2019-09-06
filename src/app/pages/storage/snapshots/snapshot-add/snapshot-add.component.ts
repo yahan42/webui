@@ -1,4 +1,4 @@
-import { AfterViewInit, ApplicationRef, Component, Injector } from '@angular/core';
+import { AfterViewInit, ApplicationRef, Component, Injector, OnDestroy } from '@angular/core';
 import { FormControl, ValidatorFn } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { T } from 'app/translate-marker';
@@ -14,13 +14,16 @@ import { EntityUtils } from '../../../common/entity/utils';
   templateUrl: './snapshot-add.component.html'
 })
 
-export class SnapshotAddComponent implements AfterViewInit, Formconfiguration {
+export class SnapshotAddComponent implements AfterViewInit, Formconfiguration, OnDestroy {
   public route_success = ['storage', 'snapshots'];
   public isEntity = true;
   public isNew = true;
   public fieldConfig: FieldConfig[] = [];
   public initialized = true;
   public addCall = 'zfs.snapshot.create';
+
+  protected naming_schema_subscription: any;
+  protected naming_schema_fg: any;
 
   private entityForm: EntityFormComponent;
   private nameValidator: ValidatorFn;
@@ -59,6 +62,16 @@ export class SnapshotAddComponent implements AfterViewInit, Formconfiguration {
         onChangeOption: this.updateNameValidity.bind(this)
       },
       {
+        type: 'input',
+        name: 'new_naming_schema',
+        placeholder: helptext.snapshot_add_new_naming_schema_placeholder,
+        tooltip: helptext.snapshot_add_new_naming_schema_tooltip,
+        isHidden: true,
+        disabled: true,
+        value: 'auto-%Y-%m-%d_%H-%M',
+        blurEvent: this.updateNameValidity.bind(this)
+      },
+      {
         type: 'checkbox',
         name: 'recursive',
         value: false,
@@ -91,7 +104,8 @@ export class SnapshotAddComponent implements AfterViewInit, Formconfiguration {
         options => {
           this.fieldConfig.find(config => config.name === "naming_schema").options = [
             { label: "---", value: undefined },
-            ...options
+            ...options,
+            { label: "Create New", value: "create_new"}
           ];
         },
         error => new EntityUtils().handleWSError(this, error, this.dialog)
@@ -104,6 +118,7 @@ export class SnapshotAddComponent implements AfterViewInit, Formconfiguration {
     const nameControl = this.entityForm.formGroup.get('name');
     const nameConfig = this.fieldConfig.find(config => config.name === 'name');
     const namingSchemaControl = this.entityForm.formGroup.get('naming_schema');
+    const newNamingSchemaControl = this.entityForm.formGroup.get('new_naming_schema');
 
     this.nameValidator = (nc: FormControl): { [error_key: string]: string } | null => {  
       if (!!nc.value && !!namingSchemaControl.value) {
@@ -112,8 +127,12 @@ export class SnapshotAddComponent implements AfterViewInit, Formconfiguration {
           duplicateNames: T('Name and Naming Schema cannot be provided at the same time.')
         }
       }
-  
-      if (!nc.value && !namingSchemaControl.value) {
+ 
+      console.log(newNamingSchemaControl);
+      if (!nc.value && 
+            (!namingSchemaControl.value 
+             || (namingSchemaControl.value === 'create_new'
+                 && !newNamingSchemaControl.value))) {
         nameConfig.hasErrors = nc.touched;
         return {
           nameRequired: T('Name or Naming Schema must be provided.')
@@ -125,6 +144,11 @@ export class SnapshotAddComponent implements AfterViewInit, Formconfiguration {
     }
 
     nameControl.setValidators(this.nameValidator.bind(this));
+
+    this.naming_schema_subscription = namingSchemaControl.valueChanges.subscribe(value => {
+      const new_naming_schema = (value !== 'create_new');
+      this.entityForm.setDisabled('new_naming_schema', new_naming_schema, new_naming_schema);
+    });
   }
 
   beforeSubmit(snapshot): void {
@@ -132,10 +156,18 @@ export class SnapshotAddComponent implements AfterViewInit, Formconfiguration {
       delete snapshot.name;
     } else if (!snapshot.naming_schema) {
       delete snapshot.naming_schema;
+    } 
+    if (snapshot.naming_schema === 'create_new') {
+      snapshot.naming_schema = snapshot.new_naming_schema;
+      delete snapshot.new_naming_schema;
     }
   }
 
   updateNameValidity() {
     this.entityForm.formGroup.get('name').updateValueAndValidity();
+  }
+
+  ngOnDestroy() {
+    this.naming_schema_subscription.unsubscribe();
   }
 }
