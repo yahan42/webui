@@ -140,15 +140,15 @@
   </div>
 
   <!-- DATATABLE START -->
-  <div class="no-padding">
+  <div class="no-padding" [ngClass]="{'desktop': globalRowHeight == 36}">
     <ngx-datatable *ngIf="showDefaults" class='material expandable' 
       [rows]='currentRows' 
       [columns]="conf.columns" 
       [columnMode]="'force'" 
       [columnWidth]="'auto'"
-      [headerHeight]="'50'" 
-      [footerHeight]="'50'" 
-      [rowHeight]="50" 
+      [headerHeight]="globalRowHeight" 
+      [footerHeight]="globalRowHeight" 
+      [rowHeight]="globalRowHeight" 
       [reorderable]="true"
       [limit]="paginationPageSize" 
       [externalPaging]="true"

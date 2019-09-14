@@ -98,6 +98,11 @@ export class EntityTableComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('defaultMultiActions', { static: false}) defaultMultiActions: ElementRef;
   @ViewChild('entityTable', { static: false}) table: any;
 
+  // Media Query from FlexLayout
+  public mqAlias: string;
+  private _globalRowHeight: number = 36;
+  get globalRowHeight() { return this._globalRowHeight;}
+
   // MdPaginator Inputs
   public paginationPageSize: number = 8;
   public paginationPageSizeOptions = [5, 10, 20, 100, 1000];
@@ -108,7 +113,7 @@ export class EntityTableComponent implements OnInit, AfterViewInit, OnDestroy {
   public displayedColumns: string[] = [];
   public busy: Subscription;
   public columns: Array<any> = [];
-  public rowHeight = 50;
+  public rowHeight = this._globalRowHeight;
   public zoomLevel: number;
   public tableHeight:number = (this.paginationPageSize * this.rowHeight) + 100;
   public windowHeight: number;
@@ -164,10 +169,27 @@ export class EntityTableComponent implements OnInit, AfterViewInit, OnDestroy {
     protected _eRef: ElementRef, protected dialogService: DialogService, protected loader: AppLoaderService, 
     protected erdService: ErdService, protected translate: TranslateService, protected snackBar: MatSnackBar,
     public sorter: StorageService, protected job: JobService, protected prefService: PreferencesService) { 
+
       this.core.register({observerClass:this, eventName:"UserPreferencesChanged"}).subscribe((evt:CoreEvent) => {
         this.multiActionsIconsOnly = evt.data.preferIconsOnly;
       });
+
       this.core.emit({name:"UserPreferencesRequest"}); 
+
+      this.core.register({observerClass:this, eventName:"MediaChange"}).subscribe((evt:CoreEvent) => {
+        this.mqAlias = evt.data.mqAlias;
+        switch(this.mqAlias){
+          case 'xs':
+          case 'sm':
+            this._globalRowHeight = 48;
+            break;
+        default:
+          this._globalRowHeight = 36;
+        }
+        //this.table.recalculate();
+        //this.setPaginationInfo();
+        //this.setTableHeight();
+      });
   }
 
   ngOnDestroy(){

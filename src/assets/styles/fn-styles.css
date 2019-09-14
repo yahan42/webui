@@ -1390,3 +1390,17 @@ body.safari-platform .mat-raised-button {
     line-height: 1 !important;
     font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace !important;
 }
+
+.desktop .datatable-header-inner{
+  height:auto;
+}
+
+.desktop .datatable-header-cell-label{
+  top:0;
+}
+
+.desktop .datatable-header-cell-wrapper,
+.desktop .datatable-header-cell-label,
+.desktop .datatable-body-cell-label {
+  padding:0;
+}
