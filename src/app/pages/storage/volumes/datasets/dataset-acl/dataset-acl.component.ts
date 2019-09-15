@@ -1,6 +1,5 @@
 import {
   Component,
-  OnInit,
   OnDestroy,
 } from '@angular/core';
 import {
@@ -27,9 +26,9 @@ import { ConfirmDialog } from 'app/pages/common/confirm-dialog/confirm-dialog.co
 
 @Component({
   selector : 'app-dataset-acl',
-  template : `<entity-form *ngIf="requiredData.length == 2" [conf]="this"></entity-form>`
+  template : `<entity-form [conf]="this"></entity-form>`
 })
-export class DatasetAclComponent implements OnInit, OnDestroy {
+export class DatasetAclComponent implements OnDestroy {
 
   protected queryCall = 'filesystem.getacl';
   protected updateCall = 'filesystem.setacl';
@@ -58,15 +57,6 @@ export class DatasetAclComponent implements OnInit, OnDestroy {
   protected dialogRef: any
   protected route_success: string[] = [ 'storage', 'pools' ];
   public save_button_enabled = true;
-
-  public requiredData: string[] = [];
-  /*get formReady(){
-    return this.requiredData.length == 2;
-  }*/
-  public cachedOptions: any[] = []; // default_acl_choices
-  public acl_is_trivial: any;
-  //public ready:boolean = false;
-
 
   public fieldSetDisplay  = 'default';//default | carousel | stepper
   public fieldConfig: FieldConfig[] = [];
@@ -283,33 +273,9 @@ export class DatasetAclComponent implements OnInit, OnDestroy {
               protected storageService: StorageService, protected dialogService: DialogService,
               protected loader: AppLoaderService, protected dialog: MatDialog) {}
 
-  ngOnInit(){
-    this.preFetch();
-  }
-
-  preFetch(){
-    this.ws.call('filesystem.default_acl_choices').subscribe((res) => {
-      //this.defaults = _.find(this.fieldConfig, {"name": "default_acl_choices"});
-      res.forEach((item) => {
-        this.cachedOptions.push({label : item, value : item});
-      });
-      this.requiredData.push("default_acl_choices");
-    });
-
-    console.log(this.aroute);
-    this.path = this.aroute.params.value ? '/mnt/' + this.aroute.params.value.path : '/mnt/' + this.aroute.params.path;
-    console.log(this.path);
-    this.ws.call('filesystem.acl_is_trivial', [this.path]).subscribe(acl_is_trivial => {
-      this.acl_is_trivial = acl_is_trivial;
-      this.requiredData.push("acl_is_trivial");
-    }, (err) => {
-      //new EntityUtils().handleWSError(this.entityForm, err);
-    });
-  }
-
   preInit(entityEdit: any) {
     this.sub = this.aroute.params.subscribe(params => {
-      //this.path = '/mnt/' + params['path'];
+      this.path = '/mnt/' + params['path'];
       const path_fc = _.find(this.fieldSets[0].config, {name:'path'});
       path_fc.value = this.path;
       this.pk = this.path;
@@ -336,24 +302,13 @@ export class DatasetAclComponent implements OnInit, OnDestroy {
       const gid_fc = _.find(this.fieldConfig, {"name": "gid"});
       gid_fc.options = this.groupOptions;
     });
-
-    this.defaults = _.find(this.fieldConfig, {"name": "default_acl_choices"});
-    console.log(this.fieldConfig);
-    if(this.fieldConfig.length > 0 && this.defaults){
-      this.defaults.options.concat(this.cachedOptions);
-    } else {
-      console.warn("No default acl choices");
-      return;
-    }
-    /*this.ws.call('filesystem.default_acl_choices').subscribe((res) => {
+    this.ws.call('filesystem.default_acl_choices').subscribe((res) => {
       this.defaults = _.find(this.fieldConfig, {"name": "default_acl_choices"});
       res.forEach((item) => {
         this.defaults.options.push(
             {label : item, value : item});
       });
-      //this.requiredData.push("default_acl_choices")
-      console.log("default_acl_choices");
-    });*/
+    });
   }
 
   afterInit(entityEdit: any) {
@@ -370,16 +325,11 @@ export class DatasetAclComponent implements OnInit, OnDestroy {
         });
       }
     });
-
-    this.entityForm.setDisabled('stripacl', this.acl_is_trivial);
-    /*this.ws.call('filesystem.acl_is_trivial', [this.path]).subscribe(acl_is_trivial => {
+    this.ws.call('filesystem.acl_is_trivial', [this.path]).subscribe(acl_is_trivial => {
       this.entityForm.setDisabled('stripacl', acl_is_trivial);
-      //this.requiredData.push("acl_is_trivial")
-      console.log("acl_is_trivial");
     }, (err) => {
       new EntityUtils().handleWSError(this.entityForm, err);
-    });*/
-
+    });
     this.stripacl = entityEdit.formGroup.controls['stripacl'];
     this.stripacl_subscription = this.stripacl.valueChanges.subscribe((value) => {
       if (value === true) {
@@ -476,7 +426,6 @@ export class DatasetAclComponent implements OnInit, OnDestroy {
         this.aces.removeAt(num)
       }
       this.ws.call('filesystem.get_default_acl', [value]).subscribe((res) => {
-        console.log(res);
         this.dataHandler(this.entityForm, res);
       });
     });
@@ -491,7 +440,7 @@ export class DatasetAclComponent implements OnInit, OnDestroy {
 
     this.loader.open();
     const res = entityForm.queryResponse;
-    if (defaults) {
+    if (defaults && res) {
       res.acl = defaults;
     }
     const user = await this.userService.getUserObject(res.uid);
@@ -572,8 +521,6 @@ export class DatasetAclComponent implements OnInit, OnDestroy {
       }
     }
     this.loader.close();
-    console.log("LOADER DONE");
-    
   }
 
   ngOnDestroy() {
