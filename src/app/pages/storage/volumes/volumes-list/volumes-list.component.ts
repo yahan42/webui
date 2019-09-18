@@ -25,6 +25,7 @@ import { CoreService } from 'app/core/services/core.service';
 import { SnackbarService } from '../../../../services/snackbar.service';
 import { map, switchMap } from 'rxjs/operators';
 import { PreferencesService } from 'app/core/services/preferences.service';
+import { MessageService } from '../../../common/entity/entity-form/services/message.service';
 
 export interface ZfsPoolData {
   avail?: number;
@@ -91,6 +92,7 @@ export class VolumesListTableConfig implements InputTableConf {
   private vmware_res_status: boolean;
   public dialogConf: DialogFormConfiguration;
   public restartServices = false;
+  protected subs;
 
   constructor(
     private parentVolumesListComponent: VolumesListComponent,
@@ -106,7 +108,8 @@ export class VolumesListTableConfig implements InputTableConf {
     protected translate: TranslateService,
     protected snackBar: MatSnackBar,
     protected snackbarService: SnackbarService,
-    protected storageService: StorageService
+    protected storageService: StorageService,
+    protected messageService: MessageService,
   ) {
 
     if (typeof (this._classId) !== "undefined" && this._classId !== "") {
@@ -133,8 +136,8 @@ export class VolumesListTableConfig implements InputTableConf {
 
   getEncryptedActions(rowData: any) {
     const actions = [],
-    localLoader = this.loader, localRest = this.rest, localDialogService = this.dialogService,
-      localResourceName = this.resource_name, localParentVolumesList = this.parentVolumesListComponent;
+      localDialogService = this.dialogService,
+      localParentVolumesList = this.parentVolumesListComponent, localDialog = this.mdDialog;
 
     if (rowData.vol_encrypt === 2) {
       if (rowData.is_decrypted) {
@@ -156,16 +159,18 @@ export class VolumesListTableConfig implements InputTableConf {
                 saveButtonText: T("Lock Pool"),
                 customSubmit: function (entityDialog) {
                   const value = entityDialog.formValue;
-                  localLoader.open();
-                  localRest.post(localResourceName + "/" + row1.name + "/lock/",
-                    { body: JSON.stringify({passphrase : value.passphrase}) }).subscribe((restPostResp) => {
-                      entityDialog.dialogRef.close(true);
-                      localLoader.close();
-                      localParentVolumesList.repaintMe();
-                  }, (res) => {
+                  const dialogRef = localDialog.open(EntityJobComponent, {data: {"title":T("Locking Pool")}, disableClose: true});
+                  dialogRef.componentInstance.setDescription(T("Locking Pool..."));
+                  dialogRef.componentInstance.setCall("pool.lock", [row1.id, value.passphrase]);
+                  dialogRef.componentInstance.submit();
+                  dialogRef.componentInstance.success.subscribe(res=>{
                     entityDialog.dialogRef.close(true);
-                    localLoader.close();
-                    localDialogService.errorReport(T("Error locking pool."), res.message, res.stack);
+                    dialogRef.close(true);
+                    localParentVolumesList.repaintMe();
+                  });
+                  dialogRef.componentInstance.failure.subscribe((res) => {
+                    dialogRef.close(false);
+                    new EntityUtils().handleWSError(this, res, localDialogService);
                   });
                 }
               }
@@ -228,9 +233,15 @@ export class VolumesListTableConfig implements InputTableConf {
   unlockAction(row1) {
     const localLoader = this.loader,
     localRest = this.rest,
+    localWs = this.ws,
     localParentVol = this.parentVolumesListComponent,
     localDialogService = this.dialogService,
-    localSnackBar = this.snackBar
+    localDialog = this.mdDialog,
+    localUpdater = this.updater,
+    localSnackBar = this.snackBar,
+    localMessage = this.messageService
+
+    const self = this;
 
     this.storageService.poolUnlockServiceChoices().pipe(
       map(serviceChoices => {
@@ -245,12 +256,19 @@ export class VolumesListTableConfig implements InputTableConf {
               placeholder: helptext.unlockDialog_password_placeholder,
             },
             {
-              type: 'input',
+              type: 'upload',
               name: 'recovery_key',
               placeholder: helptext.unlockDialog_recovery_key_placeholder,
               tooltip: helptext.unlockDialog_recovery_key_tooltip,
-              inputType: 'file',
-              fileType: 'binary'
+              fileLocation: '',
+              message: localMessage,
+              updater: function(file: any, parent: any) {
+                const fileBrowser = file.fileInput.nativeElement;
+                if (fileBrowser.files && fileBrowser.files[0]) {
+                  parent.subs = {"apiEndPoint":file.apiEndPoint, "file": fileBrowser.files[0]}
+                }
+              },
+              parent: this,
             },
             {
               type: 'select',
@@ -266,21 +284,31 @@ export class VolumesListTableConfig implements InputTableConf {
           saveButtonText: T("Unlock"),
           customSubmit: function (entityDialog) {
             const value = entityDialog.formValue;
-            localLoader.open();
-            return localRest.post("storage/volume/" + row1.name + "/unlock/",
-              { body: JSON.stringify({
-                passphrase: value.passphrase,
-                recovery_key: value.recovery_key,
-                services: value.services
-                })
-              }).subscribe((restPostResp) => {
+            const dialogRef = localDialog.open(EntityJobComponent, {data: {"title":T("Unlocking Pool")}, disableClose: true});
+            dialogRef.componentInstance.setDescription(T("Unlocking Pool..."));
+            const params = [row1.id, {passphrase: value.passphrase, recoverykey: false, services_restart: value.services}];
+            if (value.recovery_key) {
+              params['recoverykey'] = true;
+              const formData: FormData = new FormData();
+              formData.append('data', JSON.stringify({
+                "method": "pool.unlock",
+                "params": params
+              }));
+              formData.append('file', self.subs.file);
+          
+              dialogRef.componentInstance.wspost(self.subs.apiEndPoint, formData)
+            } else {
+              dialogRef.componentInstance.setCall("pool.unlock", params);
+              dialogRef.componentInstance.submit();
+            }
+            dialogRef.componentInstance.success.subscribe(res=>{
               entityDialog.dialogRef.close(true);
-              localLoader.close();
+              dialogRef.close(true);
               localParentVol.repaintMe();
-              localSnackBar.open(row1.name + " has been unlocked.", 'close', { duration: 5000 });
-            }, (res) => {
-              localLoader.close();
-              localDialogService.errorReport(T("Error Unlocking"), res.error.error_message, res.error.traceback);
+            });
+            dialogRef.componentInstance.failure.subscribe((res) => {
+              dialogRef.close(false);
+              new EntityUtils().handleWSError(this, res, localDialogService);
             });
           }
         };
@@ -913,20 +941,20 @@ export class VolumesListComponent extends EntityTableComponent implements OnInit
 
   title = T("Pools");
   zfsPoolRows: ZfsPoolData[] = [];
-  conf: InputTableConf = new VolumesListTableConfig(this, this.router, "", "Pools", {}, this.mdDialog, this.rest, this.ws, this.dialogService, this.loader, this.translate, this.snackBar, this.snackbarService, this.storage);
+  conf: InputTableConf = new VolumesListTableConfig(this, this.router, "", "Pools", {}, this.mdDialog, this.rest, this.ws, this.dialogService, this.loader, this.translate, this.snackBar, this.snackbarService, this.storage, this.messageService);
 
   actionComponent = {
     getActions: (row) => {
       return this.conf.getActions(row);
     },
-    conf: new VolumesListTableConfig(this, this.router, "", "Pools", {}, this.mdDialog, this.rest, this.ws, this.dialogService, this.loader, this.translate, this.snackBar, this.snackbarService, this.storage)
+    conf: new VolumesListTableConfig(this, this.router, "", "Pools", {}, this.mdDialog, this.rest, this.ws, this.dialogService, this.loader, this.translate, this.snackBar, this.snackbarService, this.storage, this.messageService)
   };
 
   actionEncryptedComponent = {
     getActions: (row) => {
       return (<VolumesListTableConfig>this.conf).getEncryptedActions(row);
     },
-    conf: new VolumesListTableConfig(this, this.router, "", "Pools", {}, this.mdDialog, this.rest, this.ws, this.dialogService, this.loader, this.translate, this.snackBar, this.snackbarService, this.storage)
+    conf: new VolumesListTableConfig(this, this.router, "", "Pools", {}, this.mdDialog, this.rest, this.ws, this.dialogService, this.loader, this.translate, this.snackBar, this.snackbarService, this.storage, this.messageService)
   };
 
   expanded = false;
@@ -937,7 +965,8 @@ export class VolumesListComponent extends EntityTableComponent implements OnInit
   constructor(protected core: CoreService ,protected rest: RestService, protected router: Router, protected ws: WebSocketService,
     protected _eRef: ElementRef, protected dialogService: DialogService, protected loader: AppLoaderService,
     protected mdDialog: MatDialog, protected erdService: ErdService, protected translate: TranslateService,
-    public sorter: StorageService, protected snackBar: MatSnackBar, protected snackbarService: SnackbarService, protected job: JobService, protected storage: StorageService, protected pref: PreferencesService) {
+    public sorter: StorageService, protected snackBar: MatSnackBar, protected snackbarService: SnackbarService, 
+    protected job: JobService, protected storage: StorageService, protected pref: PreferencesService, protected messageService: MessageService) {
     super(core, rest, router, ws, _eRef, dialogService, loader, erdService, translate, snackBar, sorter, job, pref);
   }
 
@@ -957,7 +986,7 @@ export class VolumesListComponent extends EntityTableComponent implements OnInit
     this.ws.call('pool.dataset.query', []).subscribe((datasetData) => {
       this.rest.get("storage/volume", {}).subscribe((res) => {
         res.data.forEach((volume: ZfsPoolData) => {
-          volume.volumesListTableConfig = new VolumesListTableConfig(this, this.router, volume.id, volume.name, datasetData, this.mdDialog, this.rest, this.ws, this.dialogService, this.loader, this.translate, this.snackBar, this.snackbarService, this.storage);
+          volume.volumesListTableConfig = new VolumesListTableConfig(this, this.router, volume.id, volume.name, datasetData, this.mdDialog, this.rest, this.ws, this.dialogService, this.loader, this.translate, this.snackBar, this.snackbarService, this.storage, this.messageService);
           volume.type = 'zpool';
 
           if (volume.children && volume.children[0]) {
