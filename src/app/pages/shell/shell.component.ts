@@ -4,6 +4,9 @@ import { TranslateService } from "@ngx-translate/core";
 import { ShellService, WebSocketService } from "../../services/";
 import helptext from "./../../helptext/shell/shell";
 import { CopyPasteMessageComponent } from "./copy-paste-message.component";
+import { Terminal } from 'xterm';
+import { AttachAddon } from 'xterm-addon-attach';
+import { FitAddon } from 'xterm-addon-fit';
 
 @Component({
   selector: 'app-shell',
@@ -17,12 +20,13 @@ export class ShellComponent implements AfterViewInit, OnChanges, OnDestroy {
   //xter container
   @ViewChild('terminal', { static: true}) container: ElementRef;
   // xterm variables
-  cols: number;
-  rows: number;
+  cols: number = 80;
+  rows: number = 25;
   rowCount: number;
   font_size = 14;
   public token: any;
   public xterm: any;
+  public fitAddon: FitAddon;
   public resize_terminal = true;
   protected shellSubscription: any;
   public lastWidth: number;
@@ -42,9 +46,7 @@ export class ShellComponent implements AfterViewInit, OnChanges, OnDestroy {
       this.initializeWebShell(res);
       this.shellSubscription = this.ss.shellOutput.subscribe((value) => {
         if (value !== undefined){
-          if(this.filteredValue(value)){ return; }
-
-          this.xterm.write(value); 
+          //this.xterm.write(value); 
         } 
       }); 
       this.initializeTerminal(); });
@@ -61,8 +63,8 @@ export class ShellComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   onResize(event) {
-    this.setTermDimensions();
-    this.fitTerm();
+    //this.setTermDimensions();
+    //this.xterm.resize(this.rows, this.cols);
   }
 
   overflowParent(rule: string){
@@ -77,7 +79,7 @@ export class ShellComponent implements AfterViewInit, OnChanges, OnDestroy {
   ngOnChanges(changes: {
     [propKey: string]: SimpleChange
   }){
-    const log: string[] = [];
+    /*const log: string[] = [];
     for (const propName in changes) {
       const changedProp = changes[propName];
       console.log(changedProp);
@@ -85,7 +87,7 @@ export class ShellComponent implements AfterViewInit, OnChanges, OnDestroy {
       if (propName === 'prompt' && this.xterm != null) {
         this.xterm.write(this.clearLine + this.prompt);
       }
-    }
+    }*/
   }
 
   onRightClick(): false {
@@ -96,20 +98,26 @@ export class ShellComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   initializeTerminal() {
     this.setTermDimensions();
-    this.xterm = new (<any>window).Terminal({
+    //this.xterm = new (<any>window).Terminal({
+    this.xterm = new Terminal({
       'cursorBlink': true,
       'tabStopWidth': 8,
-      'focus': true,
+      //'focus': true,
       'cols': this.cols,
       'rows': this.rows,
-      'convertEol': true,
     });
 
     this.xterm.open(this.container.nativeElement, true);
-    this.xterm.attach(this.ss);
-    this.xterm._initialized = true;
+    
+    // Xterm Addons
+    const attachAddon = new AttachAddon(this.ss.socket);
+    this.xterm.loadAddon(attachAddon);
+    this.fitAddon = new FitAddon();
+    this.xterm.loadAddon(this.fitAddon);
+    // Make the terminal's size and geometry fit the size of #terminal-container
     this.fitTerm();
-    this.rowCount = this.getRowCount(); 
+
+    this.xterm._initialized = true;
 
     this.setupListeners();
 
@@ -117,47 +125,64 @@ export class ShellComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   setupListeners(){
-    this.xterm.on('key',(key, e) =>{
-
+    /*this.xterm.onKey((e) =>{
       if(e.key == "Enter"){
-        this.resetScrollBottom();
+        console.log(e);
       }
-
-    });
+    });*/
   }
 
-  filteredValue(value){
-    let filtered = false;
-    const cc = [
-      value.charCodeAt(0),
-      value.charCodeAt(1),
-      value.charCodeAt(2),
-      value.charCodeAt(3)
-    ]
+  fitTerm(){
+    //this.fitAddon.fit();
+    //this.setTermDimensions();
 
-    if(cc[0] == 27 && cc[1] == 91 && cc[2] == 49 && cc[3] == 109){
-      filtered = true;
-    } 
-    return filtered;
+    const dimensions = this.getTermDimensions();
+    const vp:HTMLElement = document.querySelector('.terminal .xterm-viewport'); 
+    const scr:HTMLElement = document.querySelector('.terminal .xterm-screen'); 
+    const xtl:HTMLElement = document.querySelector('.terminal canvas.xterm-text-layer'); 
+    const xsl:HTMLElement = document.querySelector('.terminal canvas.xterm-selection-layer'); 
+    const xll:HTMLElement = document.querySelector('.terminal canvas.xterm-link-layer'); 
+    const xcl:HTMLElement = document.querySelector('.terminal canvas.xterm-cursor-layer'); 
+
+    let elements = [vp, scr, xtl, xsl, xll, xcl];
+
+    for(let i = 0; i < elements.length; i++){
+      if(i < 2){
+        this.fitCanvas(elements[i], dimensions, false);
+      } else {
+        this.fitCanvas(elements[i], dimensions, true);
+      }
+    }
+
+    //this.xterm.fit();
+    //vp.style.height = dimensions.height.toString() + 'px';
+    
+    this.setTermDimensions();
+    this.fitAddon.fit();
   }
 
-  getRowCount(){
+  fitCanvas(el,dimensions, attrs?:boolean){
+    el.style.width = dimensions.width.toString() + 'px';
+    el.style.height = dimensions.height.toString() + 'px';
+    if(attrs){ 
+      el.setAttribute('width', dimensions.width);
+      el.setAttribute('height', dimensions.height);
+    }
+    
+  }
+
+  /*getRowCount(){
     const rows = document.querySelectorAll('.terminal .xterm-rows > div'); 
     return rows.length;
-  }
-
-  resetScrollBottom(){
-    this.xterm.parser._terminal.buffer.scrollBottom = this.getRowCount() - 2;
-    this.xterm.write(this.prompt);
-  }
+  }*/
 
   getTermDimensions(){
-    const target:HTMLElement = document.querySelector('.terminal .xterm-viewport'); 
-    return {width: target.offsetWidth, height: target.offsetHeight};
+    const target:HTMLElement = document.querySelector('.terminal .xterm-text-layer'); 
+    return !target ? null : {width: target.offsetWidth, height: target.offsetHeight};
   }
 
   getCursorDimensions(){
-    const target:HTMLElement = document.querySelector('.terminal .terminal-cursor'); 
+    const target:HTMLElement = document.querySelector('.terminal .xterm-cursor'); 
     return {
       width: target ? target.offsetWidth : this.font_size * 0.45 , 
       height: target ? target.offsetHeight : this.font_size
@@ -170,34 +195,37 @@ export class ShellComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   setTermDimensions(c?: number, r?: number){
+    let dimensions = this.getTermDimensions();
+    if(!dimensions){ return; }
     if(!c || !r){
-      let dimensions = this.getTermParentDimensions();
+      //let dimensions = this.getTermParentDimensions();
       const cursor = this.getCursorDimensions();
       const cols = Math.floor(dimensions.width / (cursor.width));
-      const rows = Math.floor((dimensions.height / cursor.height) - 3);
+      const rows = Math.floor((dimensions.height / cursor.height) );
       this.cols = cols;
       this.rows = rows;
     } else {
       this.cols = c;
       this.rows = r;
     }
+
+    //this.cols = 80;
+
+    if(this.xterm){
+      //this.xterm.setOption('rows', this.rows);
+      //this.xterm.setOption('cols', this.cols);
+      this.xterm.resize(this.cols, this.rows);
+    }
   }
 
-  forceDimensions(){
-    this.setTermDimensions();
-    this.ss.configTTY(this.rows, this.cols, this.xterm);
-  }
-
-  fitTerm(){
-    const dimensions = this.getTermParentDimensions();
-    const vp:HTMLElement = document.querySelector('.terminal .xterm-viewport'); 
-    const sel:HTMLElement = document.querySelector('.terminal .xterm-selection'); 
-
-    this.xterm.fit();
-    sel.style.height = dimensions.height.toString() + 'px';
-    vp.style.height = dimensions.height.toString() + 'px';
-   
-    this.setTermDimensions();
+  forceDimensions(bytes?: boolean){
+    console.log(this.xterm);
+    console.log('COLS: ' + this.cols + ', ROWS: ' + this.rows);
+    this.fitTerm();
+    //this.setTermDimensions();
+    if(bytes){
+      this.ss.configTTY(this.rows, this.cols, this.xterm);
+    }
   }
 
   initializeWebShell(res: string) {

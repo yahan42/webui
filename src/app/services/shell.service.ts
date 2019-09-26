@@ -126,9 +126,9 @@ export class ShellService {
   }
 
   configTTY(rows:number, cols:number, xterm?: any){
-    console.log(xterm);
-    /*const cmd = 'stty rows ' + rows + ' cols ' + cols;
-    this.send(cmd + ' \n');*/
+    //console.log(xterm);
+    const cmd = 'stty rows ' + rows + ' cols ' + cols + ' flusho';
+    this.send(cmd + ' \n');
 
     // EXAMPLES: 
     // \e[8;50;100t
@@ -139,9 +139,11 @@ export class ShellService {
     //const cmd2 = this.convertToBytes(str);
     //this.send(cmd2);
 
-    const str = '\x1b[8;' + rows + ';' + cols + 't';
-    const cmd3 = this.convertToBytes(str);
-    this.send(str)
+    //const str = '\e[8;' + rows + ';' + cols + 't';
+    //const cmd3 = this.convertToBytes(str);
+    //xterm.writeUtf8(cmd3);
+    //const str = 'perl -e \'print("\e[8;' + rows + ';' + cols + 't")\' && clear\r';
+    //this.send(str)
   }
 
   convertToBytes(str:string):ArrayBuffer{	

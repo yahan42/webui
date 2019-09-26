@@ -30,13 +30,12 @@ export class JailShellComponent extends ShellComponent implements AfterViewInit 
 
 
   ngAfterViewInit() {
-    this.aroute.params.subscribe(params => {
+    /*this.aroute.params.subscribe(params => {
       this.pk = params['pk'];
       this.getAuthToken().subscribe((res) => {
         this.initializeWebShell(res);
         this.shellSubscription = this.ss.shellOutput.subscribe((value) => {
           if (value !== undefined) {
-            if(this.filteredValue(value)){ return; }
             this.xterm.write(value);
 
             if (_.trim(value) == "logout") {
@@ -47,7 +46,7 @@ export class JailShellComponent extends ShellComponent implements AfterViewInit 
         });
         this.initializeTerminal();
       });
-    });
+    });*/
   }
 
   initializeWebShell(res: string) {

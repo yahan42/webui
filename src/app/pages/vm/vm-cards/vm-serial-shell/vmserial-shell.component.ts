@@ -27,25 +27,24 @@ export class VMSerialShellComponent extends ShellComponent implements AfterViewI
 
 
   ngAfterViewInit() {
-    this.aroute.params.subscribe(params => {
+    /*this.aroute.params.subscribe(params => {
       this.pk = params['pk'];
       this.getAuthToken().subscribe((res) => {
         this.initializeWebShell(res);
         this.shellSubscription = this.ss.shellOutput.subscribe((value) => {
           if (value !== undefined) {
-            if(this.filteredValue(value)){ return; }
             this.xterm.write(value);
           }
         });
         this.initializeTerminal();
       });
-    });
+    });*/
 
   }
 
   initializeTerminal() {
 
-    this.xterm = new (<any>window).Terminal({
+    /*this.xterm = new (<any>window).Terminal({
       'cursorBlink': true,
       'tabStopWidth': 8,
       'cols': this.cols,
@@ -54,21 +53,16 @@ export class VMSerialShellComponent extends ShellComponent implements AfterViewI
     });
 
     this.xterm.open(this.container.nativeElement, true);
-    this.xterm.attach(this.ss);
+    //this.xterm.attach(this.ss);
     this.xterm._initialized = true;
-    this.fitTerm();
+    //this.fitTerm();
     this.rowCount = this.getRowCount();
 
-    /*this.xterm.on('key', (e) => {
-      if(e.key == "Enter"){
-        this.resetScrollBottom();
-      }
-    });*/
     this.setupListeners();
 
     this.xterm.send('cu -l /dev/nmdm'+this.pk+'B\n');
     this.xterm.send('\r');
-    this.forceDimensions();
+    this.forceDimensions();*/
   }
 
 }
