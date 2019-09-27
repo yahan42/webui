@@ -26,13 +26,18 @@ export class FormInputWithMaskComponent implements Field {
   getMask() {
     switch(this.config.mask) {
       case 'email' : return { mask : emailMask };
-      case 'usPhone' : return { mask : ['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/] };
+      case 'usPhone' : return { 
+        mask : ['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/],
+        showMask : true,
+        placeholderChar : '\u2000'
+      }
       case 'usPhoneWithCountryCode' : return { mask : ['+', '1', ' ', '(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/] };
       case 'usDate' : return {
-          mask : [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/],
-          keepCharPositions : true,
-          pipe : createAutoCorrectedDatePipe('mm/dd/yyyy HH:MM')
-        }
+        mask : [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/],
+        keepCharPositions : true,
+        pipe : createAutoCorrectedDatePipe('mm/dd/yyyy HH:MM'),
+        showMask : true
+      }
     }
   }
 
