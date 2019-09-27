@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -12,7 +12,7 @@ import createAutoCorrectedDatePipe from 'text-mask-addons/dist/createAutoCorrect
   templateUrl: './form-inputwithmask.component.html',
   styleUrls: ['../dynamic-field/dynamic-field.css'],
 })
-export class FormInputWithMaskComponent implements Field, OnInit {
+export class FormInputWithMaskComponent implements Field {
   @ViewChild('fileInput', { static: true}) fileInput;
   config: FieldConfig;
   group: FormGroup;
@@ -20,31 +20,19 @@ export class FormInputWithMaskComponent implements Field, OnInit {
   public fileString;
   public showPassword = false;
   public myModel = '';
-  public keepCharPositions = false;
-  public mask: any;
-  public pipe: any;
-  public autoCorrectedDatePipe = createAutoCorrectedDatePipe('mm/dd/yyyy HH:MM');
 
-  constructor(public translate: TranslateService) {
-  }
-
-  ngOnInit() {
-    this.getMask();
-  }
+  constructor(public translate: TranslateService) {}
  
   getMask() {
     switch(this.config.mask) {
-      case 'email' : this.mask = emailMask;
-        break;
-      case 'usPhone' : this.mask = ['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
-        break;
-      case 'usPhoneWithCountryCode' : this.mask = ['+', '1', ' ', '(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
-        break;
-      case 'usDate' : 
-        this.mask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
-        this.keepCharPositions = true;
-        this.pipe = this.autoCorrectedDatePipe;
-        break;
+      case 'email' : return { mask : emailMask };
+      case 'usPhone' : return { mask : ['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/] };
+      case 'usPhoneWithCountryCode' : return { mask : ['+', '1', ' ', '(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/] };
+      case 'usDate' : return {
+          mask : [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/],
+          keepCharPositions : true,
+          pipe : createAutoCorrectedDatePipe('mm/dd/yyyy HH:MM')
+        }
     }
   }
 

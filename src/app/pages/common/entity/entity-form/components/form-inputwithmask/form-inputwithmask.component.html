@@ -18,7 +18,7 @@
 			[required]="config.required"
 			[max]="config.max"
 			[min]="config.min"
-			[textMask]="{mask: mask, keepCharPositions: keepCharPositions, pipe: pipe}"
+			[textMask]="getMask()"
 			[(ngModel)]="myModel"
 			(blur)="blurEvent()"
 			autocomplete="new-password">
