@@ -56,7 +56,8 @@ export class UserFormComponent {
           parent: this
         },
         {
-          type : 'input',
+          type : 'inputwithmask',
+          mask : 'email',
           name : helptext.user_form_email_name,
           placeholder : helptext.user_form_email_placeholder,
           tooltip : helptext.user_form_email_tooltip

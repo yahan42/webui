@@ -26,6 +26,7 @@ import { FormButtonComponent } from './entity-form/components/form-button/form-b
 import { FormCheckboxComponent } from './entity-form/components/form-checkbox/form-checkbox.component';
 import { FormComboboxComponent } from './entity-form/components/form-combobox/form-combobox.component';
 import { FormInputComponent } from './entity-form/components/form-input/form-input.component';
+import { FormInputWithMaskComponent } from './entity-form/components/form-inputwithmask/form-inputwithmask.component';
 import { FormUploadComponent } from './entity-form/components/form-upload/form-upload.component';
 import { FormSelectComponent } from './entity-form/components/form-select/form-select.component';
 import { FormRadioComponent } from './entity-form/components/form-radio/form-radio.component';
@@ -79,13 +80,14 @@ import { ToolbarMultimenuComponent } from './entity-toolbar/components/toolbar-m
 import { EntityRowDetailsComponent } from './entity-table/entity-row-details.component';
 import { TaskScheduleListComponent } from 'app/pages/task-calendar/components/task-schedule-list/task-schedule-list.component';
 import { DataTableCellDirective } from './entity-table/data-table-cell.directive';
+import { TextMaskModule } from 'angular2-text-mask';
 
 @NgModule({
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule, DragDropModule,
     MaterialModule, ColorPickerModule, NgxDatatableModule, CdkTableModule, TreeModule.forRoot(),
     Ng2DropdownModule, NgUploaderModule, FlexLayoutModule, TranslateModule,
-    OverlayModule, A11yModule, TreeTableModule, FileSizeModule
+    OverlayModule, A11yModule, TreeTableModule, FileSizeModule, TextMaskModule
   ],
   declarations: [
     TaskScheduleListComponent,
@@ -104,6 +106,7 @@ import { DataTableCellDirective } from './entity-table/data-table-cell.directive
     EntityFormEmbeddedComponent,
     FormButtonComponent,
     FormInputComponent,
+    FormInputWithMaskComponent,
     FormSelectComponent,
     FormRadioComponent,
     FormCheckboxComponent,
@@ -172,6 +175,7 @@ import { DataTableCellDirective } from './entity-table/data-table-cell.directive
   entryComponents: [
     FormButtonComponent,
     FormInputComponent,
+    FormInputWithMaskComponent,
     FormSelectComponent,
     FormCheckboxComponent,
     FormComboboxComponent,

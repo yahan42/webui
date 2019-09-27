@@ -38,24 +38,27 @@ export class TnSupportComponent implements OnInit {
           paraText: '<i class="material-icons">mail</i>' + helptext.contactUs
         },
         {
-          type : 'input',
+          type : 'inputwithmask',
           name : 'name',
+          mask : 'usDate',
           placeholder : helptext.name.placeholder,
           tooltip : helptext.name.tooltip,
           required: true,
           validation : helptext.name.validation
         },
         {
-          type : 'input',
+          type : 'inputwithmask',
           name : 'email',
+          mask : 'email',
           placeholder : helptext.email.placeholder,
           tooltip : helptext.email.tooltip,
           required: true,
           validation : helptext.email.validation
         },
         {
-          type : 'input',
+          type : 'inputwithmask',
           name : 'phone',
+          mask : 'usPhone',
           placeholder : helptext.phone.placeholder,
           tooltip : helptext.phone.tooltip,
           required: true,

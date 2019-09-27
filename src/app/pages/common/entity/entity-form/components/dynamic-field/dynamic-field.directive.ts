@@ -16,6 +16,7 @@ import {FormArrayComponent} from '../form-array/form-array.component';
 import {FormButtonComponent} from '../form-button/form-button.component';
 import {FormCheckboxComponent} from '../form-checkbox/form-checkbox.component';
 import {FormInputComponent} from '../form-input/form-input.component';
+import {FormInputWithMaskComponent} from '../form-inputwithmask/form-inputwithmask.component';
 import {FormPermissionsComponent} from '../form-permissions/form-permissions.component';
 import {FormSelectComponent} from '../form-select/form-select.component';
 import {FormTextareaComponent} from '../form-textarea/form-textarea.component';
@@ -38,6 +39,7 @@ import { FormListComponent } from '../form-list/form-list.component';
 const components: {[type: string] : Type<Field>} = {
   button : FormButtonComponent,
   input : FormInputComponent,
+  inputwithmask : FormInputWithMaskComponent,
   select : FormSelectComponent,
   checkbox : FormCheckboxComponent,
   textarea : FormTextareaComponent,
