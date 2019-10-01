@@ -143,7 +143,6 @@ export class FnSupportComponent {
 
   afterInit(entityEdit: any) {
     this.entityEdit = entityEdit;
-    console.log(entityEdit)
   }
 
   blurEvent(parent){
