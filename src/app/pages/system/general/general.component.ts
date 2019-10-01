@@ -79,7 +79,9 @@ export class GeneralComponent implements OnDestroy {
       name: 'language',
       placeholder: helptext.stg_language.placeholder,
       tooltip: helptext.stg_language.tooltip,
-      options: []
+      options: [],
+      updater: this.updateLanguageOptions,
+      parent: this,
     },
     {
       type: 'select',
@@ -226,6 +228,7 @@ export class GeneralComponent implements OnDestroy {
   private redirect: any;
   private guicertificate: any;
   private languages = {};
+  private language_labels = {};
   private language_value: any;
   private language_subscription: any;
   //private hostname: '(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])';
@@ -295,16 +298,18 @@ export class GeneralComponent implements OnDestroy {
       this.language_fc = _.find(this.fieldConfig, { 'name': 'language' });
       const options = [];
       res.forEach((item) => {
-        options.push({ label: item[1], value: item[0] });
+        const label = item[0] + " - " + item[1];
+        options.push({ label: label, value: item[0] });
         this.languages[item[0]] = item[1];
+        this.language_labels[item[0]] = label;
       });
       this.language_fc.options = _.sortBy(options, ["label"]);
     });
 
     this.language_subscription = entityEdit.formGroup.controls['language'].valueChanges.subscribe((res) => {;
-      this.language_value = this.getKeyByValue(this.languages, res);
-      if (this.languages[res]) {
-        entityEdit.formGroup.controls['language'].setValue(this.languages[res]);
+      this.language_value = this.getKeyByValue(this.language_labels, res);
+      if (this.language_labels[res]) {
+        entityEdit.formGroup.controls['language'].setValue(this.language_labels[res]);
       }
     });
 
@@ -333,6 +338,22 @@ export class GeneralComponent implements OnDestroy {
           this.sysloglevel.options.push({ label: item[1], value: item[0] });
         });
       });
+  }
+
+  updateLanguageOptions(value = "", parent) {
+    const language = parent.language_fc;
+    value = value.toLowerCase();
+    const searchOptions = [];
+    for (const key in parent.languages) {
+      if (parent.languages.hasOwnProperty(key)) {
+        if (_.startsWith(key.toLowerCase(), value)) {
+          searchOptions.push({label: parent.language_labels[key], value: key});
+        } else if (_.startsWith(parent.languages[key].toLowerCase(), value)) {
+          searchOptions.push({label: parent.language_labels[key], value: key});
+        }
+      }
+    }
+    language.searchOptions = searchOptions;
   }
   
   beforeSubmit(value) {
