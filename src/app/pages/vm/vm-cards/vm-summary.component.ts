@@ -18,6 +18,7 @@ export class VmSummaryComponent implements AfterViewInit, OnDestroy {
   public chartSize:number = 260;
   public totalVmem:number;
   public physmem:number;
+  public freeMem:any;
 
   constructor(private core:CoreService) {
   }
@@ -50,10 +51,19 @@ export class VmSummaryComponent implements AfterViewInit, OnDestroy {
       //this.setNetData(evt);
     });
 
-    this.core.register({observerClass:this,eventName:"StatsVmemoryUsage"}).subscribe((evt:CoreEvent) => {
-      //console.log(evt);
-      this.setMemData(evt);
+    this.core.register({observerClass:this,eventName:"VmAvailMem"}).subscribe((evt:CoreEvent) => {
+    //   // console.log(evt);
+      this.checkIt(evt);
+      this.core.register({observerClass:this,eventName:"StatsVmemoryUsage"}).subscribe((evt:CoreEvent) => {
+        //console.log(evt);
+        this.setMemData(evt);
+      });
+      this.core.register({observerClass:this,eventName:"SysInfo"}).subscribe((evt:CoreEvent) => {
+        //console.log(evt);
+        this.setMemTotal(evt);
+      });
     });
+
 
     this.core.register({observerClass:this,eventName:"SysInfo"}).subscribe((evt:CoreEvent) => {
       //console.log(evt);
@@ -78,6 +88,7 @@ export class VmSummaryComponent implements AfterViewInit, OnDestroy {
     // VM Memory Usage Stats
     this.core.emit({name:"StatsVmemoryUsageRequest"});
     this.core.emit({name:"SysInfoRequest"});
+    this.core.emit({name:'VmGetAvailMem'});
 
     // CPU Stats (dataList eg. {source: "aggregation-cpu-sum", type: "cpu-user", dataset: "value"})
     //this.core.emit({name:"StatsCpuRequest", data:[['user','interrupt','system'/*,'idle','nice'*/],{step:'10', start:'now-10m'}]});
@@ -86,6 +97,10 @@ export class VmSummaryComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy(){
     this.core.unregister({observerClass:this});
+  }
+
+  checkIt(evt:CoreEvent) {
+    this.freeMem = evt.data;
   }
 
   setMemData(evt:CoreEvent){
@@ -105,8 +120,7 @@ export class VmSummaryComponent implements AfterViewInit, OnDestroy {
     ];
     this.totalVmem = evt.data.RNP + evt.data.PRD + evt.data.RPRD;
     if(this.physmem){
-      //console.warn({physmem:this.physmem, totalVmem: this.totalVmem});
-      let avail = (<any>window).filesize(this.physmem - this.totalVmem, {output: "object", exponent:3});
+      let avail = (<any>window).filesize(this.freeMem, {output: "object", exponent:3});
       memData.push({legend:"Free", data:[avail.value]});
     }
     this.memChart.data = memData;
@@ -116,10 +130,15 @@ export class VmSummaryComponent implements AfterViewInit, OnDestroy {
     //this.memChart.refresh();
   }
   setMemTotal(evt:CoreEvent){
-    let totalMem = (<any>window).filesize(evt.data.physmem, {output: "object", exponent:3});
 
-    if(this.totalVmem){
-      this.memChart.data.push({legend:"Free",data:[ totalMem.value - this.totalVmem]});
+    let totalMem = (<any>window).filesize(evt.data.physmem, {output: "object", exponent:3});
+    console.log(totalMem, this.totalVmem, this.freeMem, evt.data.physmem)
+    // let mem = (<any>window).filesize(this.freeMem, {output: "object", exponent:3});
+    // console.log(mem)
+    if(this.totalVmem){ 
+      console.log('boom')
+
+      this.memChart.data.push({legend:"Free",data:[totalMem.value - this.totalVmem]});
       //this.memChart.refresh();
     } else {
       this.physmem = evt.data.physmem;

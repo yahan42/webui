@@ -330,6 +330,15 @@ export class ApiService {
         responseEvent:"VmProfiles",
       },
     },
+    VmGetAvailMem:{
+      apiCall:{
+        protocol:"websocket",
+        version:"2",
+        namespace:"vm.get_available_memory",
+        args:[],
+        responseEvent:"VmAvailMem",
+      },
+    },
     // Used by stats service!!
     StatsRequest:{
       apiCall:{
