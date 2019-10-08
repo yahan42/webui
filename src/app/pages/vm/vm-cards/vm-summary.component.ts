@@ -125,9 +125,8 @@ export class VmSummaryComponent implements AfterViewInit, OnDestroy {
     }
     this.memChart.data = memData;
 
-    // this.memChart.width = this.chartSize;
-    // this.memChart.height = this.chartSize;
-    console.log(this.memChart.height)
+    this.memChart.width = this.chartSize;
+    this.memChart.height = this.chartSize;
     //this.memChart.refresh();
   }
   setMemTotal(evt:CoreEvent){
@@ -135,17 +134,13 @@ export class VmSummaryComponent implements AfterViewInit, OnDestroy {
     let totalMem = (<any>window).filesize(evt.data.physmem, {output: "object", exponent:3});
     console.log(totalMem, this.totalVmem, this.freeMem, evt.data.physmem)
     let mem = (<any>window).filesize(this.freeMem, {output: "object", exponent:3});
-    console.log(mem)
     if(this.totalVmem){ // never gets here
-      console.log('boom')
-
       this.memChart.data.push({legend:"Free",data:[mem.value]}); // seems ok check on real hardware
       //this.memChart.refresh();
     } else {
       this.physmem = mem; //ok
-      console.log(this.physmem)
       this.memChart.width = this.chartSize;
-    this.memChart.height = this.chartSize;
+      this.memChart.height = this.chartSize;
     }
   }
 
