@@ -1,5 +1,6 @@
 
 <mat-card id="train-card">
+<<<<<<< HEAD
     <mat-spinner 
       [diameter]='40' 
       id="update-spinner"
@@ -17,6 +18,32 @@
           <mat-option *ngFor="let train of trains" [value]="train.name">{{ train.name }} - {{ train.description }}</mat-option>
         </mat-select>
         <button mat-mini-fab color="primary" id="refresh-button" matTooltip="Refresh" (click)="check()">
+=======
+  <mat-spinner 
+    [diameter]='40' 
+    id="update-spinner"
+    *ngIf="showSpinner" #updatespinner>
+  </mat-spinner>
+  <div>
+    <div class="train-card-row">
+      <mat-checkbox [(ngModel)]="autoCheck" id="autocheck" [ngModelOptions]="{standalone: true}"
+        (change)="toggleAutoCheck()">{{"Check for Updates Daily and Download if Available" | translate}}</mat-checkbox>
+      <tooltip class="updatecheckTooltip" [message]=updatecheck_tooltip></tooltip>
+    </div>
+    <div class="train-card-row train-select-row" *ngIf="trains.length > 1; else trainName">
+      <mat-label id="train-label">{{"Train" | translate}}</mat-label>
+      <mat-select class="form-control full-width" id="train-selector" [(ngModel)]="train"  (ngModelChange)="onTrainChanged($event)">
+        <mat-option *ngFor="let train of trains" [value]="train.name">{{ train.name }} - {{ train.description }}</mat-option>
+      </mat-select>
+      <button mat-mini-fab color="primary" id="refresh-button" matTooltip="Refresh" (click)="check()">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+    <ng-template #trainName>
+      <div class="train-card-row train-select-row">
+        <div id="single-train-name">Current Train: {{ train }} - {{ singleDescription }}</div>
+        <button mat-mini-fab color="primary" [disabled]="isUpdateRunning" id="single-train-refresh-button" matTooltip="Refresh" (click)="check()">
+>>>>>>> 52d2f0027... Fix issues with updater train selection
           <mat-icon>refresh</mat-icon>
         </button>
       </div>
