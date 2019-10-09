@@ -219,15 +219,19 @@ export class UpdateComponent implements OnInit {
           }
         }
         this.singleDescription = this.trains[0].description;
-  
-        if (this.fullTrainList[res.current].description.toLowerCase().includes('[nightly]')) {
-          this.currentTrainDescription = '[nightly]';
-        } else if (this.fullTrainList[res.current].description.toLowerCase().includes('[release]')) {
-          this.currentTrainDescription = '[release]';
-        } else if (this.fullTrainList[res.current].description.toLowerCase().includes('[prerelease]')) {
-          this.currentTrainDescription = '[prerelease]';
-        } else {
-          this.currentTrainDescription = res.trains[this.selectedTrain].description.toLowerCase();
+        
+        if (this.fullTrainList[res.current]) {
+          if (this.fullTrainList[res.current].description.toLowerCase().includes('[nightly]')) {
+            this.currentTrainDescription = '[nightly]';
+          } else if (this.fullTrainList[res.current].description.toLowerCase().includes('[release]')) {
+            this.currentTrainDescription = '[release]';
+          } else if (this.fullTrainList[res.current].description.toLowerCase().includes('[prerelease]')) {
+            this.currentTrainDescription = '[prerelease]';
+          } else {
+            this.currentTrainDescription = res.trains[this.selectedTrain].description.toLowerCase();
+          }
+        } else { 
+            this.currentTrainDescription = '';
         }
         // To remember train descrip if user switches away and then switches back
         this.trainDescriptionOnPageLoad = this.currentTrainDescription;
@@ -262,21 +266,29 @@ export class UpdateComponent implements OnInit {
         this.dialogService.confirm(helptext.dialog_nightly_upgrade.title, this.train_msg[compare]).subscribe((res)=>{
           if (res){
             this.train = event;
-            this.currentTrainDescription = this.fullTrainList[this.train].description.toLowerCase();
+            this.setTrainDescription();
             this.setTrainAndCheck();
           } else {
             this.train = this.selectedTrain;
-            this.currentTrainDescription = this.fullTrainList[this.train].description.toLowerCase();
+            this.setTrainDescription();
           }
         })
     } else if (compare === "ALLOWED" || compare === "MINOR_UPGRADE" || compare === "MAJOR_UPGRADE") {
       this.dialogService.confirm(helptext.dialog_switch_train.title, helptext.dialog_switch_train.message).subscribe((train_res)=>{
         if(train_res){
           this.train = event;
-          this.currentTrainDescription = this.fullTrainList[this.train].description.toLowerCase();
+          this.setTrainDescription();
           this.setTrainAndCheck();
         }
       })
+    }
+  }
+
+  setTrainDescription() {
+    if (this.fullTrainList[this.train]) {
+      this.currentTrainDescription = this.fullTrainList[this.train].description.toLowerCase();
+    } else {
+      this.currentTrainDescription = '';
     }
   }
 
