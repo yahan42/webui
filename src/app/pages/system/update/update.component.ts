@@ -108,7 +108,7 @@ export class UpdateComponent implements OnInit {
     const v2 = this.parseTrainName(t2);
 
     try {
-      if(v1[0] !== v2[0] ) {
+      if(v1[0] !== v2[0] || v1[1] !== v2[1]) {
 
         const version1 = v1[0].split('.');
         const version2 = v2[0].split('.');
@@ -131,6 +131,10 @@ export class UpdateComponent implements OnInit {
         if (version1[0] === version2[0]){
           // comparing '11' .1 with '11' .2
           if(version1[1] && version2[1]){
+            if (version1[1] === version2[1]) {
+              //upgrading to train of same version;
+              return "ALLOWED";
+            }
             //comparing '.1' with '.2'
             return version1[1] > version2[1] ? "MINOR_UPGRADE":"MINOR_DOWNGRADE";
           }
@@ -560,6 +564,7 @@ export class UpdateComponent implements OnInit {
             this.pre_release_train = false;
             this.nightly_train = true;
           }
+          this.showSpinner = false;
         },
         (err) => {
           this.general_update_error =  err.reason.replace('>', '').replace('<','') + helptext.update_error;
