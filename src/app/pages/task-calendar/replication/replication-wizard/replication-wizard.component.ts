@@ -28,6 +28,7 @@ export class ReplicationWizardComponent {
     public isLinear = true;
     public summary_title = "Replication Summary";
     protected entityWizard: any;
+    protected default_naming_schema = 'auto-%Y-%m-%d_%H-%M';
 
     protected custActions: Array<any> = [
         {
@@ -233,13 +234,6 @@ export class ReplicationWizardComponent {
                     placeholder: helptext.custom_snapshots_placeholder,
                     tooltip: helptext.custom_snapshots_tooltip,
                     value: false,
-                    relation: [{
-                        action: 'SHOW',
-                        when: [{
-                            name: 'source_datasets_from',
-                            value: 'remote',
-                        }]
-                    }],
                 },
                 {
                     type: 'input',
@@ -248,15 +242,12 @@ export class ReplicationWizardComponent {
                     tooltip: helptext.naming_schema_tooltip,
                     relation: [{
                         action: 'SHOW',
-                        connective: 'AND',
                         when: [{
                             name: 'custom_snapshots',
                             value: true,
-                        }, {
-                            name: 'source_datasets_from',
-                            value: 'remote',
                         }]
                     }],
+                    value: this.default_naming_schema,
                     parent: this,
                     blurStatus: true,
                     blurEvent: (parent) => {
@@ -837,6 +828,7 @@ export class ReplicationWizardComponent {
     }
 
     async doCreate(data, item) {
+        console.log(data);
         let payload;
         if (item === 'private_key') {
             payload = {
@@ -885,7 +877,7 @@ export class ReplicationWizardComponent {
                     schedule: this.parsePickerTime(data['schedule_picker']),
                     lifetime_value: 2,
                     lifetime_unit: 'WEEK',
-                    naming_schema: 'auto-%Y-%m-%d_%H-%M',
+                    naming_schema: this.default_naming_schema,
                     enabled: true,
                 };
                 await this.isSnapshotTaskExist(payload).then(
@@ -917,12 +909,12 @@ export class ReplicationWizardComponent {
                 payload['auto'] = true;
                 if (payload['direction'] === 'PULL') {
                     payload['schedule'] = this.parsePickerTime(data['schedule_picker']);
-                    payload['naming_schema'] = ['auto-%Y-%m-%d_%H-%M']; //default?
+                    payload['naming_schema'] = [this.default_naming_schema]; //default?
                 } else {
                     payload['periodic_snapshot_tasks'] = data['periodic_snapshot_tasks'];
                 }
             } else {
-                payload['also_include_naming_schema'] = []; //default?
+                payload['also_include_naming_schema'] = [data['naming_schema']]; //default?
                 payload['auto'] = false;
             }
 
@@ -1083,7 +1075,7 @@ export class ReplicationWizardComponent {
     getSnapshots() {
         let payload = [
             this.entityWizard.formArray.controls[0].controls['source_datasets'].value || [],
-            (this.entityWizard.formArray.controls[0].controls['naming_schema'].enabled && this.entityWizard.formArray.controls[0].controls['naming_schema'].value) ? this.entityWizard.formArray.controls[0].controls['naming_schema'].value.split(' ') : ['auto-%Y-%m-%d_%H-%M'],
+            (this.entityWizard.formArray.controls[0].controls['naming_schema'].enabled && this.entityWizard.formArray.controls[0].controls['naming_schema'].value) ? this.entityWizard.formArray.controls[0].controls['naming_schema'].value.split(' ') : [this.default_naming_schema],
             this.entityWizard.formArray.controls[0].controls['transport'].value,
             this.entityWizard.formArray.controls[0].controls['ssh_credentials_source'].value,
         ];
