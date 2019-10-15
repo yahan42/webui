@@ -16,6 +16,8 @@
            <span>{{ option.label }}</span>
          </mat-option>
        </mat-autocomplete>
+       <mat-error *ngIf="config['hasErrors']">{{config['errors']}}</mat-error>
+       <mat-hint [ngStyle]="{'color':'red', 'font-size': 'larger'}" *ngIf="config.warnings">{{config.warnings | translate}}</mat-hint>
     </mat-form-field>
     <mat-button mat-icon-button id="{{config.name}}-select" type="button" [matMenuTriggerFor]="options">
       <mat-icon>arrow_drop_down</mat-icon>
@@ -29,9 +31,4 @@
     </mat-menu>
     <tooltip *ngIf="config.tooltip" [header]="config.placeholder" [message]="config.tooltip"></tooltip>
   </div>
-  <div class="error-div">
-    <mat-error *ngIf="config['hasErrors']">{{config['errors']}}</mat-error>
-    <mat-error *ngIf="config.warnings">{{config.warnings | translate}}</mat-error>
-  </div>
-
 </div>
