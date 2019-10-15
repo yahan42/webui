@@ -60,6 +60,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public showSpinner: boolean = true;
 
+  public browserFocused: boolean = true;
+
   constructor(protected core:CoreService, protected ws: WebSocketService, public mediaObserver: MediaObserver, private el: ElementRef){
     this.statsDataEvents = new Subject<CoreEvent>();
 
@@ -180,18 +182,30 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     // Restore top level scrolling 
     let wrapper = (<any>document).querySelector('.fn-maincontent');
     wrapper.style.overflow = 'auto';
+    document.removeEventListener("visibilitychange", this.handleVisibilityChange, true);
   }
 
-  init(){
+  handleVisibilityChange(e){
+    if (document.hidden) {
+      this.browserFocused = false;
+      this.statsEvents.complete();
+      this.statsEvents = null;
+    } else  {
+      this.browserFocused = true;
+      this.startListening();
+    }
+  }
+
+  startListening(){
 
     this.statsEvents = this.ws.sub("reporting.realtime").subscribe((evt)=>{
-      if(evt.cpu){
+      if(evt.cpu && this.browserFocused){
         this.statsDataEvents.next({name:"CpuStats", data:evt.cpu});
       }
-      if(evt.virtual_memory){
+      if(evt.virtual_memory && this.browserFocused){
         this.statsDataEvents.next({name:"MemoryStats", data:evt.virtual_memory});
       }
-      if(evt.interfaces){
+      if(evt.interfaces && this.browserFocused){
         const keys = Object.keys(evt.interfaces);
         keys.forEach((key, index) => {
           const data = evt.interfaces[key];
@@ -199,6 +213,14 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         });
       }
     });
+
+  }
+
+  init(){
+
+    document.addEventListener("visibilitychange", this.handleVisibilityChange, false);
+
+    this.startListening();
 
     this.core.register({observerClass:this,eventName:"NicInfo"}).subscribe((evt:CoreEvent) => {
       let clone = Object.assign([],evt.data);
