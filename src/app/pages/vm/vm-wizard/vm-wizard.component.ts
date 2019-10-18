@@ -197,7 +197,25 @@ export class VMWizardComponent {
           blurStatus: true,
           blurEvent: this.blurEvent3,
           parent: this,
-          validation : helptext.volsize_validation,
+          validation : [
+            ...helptext.volsize_validation,
+            (control: FormControl): ValidationErrors => {
+              const config = this.wizardConfig.find(c => c.label === helptext.disks_label).fieldConfig.find(c => c.name === 'volsize');
+              const errors = control.value && isNaN(this.storageService.convertHumanStringToNum((control.value).toString()))
+                ? { invalid_byte_string: true }
+                : null
+
+              if (errors) {
+                config.hasErrors = true;
+                config.errors = globalHelptext.human_readable.input_error;
+              } else {
+                config.hasErrors = false;
+                config.errors = '';
+              }
+
+              return errors;
+            }
+          ],
           required: true
         },
         {
@@ -428,22 +446,22 @@ export class VMWizardComponent {
         if(datastore !== undefined && datastore !== "" && datastore !== "/mnt"){
           _.find(this.wizardConfig[2].fieldConfig, {'name' : 'datastore'}).hasErrors = false;
           _.find(this.wizardConfig[2].fieldConfig, {'name' : 'datastore'}).errors = null;
-        const volsize = ( < FormGroup > entityWizard.formArray.get([2])).controls['volsize'].value * 1073741824;
+        const volsize = this.storageService.convertHumanStringToNum(( < FormGroup > entityWizard.formArray.get([2])).controls['volsize'].value);
         this.ws.call('filesystem.statfs',[`/mnt/${datastore}`]).subscribe((stat)=> {
           _.find(this.wizardConfig[2].fieldConfig, {'name' : 'volsize'})['hasErrors'] = false;
           _.find(this.wizardConfig[2].fieldConfig, {'name' : 'volsize'})['errors'] = '';
          if (stat.free_bytes < volsize ) {
-          ( < FormGroup > entityWizard.formArray.get([2])).controls['volsize'].setValue(Math.floor(stat.free_bytes / (1073741824)).toString());
+          ( < FormGroup > entityWizard.formArray.get([2])).controls['volsize'].setValue(Math.floor(stat.free_bytes / (1073741824)).toString() + ' GiB');
          } else if (stat.free_bytes > 40*1073741824) {
               const vm_os = ( < FormGroup > entityWizard.formArray.get([0]).get('os')).value;
               if (vm_os === "Windows"){
-                  ( < FormGroup > entityWizard.formArray.get([2])).controls['volsize'].setValue(volsize/1073741824);
+                  ( < FormGroup > entityWizard.formArray.get([2])).controls['volsize'].setValue((volsize/1073741824).toString() + ' GiB');
               } else {
-                  ( < FormGroup > entityWizard.formArray.get([2])).controls['volsize'].setValue(volsize/1073741824);
+                  ( < FormGroup > entityWizard.formArray.get([2])).controls['volsize'].setValue((volsize/1073741824).toString() + ' GiB');
               };
         } else if (stat.free_bytes > 10*1073741824) {
               const vm_os = ( < FormGroup > entityWizard.formArray.get([0]).get('os')).value;
-              ( < FormGroup > entityWizard.formArray.get([2])).controls['volsize'].setValue((volsize/1073741824).toString());
+              ( < FormGroup > entityWizard.formArray.get([2])).controls['volsize'].setValue((volsize/1073741824).toString() + ' GiB');
           };
         });
       } else {
@@ -474,12 +492,12 @@ export class VMWizardComponent {
       if (res === 'Windows') {
         ( < FormGroup > entityWizard.formArray.get([1])).controls['vcpus'].setValue(2);
         ( < FormGroup > entityWizard.formArray.get([1])).controls['memory'].setValue('4 GiB');
-        ( < FormGroup > entityWizard.formArray.get([2])).controls['volsize'].setValue(40);
+        ( < FormGroup > entityWizard.formArray.get([2])).controls['volsize'].setValue('40 GiB');
       }
       else {
         ( < FormGroup > entityWizard.formArray.get([1])).controls['vcpus'].setValue(1);
         ( < FormGroup > entityWizard.formArray.get([1])).controls['memory'].setValue('512 MiB');
-        ( < FormGroup > entityWizard.formArray.get([2])).controls['volsize'].setValue(10);
+        ( < FormGroup > entityWizard.formArray.get([2])).controls['volsize'].setValue('10 GiB');
       }
     });
     ( < FormGroup > entityWizard.formArray.get([2]).get('disk_radio')).valueChanges.subscribe((res) => {
@@ -582,8 +600,12 @@ blurEvent2(parent){
 }
 
 blurEvent3(parent){
-  if(parent.entityWizard.formArray.controls[2].value.volsize > 0 ) {
-    const volsize = parent.entityWizard.formArray.controls[2].value.volsize * 1073741824;
+  const enteredVal = parent.entityWizard.formArray.controls[2].value.volsize;
+  const hdSizeRequested = parent.storageService.convertHumanStringToNum(enteredVal);
+  console.log(hdSizeRequested)
+  if(hdSizeRequested > 0 ) {
+    const volsize = hdSizeRequested;
+    console.log(volsize)
     const datastore = parent.entityWizard.formArray.controls[2].value.datastore;
     const vm_name = parent.entityWizard.formGroup.value.formArray[0].name;
     if(datastore !== undefined && datastore !== "" && datastore !== "/mnt"){
