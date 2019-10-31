@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EnclosureDisksComponent } from './enclosure-details.component';
+import { EnclosureDisksComponent } from './enclosure-disks.component';
 
 describe('EnclosureDisksComponent', () => {
   let component: EnclosureDisksComponent;
