@@ -10,7 +10,6 @@ import { DownloadKeyModalDialog } from 'app/components/common/dialog/downloadkey
 import { MatDialog } from '@angular/material';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
-import { MatSnackBar } from '@angular/material';
 import * as moment from 'moment';
 import {TreeNode} from 'primeng/api';
 import { EntityJobComponent } from '../../../common/entity/entity-job/entity-job.component';
@@ -22,7 +21,6 @@ import { DialogFormConfiguration } from '../../../common/entity/entity-dialog/di
 import helptext from '../../../../helptext/storage/volumes/volume-list';
 
 import { CoreService } from 'app/core/services/core.service';
-import { SnackbarService } from '../../../../services/snackbar.service';
 import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { PreferencesService } from 'app/core/services/preferences.service';
@@ -660,7 +658,7 @@ export class VolumesListTableConfig implements InputTableConf {
 
           actions.push({
             id: rowData.name,
-            name: 'Upgrade Pool',
+            name: T('Upgrade Pool'),
             label: T("Upgrade Pool"),
             onClick: (row1) => {
 
@@ -690,7 +688,7 @@ export class VolumesListTableConfig implements InputTableConf {
     if (rowData.type === "dataset") {
       actions.push({
         id: rowData.name,
-        name: 'Add Dataset',
+        name: T('Add Dataset'),
         label: T("Add Dataset"),
         onClick: (row1) => {
           this._router.navigate(new Array('/').concat([
@@ -701,7 +699,7 @@ export class VolumesListTableConfig implements InputTableConf {
       });
       actions.push({
         id: rowData.name,
-        name: 'Add Zvol',
+        name: T('Add Zvol'),
         label: T("Add Zvol"),
         onClick: (row1) => {
           this._router.navigate(new Array('/').concat([
@@ -712,7 +710,7 @@ export class VolumesListTableConfig implements InputTableConf {
       });
       actions.push({
         id: rowData.name,
-        name: 'Edit Options',
+        name: T('Edit Options'),
         label: T("Edit Options"),
         onClick: (row1) => {
           this._router.navigate(new Array('/').concat([
@@ -722,10 +720,15 @@ export class VolumesListTableConfig implements InputTableConf {
         }
       });
       if (rowDataPathSplit[1] !== "iocage") {
+        let optionDisabled;
+        rowData.path.includes('/') ? optionDisabled = false : optionDisabled = true;
         actions.push({
           id: rowData.name,
-          name: 'Edit Permissions',
+          name: T('Edit Permissions'),
           label: T("Edit Permissions"),
+          disabled: optionDisabled,
+          matTooltip: helptext.permissions_edit_msg,
+          ttposition: 'left',
           onClick: (row1) => {
             this.ws.call('filesystem.acl_is_trivial', ['/mnt/' + row1.path]).subscribe(acl_is_trivial => {
               if (acl_is_trivial) {
@@ -750,8 +753,11 @@ export class VolumesListTableConfig implements InputTableConf {
         },
         {
           id: rowData.name,
-          name: 'Edit ACL',
+          name: T('Edit ACL'),
           label: T("Edit ACL"),
+          disabled: optionDisabled,
+          matTooltip: helptext.acl_edit_msg,
+          ttposition: 'left',
           onClick: (row1) => {
             this._router.navigate(new Array('/').concat([
               "storage", "pools", "id", row1.path.split('/')[0], "dataset",
@@ -765,7 +771,7 @@ export class VolumesListTableConfig implements InputTableConf {
       if (rowData.path.indexOf('/') !== -1) {
         actions.push({
           id: rowData.name,
-          name: 'Delete Dataset',
+          name: T('Delete Dataset'),
           label: T("Delete Dataset"),
           onClick: (row1) => {
             this.dialogService.doubleConfirm(
@@ -818,7 +824,7 @@ export class VolumesListTableConfig implements InputTableConf {
     if (rowData.type === "zvol") {
       actions.push({
         id: rowData.name,
-        name: 'Delete Zvol',
+        name: T('Delete Zvol'),
         label: T("Delete Zvol"),
         onClick: (row1) => {
           this.dialogService.doubleConfirm(T("Delete "), 
@@ -842,7 +848,7 @@ export class VolumesListTableConfig implements InputTableConf {
       });
       actions.push({
         id: rowData.name,
-        name: 'Edit Zvol',
+        name: T('Edit Zvol'),
         label: T("Edit Zvol"),
         onClick: (row1) => {
           this._router.navigate(new Array('/').concat([
@@ -857,7 +863,7 @@ export class VolumesListTableConfig implements InputTableConf {
     if (rowData.type === "zvol" || rowData.type === "dataset") {
       actions.push({
         id: rowData.name,
-        name: 'Create Snapshot',
+        name: T('Create Snapshot'),
         label: T("Create Snapshot"),
         onClick: (row) => {
           this.ws.call('vmware.dataset_has_vms',[row.path, false]).subscribe((vmware_res)=>{
@@ -914,7 +920,7 @@ export class VolumesListTableConfig implements InputTableConf {
       if (rowDataset && rowDataset['origin'] && !!rowDataset['origin'].parsed) {
         actions.push({
           id: rowData.name,
-          name: 'Promote Dataset',
+          name: T('Promote Dataset'),
           label: T("Promote Dataset"),
           onClick: (row1) => {
             this.loader.open();
@@ -1036,8 +1042,8 @@ export class VolumesListComponent extends EntityTableComponent implements OnInit
   constructor(protected core: CoreService ,protected rest: RestService, protected router: Router, protected ws: WebSocketService,
     protected _eRef: ElementRef, protected dialogService: DialogService, protected loader: AppLoaderService,
     protected mdDialog: MatDialog, protected erdService: ErdService, protected translate: TranslateService,
-    public sorter: StorageService, protected snackBar: MatSnackBar, protected snackbarService: SnackbarService, protected job: JobService, protected storage: StorageService, protected pref: PreferencesService) {
-    super(core, rest, router, ws, _eRef, dialogService, loader, erdService, translate, snackBar, sorter, job, pref, mdDialog);
+    public sorter: StorageService, protected job: JobService, protected storage: StorageService, protected pref: PreferencesService) {
+    super(core, rest, router, ws, _eRef, dialogService, loader, erdService, translate, sorter, job, pref, mdDialog);
   }
 
   public repaintMe() {
