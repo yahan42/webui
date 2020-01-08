@@ -1,11 +1,11 @@
-<div class="widget" [ngClass]="{'double-height': true,'xs': screenType == 'Mobile', 'generic-hardware': !product_image, 'ix-hardware': product_image}" >
+<div class="widget" [ngClass]="{'double-height': true,'xs': screenType == 'Mobile', 'generic-hardware': !product_image, 'ix-hardware': product_image, 'compact': isCompact}" >
   <div class="card-container front">
     <mat-card class="front" fxLayout="row" fxLayoutWrap fxLayoutAlign="space-between stretch">
       <mat-card-content fxLayout="row wrap" fxLayout.gt-xs="row wrap" fxLayoutAlign="space-between start" fxFlex="100">
 
         <mat-toolbar-row fxHide.xs class="view-overview">
           <span fxHide.xs class="mat-card-title-text">
-            <span class="card-title-text">
+            <span *ngIf="!isCompact" class="card-title-text">
               &nbsp;{{"System Information" | translate}}&nbsp;<span *ngIf="isPassive" class="passive">({{"Standby" | translate}})</span>
             </span>
           </span>
@@ -15,7 +15,7 @@
           <div class="slide overview" fxFlex="100" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between">
   
           <!-- Summary Section -->
-          <div fxFlex.xs="250px" fxFlex="40" class="left fn-theme-primary {{isPassive ? 'passive' : 'active'}}" fxLayout="column" fxLayoutAlign="space-between center">
+          <div fxFlex.xs="250px" fxFlex="{{isCompact ? 100 : 40}}" class="left fn-theme-primary {{isPassive ? 'passive' : 'active'}}" fxLayout="column" fxLayoutAlign="space-between center">
 
             <!-- Mobile Only: Exit Widget -->
             <button fxHide.gt-xs class="mat-card-title-text primary-nav" mat-icon-button color="default" >
@@ -56,7 +56,7 @@
           </div>
   
           <!-- Details Section -->
-          <div class="right" fxFlex.xs fxFlex.gt-xs="60" fxLayout="column">
+          <div *ngIf="!isCompact" class="right" fxFlex.xs fxFlex.gt-xs="60" fxLayout="column">
 
             <div  fxFlex *ngIf="!data && isHA && isPassive && !ha_status" class="data-container ha-status">
               <div class="spinner-wrapper"><mat-spinner [diameter]="40" style="margin: 0 auto;"></mat-spinner></div>

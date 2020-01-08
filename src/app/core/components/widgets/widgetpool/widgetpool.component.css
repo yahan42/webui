@@ -3,6 +3,10 @@
   height:400px;
 }
 
+.widget.compact{
+  width:240px;
+}
+
 .widget mat-card-content{
   width: 100%;
 }
