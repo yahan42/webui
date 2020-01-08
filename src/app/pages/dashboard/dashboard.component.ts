@@ -27,7 +27,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   public renderedWidgets: number[] = [];
   public hiddenWidgets: number[] = []; 
 
-  public isCompact: boolean = true;
+  public isCompact: boolean = false;
   public large: string = "lg";
   public medium: string = "md";
   public small: string = "sm";
@@ -156,7 +156,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   toggleCompact(){
     this.isCompact = !this.isCompact;
-    console.log(this.isCompact);
   }
 
   ngOnInit(){

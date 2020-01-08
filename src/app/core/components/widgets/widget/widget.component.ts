@@ -25,7 +25,7 @@ export class WidgetComponent extends iXObject implements AfterViewInit {
   protected core:CoreService;
   protected themeService: ThemeService;
   @Input() widgetSize: string;
-  @Input() isCompact?: boolean = true;
+  @Input() isCompact?: boolean = false;
   @Input() rendered?:boolean = true;
   @Input() configurable:boolean = false;
   @Output() back = new EventEmitter();
