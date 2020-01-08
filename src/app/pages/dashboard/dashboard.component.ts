@@ -154,6 +154,11 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  toggleCompact(){
+    this.isCompact = !this.isCompact;
+    console.log(this.isCompact);
+  }
+
   ngOnInit(){
 
     this.init();

@@ -1,5 +1,5 @@
 <div (window:resize)="onMobileResize($event)">  
-  
+  <button mat-mini-fab (click)="toggleCompact()" class="fn-theme-primary" style="position:fixed; right:64px; bottom: 64px; z-index:100;"><mat-icon>autorenew</mat-icon></button>
   <div class="widgets-wrapper"
        fxLayout="row wrap"
        fxLayoutAlign="center center"
@@ -12,17 +12,17 @@
           <ng-container  *ngIf="widget.rendered">
             <ng-container [ngSwitch]="widget.name.toLowerCase()">
               
-              <widget-sysinfo *ngSwitchCase="'system information'" id="active" fxFlex="{{ isCompact ? '240px' : '600px'" fxFlex.xs="100" [isHA]="isHA" [passive]="false" [widgetSize]="medium"></widget-sysinfo>
-              <widget-sysinfo *ngSwitchCase="'system information(standby)'" id="passive" fxFlex="{{isCompact ? '240px' : '600px'}}" fxFlex.xs="100" [isHA]="isHA" [passive]="true" [widgetSize]="medium"></widget-sysinfo>
+              <widget-sysinfo *ngSwitchCase="'system information'" id="active" fxFlex="{{ isCompact ? '240px' : '600px'" [isCompact]="isCompact" fxFlex.xs="100" [isHA]="isHA" [passive]="false" [widgetSize]="medium"></widget-sysinfo>
+              <widget-sysinfo *ngSwitchCase="'system information(standby)'" id="passive" [isCompact]="isCompact" fxFlex="{{isCompact ? '240px' : '600px'}}" fxFlex.xs="100" [isHA]="isHA" [passive]="true" [widgetSize]="medium"></widget-sysinfo>
               
 
-              <widget-cpu *ngSwitchCase="'cpu'" fxFlex="{{ isCompact ? '240px' : '600px'" fxFlex.xs="100" [data]="dataFromConfig(widget)" [cpuModel]="systemInformation.model" [widgetSize]="medium"   configurable="false"></widget-cpu>
+              <widget-cpu *ngSwitchCase="'cpu'" [isCompact]="isCompact" fxFlex="{{ isCompact ? '240px' : '600px'" fxFlex.xs="100" [data]="dataFromConfig(widget)" [cpuModel]="systemInformation.model" [widgetSize]="medium"   configurable="false"></widget-cpu>
   
-              <widget-memory *ngSwitchCase="'memory'" fxFlex="{{ isCompact ? '240px' : '600px' }}" fxFlex.xs="100" [data]="dataFromConfig(widget)" [widgetSize]="medium"   configurable="false"></widget-memory>
+              <widget-memory *ngSwitchCase="'memory'" [isCompact]="isCompact" fxFlex="{{ isCompact ? '240px' : '600px' }}" fxFlex.xs="100" [data]="dataFromConfig(widget)" [widgetSize]="medium"   configurable="false"></widget-memory>
               
-              <widget-pool *ngSwitchCase="'pool'" fxFlex="{{ isCompact ? '240px' : '600px' }}" fxFlex.xs="100" [poolState]="dataFromConfig(widget)" [volumeData]="volumeDataFromConfig(widget)" [widgetSize]="medium" configurable="false"></widget-pool>
+              <widget-pool *ngSwitchCase="'pool'" [isCompact]="isCompact" fxFlex="{{ isCompact ? '240px' : '600px' }}" fxFlex.xs="100" [poolState]="dataFromConfig(widget)" [volumeData]="volumeDataFromConfig(widget)" [widgetSize]="medium" configurable="false"></widget-pool>
   
-              <widget-nic *ngSwitchCase="'interface'" fxFlex="{{ isCompact ? '240px' : '600px' }}" fxFlex.xs="100" [nicState]="dataFromConfig(widget)" [stats]="statsDataEvents" [widgetSize]="medium" configurable="false"></widget-nic>
+              <widget-nic *ngSwitchCase="'interface'" [isCompact]="isCompact" fxFlex="{{ isCompact ? '240px' : '600px' }}" fxFlex.xs="100" [nicState]="dataFromConfig(widget)" [stats]="statsDataEvents" [widgetSize]="medium" configurable="false"></widget-nic>
   
             </ng-container>
           </ng-container>
