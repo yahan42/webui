@@ -11,6 +11,7 @@ import { FlexLayoutModule, MediaObserver } from '@angular/flex-layout';
 import { RestService,WebSocketService } from '../../services/';
 import { DashConfigItem } from 'app/core/components/widgets/widgetcontroller/widgetcontroller.component';
 import { tween, styler } from 'popmotion';
+//import { TextLimiterDirective } from 'app/core/directives/directives/text-limiter/text-limiter.directive';
 
 @Component({
   selector: 'dashboard',
@@ -27,7 +28,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   public renderedWidgets: number[] = [];
   public hiddenWidgets: number[] = []; 
 
-  public isCompact: boolean = false;
+  public isCompact: boolean = true;
   public large: string = "lg";
   public medium: string = "md";
   public small: string = "sm";

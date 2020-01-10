@@ -6,6 +6,7 @@ import {FormsModule} from '@angular/forms';
 import { MaterialModule } from '../../appMaterial.module';
 import { EntityModule } from '../common/entity/entity.module';
 import { CoreComponents } from 'app/core/components/corecomponents.module';
+import { CoreDirectives } from 'app/core/directives/coredirectives.module';
 
 import {DashboardComponent} from './dashboard.component';
 import {routing} from './dashboard.routing';

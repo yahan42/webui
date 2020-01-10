@@ -14,6 +14,7 @@ import { ViewButtonComponent } from './viewbutton/viewbutton.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule }   from '@angular/forms';
 import { CommonDirectivesModule } from '../../directives/common/common-directives.module';
+import { CoreDirectives } from '../directives/coredirectives.module';
 
 import { ViewChartComponent } from 'app/core/components/viewchart/viewchart.component';
 import { ViewChartPieComponent } from 'app/core/components/viewchartpie/viewchartpie.component';
@@ -37,8 +38,8 @@ import { SimpleFailoverBtnComponent, SimpleFailoverBtnDialog } from 'app/core/co
 import { TranslateModule } from '@ngx-translate/core';
 import { ContextMenuComponent } from './context-menu/context-menu.component';
 import { CopyPasteMessageComponent } from 'app/pages/shell/copy-paste-message.component';
-import { TextLimiterDirective } from './directives/text-limiter/text-limiter.directive';
-import { TextLimiterTooltipComponent } from './directives/text-limiter/text-limiter-tooltip/text-limiter-tooltip.component';
+//import { TextLimiterDirective } from './directives/text-limiter/text-limiter.directive';
+//import { TextLimiterTooltipComponent } from './directives/text-limiter/text-limiter-tooltip/text-limiter-tooltip.component';
 import { WidgetControllerComponent } from './widgets/widgetcontroller/widgetcontroller.component';
 import { ConvertPipe } from './pipes/convert.pipe';
 
@@ -59,7 +60,8 @@ import { ConvertPipe } from './pipes/convert.pipe';
     FlexLayoutModule,
     FormsModule,
     TranslateModule,
-    CommonDirectivesModule
+    CommonDirectivesModule,
+    CoreDirectives
   ],
   declarations: [
     ContextMenuComponent,
@@ -85,14 +87,15 @@ import { ConvertPipe } from './pipes/convert.pipe';
     WidgetCpuComponent,
     WidgetMemoryComponent,
     WidgetPoolComponent,
-    TextLimiterDirective,
-    TextLimiterTooltipComponent,
+    //TextLimiterDirective,
+    //TextLimiterTooltipComponent,
     WidgetControllerComponent,
     SimpleFailoverBtnComponent,
     SimpleFailoverBtnDialog,
     ConvertPipe,
   ],
   exports: [ // Modules and Components here
+    CoreDirectives,
     CommonModule,
     MaterialModule,
     OverlayModule,
@@ -120,7 +123,7 @@ import { ConvertPipe } from './pipes/convert.pipe';
     WidgetNicComponent,
     WidgetCpuComponent,
     WidgetMemoryComponent,
-    TextLimiterTooltipComponent,
+    //TextLimiterTooltipComponent,
     WidgetPoolComponent,
     WidgetControllerComponent,
     SimpleFailoverBtnComponent,
@@ -148,7 +151,7 @@ import { ConvertPipe } from './pipes/convert.pipe';
     WidgetCpuComponent,
     WidgetMemoryComponent,
     WidgetPoolComponent,
-    TextLimiterTooltipComponent,
+    //TextLimiterTooltipComponent,
     WidgetControllerComponent,
     SimpleFailoverBtnComponent,
     SimpleFailoverBtnDialog,
