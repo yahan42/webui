@@ -12,7 +12,7 @@
           <ng-container  *ngIf="widget.rendered">
             <ng-container [ngSwitch]="widget.name.toLowerCase()">
               
-              <widget-sysinfo ix-animate *ngSwitchCase="'system information'" id="active" fxFlex="{{ isCompact ? '240px' : '600px'" [isCompact]="isCompact" fxFlex.xs="100" [isHA]="isHA" [passive]="false" [widgetSize]="medium"></widget-sysinfo>
+              <widget-sysinfo ix-animate animateWith="angular" *ngSwitchCase="'system information'" id="active" fxFlex="{{ isCompact ? '240px' : '600px'" [isCompact]="isCompact" fxFlex.xs="100" [isHA]="isHA" [passive]="false" [widgetSize]="medium"></widget-sysinfo>
               <widget-sysinfo *ngSwitchCase="'system information(standby)'" id="passive" [isCompact]="isCompact" fxFlex="{{isCompact ? '240px' : '600px'}}" fxFlex.xs="100" [isHA]="isHA" [passive]="true" [widgetSize]="medium"></widget-sysinfo>
               
 
