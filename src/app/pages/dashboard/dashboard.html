@@ -1,5 +1,5 @@
 <div (window:resize)="onMobileResize($event)">  
-  <button *ngIf="screenType == 'Desktop'" mat-mini-fab (click)="toggleCompact()" class="fn-theme-primary" style="position:fixed; right:64px; bottom: 64px; z-index:100;"><mat-icon>autorenew</mat-icon></button>
+  <button *ngIf="screenType == 'Desktop'" mat-fab (click)="toggleCompact()" class="fn-theme-primary" style="position:fixed; right:64px; bottom: 64px; z-index:100;"><mat-icon>autorenew</mat-icon></button>
   <div class="widgets-wrapper"
        fxLayout="row wrap"
        fxLayoutAlign="center center"

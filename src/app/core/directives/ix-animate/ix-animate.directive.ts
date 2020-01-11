@@ -1,6 +1,6 @@
 import { Directive, AfterViewInit, Renderer2, ElementRef, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { AnimationBuilder, style, animate, query, transition, trigger, keyframes } from '@angular/animations';
-import { tween, keyframes as pKeyframes, styler, easing } from 'popmotion';
+import { AnimationBuilder, AnimationPlayer, style, animate, query, transition, trigger, keyframes } from '@angular/animations';
+import { tween, keyframes as popKeyframes, styler, easing } from 'popmotion';
 
 export interface TweenConfig {
   from?: any;
@@ -23,17 +23,16 @@ export class iXAnimateDirective implements AfterViewInit, OnChanges {
 
   protected target: any;
   protected defaultEasing: any = easing.easeInOut;
+  public player: AnimationPlayer | undefined;
 
   public _sState: any;
   get sState(){ return this._sState;}
   set sState(v){
     this._sState = v;
     if(this.isTweenConfig(v)){
-      this.angularTween(v);
-      console.log("Tween!");
+      this.tween(v);
     } else if (this.isKeyframesConfig(v)){
-      this.angularKeyframes(v);
-      console.log("Keyframes!");
+      this.keyframes(v);
     }
   }
 
@@ -53,38 +52,42 @@ export class iXAnimateDirective implements AfterViewInit, OnChanges {
 
   ngAfterViewInit(){
     this.target = this.engine == 'popmotion' ? styler(this.el.nativeElement) : this.el.nativeElement;
+    this.runExample();
+  }
+
+  runExample(){
+    const tweenOptions:TweenConfig = {
+      from: {transform: 'translate(0px,0px) scale(1)', 'z-index': 1},
+      to: {transform: 'translate(80px,100px) scale(1.25)', 'z-index': 5},
+      duration: 300
+    }
+
+    const keyframeOptions:KeyframesConfig = {
+      values:[
+        {transform: 'translate(0px,0px) scale(1) ', 'z-index': 100},
+        {transform: 'translate(300px,80px) scale(3.5) ', 'z-index': 100},
+        {transform: 'translate(750px,250px) scale(2) ', 'z-index': 100},
+        {transform: 'translate(0px,0px) scale(1) ', 'z-index': 100},
+      ],
+      times:[0, 0.25, 0.77, 1], // NOTE these are end times and not start times!
+      duration: 500,
+      easing: this.defaultEasing
+    }
 
     setTimeout(() => {
-      const tweenOptions:TweenConfig = {
-        from: {transform: 'translate(1920px,0)', 'z-index': 1},
-        to:{transform: 'translate(680px,100px)', 'z-index': 5},
-        duration: 300
-      }
+      //this.sState = keyframeOptions;
+      this.sState = tweenOptions;
+    }, 1000);
 
-      const keyframeOptions = {
-        values:[
-          /*{x: 0, y: 0, scale: 1, 'z-index': 100},
-          {x: 300, y: 80, scale: 1.5, 'z-index': 100},
-          {x: 750, y: '0', scale: 1, 'z-index': 100},*/
-          {transform: 'translate(0,0) scale(1) ', 'z-index': 100},
-          {transform: 'translate(300,80) scale(1.5) ', 'z-index': 100},
-          {transform: 'translate(750,0) scale(1) ', 'z-index': 100},
-        ],
-        times:[0, 0.45, 1],
-        duration: 500,
-        easing: this.defaultEasing
-      }
-
+    setTimeout(() => {
       this.sState = keyframeOptions;
       //this.sState = tweenOptions;
-
-    }, 3000);
+    }, 4000);
 
   }
 
 
   protected tween(options: TweenConfig | any){
-    console.log(this.engine);
     if(this.engine !== 'popmotion'){ 
       this.angularTween(options);
       return
@@ -95,49 +98,61 @@ export class iXAnimateDirective implements AfterViewInit, OnChanges {
 
   protected keyframes(options: KeyframesConfig | any){
     if(this.engine !== 'popmotion'){ 
-
+      this.angularKeyframes(options);
       return
     };
-    pKeyframes(options).start(this.target.set);
+    popKeyframes(options).start(this.target.set);
   }
 
   protected angularTween(options: TweenConfig) {
-    let angularOptions = [
-    ];
+    let angularOptions = [];
 
     if(options.from){
       angularOptions.push(style(options.from));
     }
     angularOptions.push(animate(options.duration, style(options.to)));
-    console.log(angularOptions);
+
+    this.runAngularAnimation(angularOptions);
+
+  }
+
+  protected angularKeyframes(options:KeyframesConfig){
     
+    if(options.times.length !== options.values.length){
+      const message = 'Keyframes Timing Mismatch!: There are ' + options.values.length + ' values, and ' + options.times.length + ' times';
+      throw message
+    }
+
+    if(this.player){
+      this.player.destroy();
+      delete this.player;
+    }
+
+    const angularOptions = options.values.map((v, index) => {
+      const time = (v) => options.duration * v;
+
+      if(index < 1 && options.times[index] == 0){
+        return animate(0, style(v));
+      } else if(index < 1 && options.times[index] > 0){
+        throw "Missing Keyframe!: Nothing set to run at the beginning of sequence! (time property does not contain 0)"
+      }
+
+      const duration = time(options.times[index] - options.times[index - 1]);
+      return animate(duration, style(v));
+    });
+    
+    this.runAngularAnimation(angularOptions);
+
+  }
+
+  runAngularAnimation(angularOptions){
     // Define a reusable animation
     const myAnimation = this.builder.build(angularOptions);
 
     // use the returned factory object to create a player
-    const player = myAnimation.create(this.target);
+    this.player = myAnimation.create(this.target);
 
-    player.play();
-  }
-
-  protected angularKeyframes(options:KeyframesConfig){
-    console.log(options);
-    const frames = options.values.map((v, index) => {
-      const offset = options.times[index];
-      
-      
-      v.offset = offset;
-      console.log(v);
-      return style(v);
-    });
-    console.log(frames);
-
-    // Define a reusable animation
-    const myAnimation = this.builder.build([
-      animate(options.duration, keyframes(frames))
-    ]);
-    const player = myAnimation.create(this.target);
-    player.play;
+    this.player.play();
   }
 
   // Typeguards
