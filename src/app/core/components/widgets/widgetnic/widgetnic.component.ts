@@ -130,6 +130,9 @@ export class WidgetNicComponent extends WidgetComponent implements OnInit, After
       this.title = this.currentSlide == "0" ? "Interface" : this.nicState.name;
     }
 
+    if(changes.isCompact && !changes.isCompact.firstChange){
+      this.animateChange();
+    }
   }
 
   ngOnInit(){

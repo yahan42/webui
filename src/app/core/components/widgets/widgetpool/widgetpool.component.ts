@@ -166,6 +166,10 @@ export class WidgetPoolComponent extends WidgetComponent implements OnInit, Afte
     if(changes.volumeData){
       this.getAvailableSpace();
     }
+
+    if(changes.isCompact && !changes.isCompact.firstChange){
+      this.animateChange();
+    }
   }
 
   ngOnInit(){

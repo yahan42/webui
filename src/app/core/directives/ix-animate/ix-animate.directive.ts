@@ -1,4 +1,4 @@
-import { Directive, AfterViewInit, Renderer2, ElementRef, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Directive, AfterViewInit, Renderer2, ElementRef, Input, OnChanges, SimpleChange } from '@angular/core';
 import { AnimationBuilder, AnimationPlayer, style, animate, query, transition, trigger, keyframes } from '@angular/animations';
 import { tween, keyframes as popKeyframes, styler, easing } from 'popmotion';
 
@@ -14,6 +14,11 @@ export interface KeyframesConfig {
   times: number[];
   duration: number;
   easing?: any;  // popmotion only?
+}
+
+interface AnimationState {
+  tween?: TweenConfig;
+  keyframes?: KeyframesConfig;
 }
 
 @Directive({
@@ -37,25 +42,30 @@ export class iXAnimateDirective implements AfterViewInit, OnChanges {
   }
 
   @Input('animateWith') engine:string = 'angular'; // angular or popmotion are supported
-  @Input('state') state?:any;
+  @Input('animateState') state?:any;
   @Input() container?:boolean = false;
   @Input() arrangement?:string;
 
   constructor(protected renderer: Renderer2, protected el: ElementRef, protected builder: AnimationBuilder) {
   }
 
-  ngOnChanges(changes:SimpleChanges){
-    if(changes.state){
-      console.log(changes.state);
+  ngOnChanges(changes:SimpleChange){
+    if(changes.state && !changes.state.firstChange){
+      //console.log(changes.state);
+      if(changes.state.currentValue.tween){
+        this.tween(changes.state.currentValue.tween);
+      } else if (changes.state.currentValue.keyframes){
+        this.keyframes(changes.state.currentValue.keyframes);
+      }
     }
   }
 
   ngAfterViewInit(){
     this.target = this.engine == 'popmotion' ? styler(this.el.nativeElement) : this.el.nativeElement;
-    this.runExample();
+    //this.runExample();
   }
 
-  runExample(){
+  /*runExample(){
     const tweenOptions:TweenConfig = {
       from: {transform: 'translate(0px,0px) scale(1)', 'z-index': 1},
       to: {transform: 'translate(80px,100px) scale(1.25)', 'z-index': 5},
@@ -76,15 +86,15 @@ export class iXAnimateDirective implements AfterViewInit, OnChanges {
 
     setTimeout(() => {
       //this.sState = keyframeOptions;
-      this.sState = tweenOptions;
+      //this.sState = tweenOptions;
     }, 1000);
 
     setTimeout(() => {
-      this.sState = keyframeOptions;
+      //this.sState = keyframeOptions;
       //this.sState = tweenOptions;
     }, 4000);
 
-  }
+  }*/
 
 
   protected tween(options: TweenConfig | any){

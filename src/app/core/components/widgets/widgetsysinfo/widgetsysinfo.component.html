@@ -1,6 +1,6 @@
 <div class="widget" [ngClass]="{'double-height': true,'xs': screenType == 'Mobile', 'generic-hardware': !product_image, 'ix-hardware': product_image, 'compact': isCompact}" >
   <div class="card-container front">
-    <mat-card class="front" fxLayout="row" fxLayoutWrap fxLayoutAlign="space-between stretch">
+    <mat-card ix-animate [animateState]="animateState" class="front" fxLayout="row" fxLayoutWrap fxLayoutAlign="space-between stretch">
       <mat-card-content fxLayout="row wrap" fxLayout.gt-xs="row wrap" fxLayoutAlign="space-between start" fxFlex="100">
 
         <mat-toolbar-row fxHide.xs class="view-overview">

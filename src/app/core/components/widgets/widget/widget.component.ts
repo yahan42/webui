@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, AfterViewInit, Input, ViewChild, Output, EventEmitter, OnChanges, SimpleChange } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { CoreServiceInjector } from 'app/core/services/coreserviceinjector';
 import { CoreService, CoreEvent } from 'app/core/services/core.service';
@@ -20,7 +20,7 @@ import { T } from '../../../../translate-marker';
   selector: 'widget',
   templateUrl:'./widget.component.html'
 })
-export class WidgetComponent extends iXObject implements AfterViewInit {
+export class WidgetComponent extends iXObject implements AfterViewInit, OnChanges {
 
   protected core:CoreService;
   protected themeService: ThemeService;
@@ -33,6 +33,7 @@ export class WidgetComponent extends iXObject implements AfterViewInit {
   public chartSize:number;
 
   //public configurable: boolean = true;
+  public animateState;
   public flipAnimation = "stop";
   public flipDirection = "vertical";
   public isFlipped: boolean = false;
@@ -43,7 +44,35 @@ export class WidgetComponent extends iXObject implements AfterViewInit {
     this.themeService = CoreServiceInjector.get(ThemeService);
   }
 
+  ngOnChanges(changes:SimpleChange){
+    if(changes.isCompact && !changes.isCompact.firstChange){
+      this.animateChange();
+    }
+  }
+
   ngAfterViewInit(){
+  }
+
+  animateChange(){
+
+      if(this.isCompact){
+        this.animateState = {
+          tween:{
+            from: {width: '600px'},
+            to: { width: '240px'},
+            duration: 125
+          }
+        } 
+      } else if(!this.isCompact){        
+        this.animateState = {
+          tween: {
+            from: {width: '240px'},
+            to: { width: '600px'},
+            duration: 125
+          }
+        }
+      }
+
   }
 
   toggleConfig(){
