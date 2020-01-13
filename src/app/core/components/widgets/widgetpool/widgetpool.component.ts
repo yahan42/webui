@@ -128,7 +128,8 @@ export class WidgetPoolComponent extends WidgetComponent implements OnInit, Afte
     return this.currentSlide == '0' ? 0 : parseInt(this.currentSlide) - 1;
   }
 
-  path: Slide[] = [];
+  public defaultPath: Slide[] = [];
+  public path: Slide[] = [];
 
   public title: string = this.path.length > 0 && this.poolState && this.currentSlide !== "0" ? this.poolState.name : "Pool";
   public voldataavail = false;
@@ -168,6 +169,9 @@ export class WidgetPoolComponent extends WidgetComponent implements OnInit, Afte
     }
 
     if(changes.isCompact && !changes.isCompact.firstChange){
+      if(changes.isCompact.currentValue && this.currentSlideName !== 'overview'){
+        this.resetSlide();
+      }
       this.animateChange();
     }
   }
@@ -188,12 +192,13 @@ export class WidgetPoolComponent extends WidgetComponent implements OnInit, Afte
       'disk details': this.disk_details
     }
 
-    this.path = [
+    this.defaultPath = [
       { name: T("overview"),template: this.overview},
       { name: "empty", template: this.empty},
       { name: "empty", template: this.empty},
       { name: "empty", template: this.empty}
     ];
+    this.path = Object.assign([],this.defaultPath);
 
     this.cdr.detectChanges();
 
@@ -310,15 +315,20 @@ export class WidgetPoolComponent extends WidgetComponent implements OnInit, Afte
       }
   
       this.path[slideIndex] = slide;
-    } else if(direction == 'back'){
+    } else if(direction == 'back' && (parseInt(this.currentSlide) - slideIndex == 1)){
       // empty the path segment
-      this.path[parseInt(this.currentSlide)] = { name: "empty", template: this.empty}
-    }
+      this.path[parseInt(this.currentSlide)] = { name: "empty", template: this.empty} 
+    } 
 
     this.updateSlidePosition(slideIndex);
   }
 
-  updateSlidePosition(value){
+  resetSlide(){
+      this.path = Object.assign([],this.defaultPath);
+      this.updateSlidePosition(0, 0, true);
+  }
+
+  updateSlidePosition(value: number, duration: number = 250, home?:boolean){
     if(value.toString() == this.currentSlide){ return; }
 
     const carousel = this.carouselParent.nativeElement.querySelector('.carousel')
@@ -328,12 +338,12 @@ export class WidgetPoolComponent extends WidgetComponent implements OnInit, Afte
     const slideW = styler(slide).get('width'); //600;
 
     const startX = (parseInt(this.currentSlide) * slideW) * -1;
-    const endX = (value * slideW) * -1;
+    const endX = home ? 0 : (value * slideW) * -1;
 
     tween({
       from:{ x: startX },
       to:{ x: endX },
-      duration: 250
+      duration: duration
     }).start(el.set);
     
     this.currentSlide = value.toString();
