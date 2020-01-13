@@ -1,4 +1,4 @@
-import { Directive, AfterViewInit, Renderer2, ElementRef, Input, OnChanges, SimpleChange } from '@angular/core';
+import { Directive, AfterViewInit, Renderer2, ElementRef, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { AnimationBuilder, AnimationPlayer, style, animate, query, transition, trigger, keyframes } from '@angular/animations';
 import { tween, keyframes as popKeyframes, styler, easing } from 'popmotion';
 
@@ -30,7 +30,7 @@ export class iXAnimateDirective implements AfterViewInit, OnChanges {
   protected defaultEasing: any = easing.easeInOut;
   public player: AnimationPlayer | undefined;
 
-  public _sState: any;
+  /*public _sState: any;
   get sState(){ return this._sState;}
   set sState(v){
     this._sState = v;
@@ -39,23 +39,23 @@ export class iXAnimateDirective implements AfterViewInit, OnChanges {
     } else if (this.isKeyframesConfig(v)){
       this.keyframes(v);
     }
-  }
+  }*/
 
   @Input('animateWith') engine:string = 'angular'; // angular or popmotion are supported
-  @Input('animateState') state?:any;
+  @Input('animateState') animateState?:any;
   @Input() container?:boolean = false;
   @Input() arrangement?:string;
 
   constructor(protected renderer: Renderer2, protected el: ElementRef, protected builder: AnimationBuilder) {
   }
 
-  ngOnChanges(changes:SimpleChange){
-    if(changes.state && !changes.state.firstChange){
-      //console.log(changes.state);
-      if(changes.state.currentValue.tween){
-        this.tween(changes.state.currentValue.tween);
-      } else if (changes.state.currentValue.keyframes){
-        this.keyframes(changes.state.currentValue.keyframes);
+  ngOnChanges(changes:SimpleChanges){
+    if(changes.animateState && !changes.animateState.firstChange){
+      //console.log(changes.animateState);
+      if(changes.animateState.currentValue.tween){
+        this.tween(changes.animateState.currentValue.tween);
+      } else if (changes.animateState.currentValue.keyframes){
+        this.keyframes(changes.animateState.currentValue.keyframes);
       }
     }
   }

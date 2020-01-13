@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, Input, ViewChild, Output, EventEmitter, OnChanges, SimpleChange } from '@angular/core';
+import { Component, AfterViewInit, Input, ViewChild, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { CoreServiceInjector } from 'app/core/services/coreserviceinjector';
 import { CoreService, CoreEvent } from 'app/core/services/core.service';
@@ -44,7 +44,7 @@ export class WidgetComponent extends iXObject implements AfterViewInit, OnChange
     this.themeService = CoreServiceInjector.get(ThemeService);
   }
 
-  ngOnChanges(changes:SimpleChange){
+  ngOnChanges(changes:SimpleChanges){
     if(changes.isCompact && !changes.isCompact.firstChange){
       this.animateChange();
     }
