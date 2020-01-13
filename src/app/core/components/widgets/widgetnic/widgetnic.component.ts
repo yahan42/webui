@@ -88,6 +88,8 @@ export class WidgetNicComponent extends WidgetComponent implements OnInit, After
     { name: T("empty")}
   ];
 
+  defaultPath: Slide[] = [];
+
   get ipAddresses(){
     if(!this.nicState && !this.nicState.aliases){ return [];}
 
@@ -131,6 +133,9 @@ export class WidgetNicComponent extends WidgetComponent implements OnInit, After
     }
 
     if(changes.isCompact && !changes.isCompact.firstChange){
+      if(changes.isCompact.currentValue && this.currentSlideName !== 'overview'){
+        this.resetSlide();
+      }
       this.animateChange();
     }
   }
@@ -139,6 +144,9 @@ export class WidgetNicComponent extends WidgetComponent implements OnInit, After
   }
 
   ngAfterViewInit(){
+
+    this.defaultPath = Object.assign([], this.path);
+
     this.stats.subscribe((evt:CoreEvent) => {
       if(evt.name == "NetTraffic_" + this.nicState.name){
         const sent: Converted = this.convert(evt.data.sent_bytes_rate);
@@ -168,7 +176,12 @@ export class WidgetNicComponent extends WidgetComponent implements OnInit, After
     
   }
 
-  updateSlidePosition(value){
+  resetSlide(){
+    this.path = Object.assign([], this.defaultPath);
+    this.updateSlidePosition(0,0,true);
+  }
+
+  updateSlidePosition(value: number, duration: number = 250, home?: boolean){
     if(value.toString() == this.currentSlide){ return; }
     const carousel = this.carouselParent.nativeElement.querySelector('.carousel');
     const slide = this.carouselParent.nativeElement.querySelector('.slide');
