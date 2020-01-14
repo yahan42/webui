@@ -30,20 +30,10 @@ export class iXAnimateDirective implements AfterViewInit, OnChanges {
   protected defaultEasing: any = easing.easeInOut;
   public player: AnimationPlayer | undefined;
 
-  /*public _sState: any;
-  get sState(){ return this._sState;}
-  set sState(v){
-    this._sState = v;
-    if(this.isTweenConfig(v)){
-      this.tween(v);
-    } else if (this.isKeyframesConfig(v)){
-      this.keyframes(v);
-    }
-  }*/
-
   @Input('animateWith') engine:string = 'angular'; // angular or popmotion are supported
   @Input('animateState') animateState?:any;
   @Input() container?:boolean = false;
+  @Input() childSelector?:string;
   @Input() arrangement?:string;
 
   constructor(protected renderer: Renderer2, protected el: ElementRef, protected builder: AnimationBuilder) {
@@ -51,51 +41,27 @@ export class iXAnimateDirective implements AfterViewInit, OnChanges {
 
   ngOnChanges(changes:SimpleChanges){
     if(changes.animateState && !changes.animateState.firstChange){
-      //console.log(changes.animateState);
-      if(changes.animateState.currentValue.tween){
+      this.animateStateChanged(changes.animateState.currentValue);
+      /*if(changes.animateState.currentValue.tween){
         this.tween(changes.animateState.currentValue.tween);
       } else if (changes.animateState.currentValue.keyframes){
         this.keyframes(changes.animateState.currentValue.keyframes);
-      }
+      }*/
     }
+
   }
 
   ngAfterViewInit(){
     this.target = this.engine == 'popmotion' ? styler(this.el.nativeElement) : this.el.nativeElement;
-    //this.runExample();
   }
 
-  /*runExample(){
-    const tweenOptions:TweenConfig = {
-      from: {transform: 'translate(0px,0px) scale(1)', 'z-index': 1},
-      to: {transform: 'translate(80px,100px) scale(1.25)', 'z-index': 5},
-      duration: 300
+  animateStateChanged(state){
+    if(state.tween){
+      this.tween(state.tween);
+    } else if (state.keyframes){
+      this.keyframes(state.keyframes);
     }
-
-    const keyframeOptions:KeyframesConfig = {
-      values:[
-        {transform: 'translate(0px,0px) scale(1) ', 'z-index': 100},
-        {transform: 'translate(300px,80px) scale(3.5) ', 'z-index': 100},
-        {transform: 'translate(750px,250px) scale(2) ', 'z-index': 100},
-        {transform: 'translate(0px,0px) scale(1) ', 'z-index': 100},
-      ],
-      times:[0, 0.25, 0.77, 1], // NOTE these are end times and not start times!
-      duration: 500,
-      easing: this.defaultEasing
-    }
-
-    setTimeout(() => {
-      //this.sState = keyframeOptions;
-      //this.sState = tweenOptions;
-    }, 1000);
-
-    setTimeout(() => {
-      //this.sState = keyframeOptions;
-      //this.sState = tweenOptions;
-    }, 4000);
-
-  }*/
-
+  }
 
   protected tween(options: TweenConfig | any){
     if(this.engine !== 'popmotion'){ 

@@ -24,7 +24,14 @@ export interface DashConfigItem {
   name: string; // Shown in UI fields
   identifier?: string; // Comma separated 'key,value' eg. pool might have 'name,tank'
   rendered: boolean;
-  position?: number;
+  layout?: WidgetLayout;
+  //position?: number;
+}
+
+export interface WidgetLayout {
+  weight: number;
+  name: string;
+  isCompact: boolean;
 }
 
 @Component({

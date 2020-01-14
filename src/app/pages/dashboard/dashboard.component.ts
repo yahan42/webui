@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef,ChangeDetectorRef } from '@angular/core';
 import { CoreService, CoreEvent } from 'app/core/services/core.service';
 import { SystemProfiler } from 'app/core/classes/system-profiler';
 
@@ -9,7 +9,7 @@ import { WidgetPoolComponent } from 'app/core/components/widgets/widgetpool/widg
 import { FlexLayoutModule, MediaObserver } from '@angular/flex-layout';
 
 import { RestService,WebSocketService } from '../../services/';
-import { DashConfigItem } from 'app/core/components/widgets/widgetcontroller/widgetcontroller.component';
+import { DashConfigItem, WidgetLayout } from 'app/core/components/widgets/widgetcontroller/widgetcontroller.component';
 import { tween, styler } from 'popmotion';
 //import { TextLimiterDirective } from 'app/core/directives/directives/text-limiter/text-limiter.directive';
 
@@ -28,7 +28,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   public renderedWidgets: number[] = [];
   public hiddenWidgets: number[] = []; 
 
-  public isCompact: boolean = true;
+  public test: boolean = false;
+  public widgetStates: WidgetLayout[] = [];
+  public isCompact: boolean = false;
   public large: string = "lg";
   public medium: string = "md";
   public small: string = "sm";
@@ -62,7 +64,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public showSpinner: boolean = true;
 
-  constructor(protected core:CoreService, protected ws: WebSocketService, public mediaObserver: MediaObserver, private el: ElementRef){
+  constructor(protected core:CoreService, protected ws: WebSocketService, public mediaObserver: MediaObserver, private el: ElementRef, private cdr: ChangeDetectorRef){
     this.statsDataEvents = new Subject<CoreEvent>();
 
     mediaObserver.media$.subscribe((evt) =>{
@@ -155,8 +157,23 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  trace(str: string){
+    console.log(str);
+    this.test = !this.test;
+  }
+
   toggleCompact(){
     this.isCompact = !this.isCompact;
+
+    const updatedStates = this.widgetStates.map((item, index) => {
+      let update = Object.assign({}, item);
+      update.isCompact = this.isCompact;
+      return update;
+      //return {name: item.name, weight: item.weight, isCompact: this.isCompact};
+    });
+
+    this.widgetStates = updatedStates;
+    this.cdr.detectChanges();
   }
 
   ngOnInit(){
@@ -368,6 +385,11 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.nics.forEach((nic, index) => {
       conf.push({name:'Interface', identifier: 'name,' + nic.name, rendered: true })
     });
+
+    const initialStates = conf.map((item, index) =>{
+      return {name: item.name, weight: index, isCompact: this.isCompact}
+    });
+    this.widgetStates = initialStates;
 
     return conf;
   }
