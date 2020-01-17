@@ -16,7 +16,7 @@ export interface KeyframesConfig {
   easing?: any;  // popmotion only?
 }
 
-interface AnimationState {
+export interface AnimationState {
   tween?: TweenConfig;
   keyframes?: KeyframesConfig;
 }
@@ -32,9 +32,6 @@ export class iXAnimateDirective implements AfterViewInit, OnChanges {
 
   @Input('animateWith') engine:string = 'angular'; // angular or popmotion are supported
   @Input('animateState') animateState?:any;
-  @Input() container?:boolean = false;
-  @Input() childSelector?:string;
-  @Input() arrangement?:string;
 
   constructor(protected renderer: Renderer2, protected el: ElementRef, protected builder: AnimationBuilder) {
   }
@@ -42,11 +39,6 @@ export class iXAnimateDirective implements AfterViewInit, OnChanges {
   ngOnChanges(changes:SimpleChanges){
     if(changes.animateState && !changes.animateState.firstChange){
       this.animateStateChanged(changes.animateState.currentValue);
-      /*if(changes.animateState.currentValue.tween){
-        this.tween(changes.animateState.currentValue.tween);
-      } else if (changes.animateState.currentValue.keyframes){
-        this.keyframes(changes.animateState.currentValue.keyframes);
-      }*/
     }
 
   }
@@ -63,24 +55,24 @@ export class iXAnimateDirective implements AfterViewInit, OnChanges {
     }
   }
 
-  protected tween(options: TweenConfig | any){
+  protected tween(options: TweenConfig | any, target = this.target){
     if(this.engine !== 'popmotion'){ 
-      this.angularTween(options);
+      this.angularTween(options, target);
       return
     };
 
-    tween(options).start(this.target.set);
+    tween(options).start(target.set);
   }
 
-  protected keyframes(options: KeyframesConfig | any){
+  protected keyframes(options: KeyframesConfig | any, target = this.target){
     if(this.engine !== 'popmotion'){ 
-      this.angularKeyframes(options);
+      this.angularKeyframes(options, target);
       return
     };
-    popKeyframes(options).start(this.target.set);
+    popKeyframes(options).start(target.set);
   }
 
-  protected angularTween(options: TweenConfig) {
+  protected angularTween(options: TweenConfig, target) {
     let angularOptions = [];
 
     if(options.from){
@@ -88,11 +80,11 @@ export class iXAnimateDirective implements AfterViewInit, OnChanges {
     }
     angularOptions.push(animate(options.duration, style(options.to)));
 
-    this.runAngularAnimation(angularOptions);
+    this.runAngularAnimation(angularOptions, target);
 
   }
 
-  protected angularKeyframes(options:KeyframesConfig){
+  protected angularKeyframes(options:KeyframesConfig, target){
     
     if(options.times.length !== options.values.length){
       const message = 'Keyframes Timing Mismatch!: There are ' + options.values.length + ' values, and ' + options.times.length + ' times';
@@ -117,16 +109,16 @@ export class iXAnimateDirective implements AfterViewInit, OnChanges {
       return animate(duration, style(v));
     });
     
-    this.runAngularAnimation(angularOptions);
+    this.runAngularAnimation(angularOptions, target);
 
   }
 
-  runAngularAnimation(angularOptions){
+  protected runAngularAnimation(angularOptions, target){
     // Define a reusable animation
     const myAnimation = this.builder.build(angularOptions);
 
     // use the returned factory object to create a player
-    this.player = myAnimation.create(this.target);
+    this.player = myAnimation.create(target);
 
     this.player.play();
   }
