@@ -58,7 +58,7 @@ export class EntityUtils {
     }
   }
 
-  handleWSError(entity: any, res: any, dialogService?: any, targetFieldConfig?: any) {
+  handleWSError(entity: any, res: any, dialogService?: any, targetFieldConfig?: any, targetFormGroup?: any) {
     let dialog;
     if (dialogService) {
       dialog = dialogService;
@@ -105,13 +105,21 @@ export class EntityUtils {
           }
           fc['hasErrors'] = true;
           fc['errors'] = error;
-          if (entity.formGroup && entity.formGroup.controls[field]) {
-            entity.formGroup.controls[field].setErrors({'invalidValue': true});
-          }
+
           if (entity.wizardConfig && entity.entityWizard) {
             entity.entityWizard.stepper.selectedIndex = stepIndex;
-            entity.entityWizard.formGroup.controls.formArray.controls[stepIndex].controls[field].setErrors({'invalidValue': true});
           }
+          let ctrl;
+
+          if (targetFieldConfig && targetFormGroup) {
+            ctrl = targetFormGroup.controls[field];
+          } else if (entity.formGroup && entity.formGroup.controls[field]) {
+            ctrl = entity.formGroup.controls[field];
+          } else if (entity.wizardConfig && entity.entityWizard) {
+            ctrl = entity.entityWizard.formGroup.controls.formArray.controls[stepIndex].controls[field];
+          }
+
+          this.listenErrorField(field, fc, ctrl);
         } else {
           if (entity.error) {
             entity.error = error;
@@ -122,6 +130,18 @@ export class EntityUtils {
       }
     } else {
       this.errorReport(res, dialog);
+    }
+  }
+
+  listenErrorField(fieldName, config, ctrl) {
+    if (ctrl) {
+      const sub = ctrl.valueChanges.subscribe(
+        (res) => {
+          config['hasErrors'] = false;
+          config['errors'] = '';
+          sub.unsubscribe();
+        }
+      )
     }
   }
 
