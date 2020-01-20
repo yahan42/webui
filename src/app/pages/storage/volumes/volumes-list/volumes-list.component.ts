@@ -717,7 +717,7 @@ export class VolumesListTableConfig implements InputTableConf {
                     if (res.exc_info && res.exc_info.extra) {
                       res.extra = res.exc_info.extra;
                     }
-                    new EntityUtils().handleWSError(this, res, parent.dialogService, conf.fieldConfig);
+                    new EntityUtils().handleWSError(this, res, parent.dialogService, conf.fieldConfig, entityDialog.formGroup);
                   }
                   if (res.state === 'SUCCESS') {
                     if (entityDialog) {

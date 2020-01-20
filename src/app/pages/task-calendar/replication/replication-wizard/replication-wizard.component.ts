@@ -1120,7 +1120,7 @@ export class ReplicationWizardComponent {
                             (err) => {
                                 hasError = true;
                                 self.rollBack(createdItems);
-                                new EntityUtils().handleWSError(self, err, self.dialogService, self.dialogFieldConfig);
+                                new EntityUtils().handleWSError(self, err, self.dialogService, self.dialogFieldConfig, entityDialog.formGroup);
                             }
                         )
                     }
