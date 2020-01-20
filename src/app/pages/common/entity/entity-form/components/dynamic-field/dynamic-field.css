@@ -48,3 +48,7 @@
   position: relative;
   top: -12px;
 }
+
+mat-placeholder.hasErrors {
+  color: red;
+}
