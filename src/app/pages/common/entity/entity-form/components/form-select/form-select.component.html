@@ -9,16 +9,15 @@
         id="{{config.name}}_form-select-spinner"
         *ngIf="config.isLoading">
       </mat-spinner>
+    <mat-label [ngClass]="config.hasErrors ? 'hasErrors' : ''">{{config.placeholder | translate}}</mat-label>
     <mat-select 
       #selectTrigger
       [value]="formValue"
       [formControlName]="config.name" 
       [multiple]="config.multiple" 
-      [required]="config.required" 
-      [placeholder]="config.placeholder | translate" 
+      [required]="config.required"
       (selectionChange)="onChangeOption($event)"
       ix-auto ix-auto-type="select" ix-auto-identifier="{{config.placeholder}}">
-
      
       <mat-select-trigger *ngIf="config.multiple">
         <span *ngFor="let value of customTriggerValue ; last as isLast">

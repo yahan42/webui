@@ -52,3 +52,6 @@
 mat-placeholder.hasErrors {
   color: red;
 }
+mat-label.hasErrors {
+  color: red;
+}
