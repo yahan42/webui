@@ -3,7 +3,6 @@ ix-auto ix-auto-type="combobox" ix-auto-identifier="{{config.placeholder}}"><div
     <mat-form-field *ngIf="config.inputType != 'file' else elseBlock">
       <input matInput [type]="config.inputType ? config.inputType : 'text'"
         list="options"
-		  	[placeholder]="config.placeholder | translate"
 		  	[attr.value]="config.value"
 		  	[formControlName]="config.name"
 		  	[readonly]="config.readonly"
@@ -11,6 +10,7 @@ ix-auto ix-auto-type="combobox" ix-auto-identifier="{{config.placeholder}}"><div
         (keyup)="updateSearchOptions($event.target.value)"
         [matAutocomplete]="autoComplete"
         >
+      <mat-placeholder [ngClass]="config.hasErrors ? 'hasErrors' : ''">{{config.placeholder | translate}}</mat-placeholder>
        <mat-autocomplete #autoComplete="matAutocomplete">
         <mat-option *ngFor="let option of config.searchOptions" [value]="option.value"
           ix-auto ix-auto-type="option" ix-auto-identifier="{{option.label}}">

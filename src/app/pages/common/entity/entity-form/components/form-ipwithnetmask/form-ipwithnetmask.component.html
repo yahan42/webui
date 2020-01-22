@@ -19,7 +19,6 @@
 	</mat-form-field>
 	<mat-form-field fxFlex="100%">
 		<input matInput
-			[placeholder]="config.placeholder | translate"
 			[(ngModel)]="address"
 			[ngModelOptions]="{standalone: true}"
 			[readonly]="config.readonly"
@@ -28,6 +27,7 @@
 			[pattern]="network.ipv4_or_ipv6_cidr_optional"
 			ix-auto ix-auto-type="input" ix-auto-identifier="{{config.placeholder}}"
 			>
+		<mat-placeholder [ngClass]="config.hasErrors ? 'hasErrors' : ''">{{config.placeholder | translate}}</mat-placeholder>
 	</mat-form-field>
 	<span fxFlex="4px">/</span>
 	<mat-select *ngIf="!config.netmaskPreset" fxFlex="72px"
