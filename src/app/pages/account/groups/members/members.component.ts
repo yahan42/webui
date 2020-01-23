@@ -1,6 +1,7 @@
 import {mergeMap} from 'rxjs/operators';
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Params, Router} from "@angular/router";
+import * as _ from 'lodash';
 import {WebSocketService} from "../../../../services/ws.service";
 import {AppLoaderService} from "../../../../services/app-loader/app-loader.service";
 import { TranslateService } from '@ngx-translate/core'
@@ -14,6 +15,7 @@ import helptext from '../../../../helptext/account/members';
 export class MembersComponent implements OnInit {
 
   members: any[] = [];
+  filteredMembers: any[] = [];
   selectedMembers: any[] = [];
   group = {
     id: '',
@@ -83,5 +85,18 @@ export class MembersComponent implements OnInit {
       this.router.navigate(['/', 'account', 'groups']);
       this.loading.close();
     })
+  }
+
+  onChange(val: string) {
+    console.log(val);
+    const filtered = [];
+    val = val.toLowerCase();
+    for (let i = 0; i < this.filteredMembers.length; i++) {
+      if (_.includes(this.filteredMembers[i].username.toLowerCase(), val)) {
+        filtered.push(this.filteredMembers[i]);
+      }
+    }
+    this.filteredMembers  = filtered;
+    console.log(this.filteredMembers)
   }
 }

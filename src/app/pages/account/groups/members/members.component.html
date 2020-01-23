@@ -1,17 +1,18 @@
 <mat-card class="form-card">
   <mat-card-title *ngIf="groupName">{{'Manage members of' | translate}} {{groupName}} {{'group' | translate}}</mat-card-title>
-    <mat-spinner 
-      [diameter]='40' 
+    <mat-spinner
+      [diameter]='40'
       id="group-member-spinner"
       *ngIf="showSpinner">
-    </mat-spinner> 
+    </mat-spinner>
   <mat-card-content>
+    <input matInput id="filterOne" placeholder="Filter" (input)="onChange($event.target.value)">
     <div class="padding-16" *ngIf="members.length > 0">
-      <app-dual-listbox 
-        [items]="members" 
-        [(selectedItems)]="selectedMembers" 
+      <app-dual-listbox
+        [items]="members"
+        [(selectedItems)]="selectedMembers"
         minHeight="65vh"
-        maxHeight="65vh" 
+        maxHeight="65vh"
         title1="{{'All users' | translate}}"
         title2="{{'Group members' | translate}}">
         <ng-template #templateItem let-item="data">
