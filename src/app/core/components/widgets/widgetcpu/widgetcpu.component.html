@@ -23,14 +23,14 @@
             </div>
         </mat-toolbar-row>
 
-          <div *ngIf="screenType == 'Desktop'" class="cpu-model top">{{cpuModel ? cpuModel : 'gathering info...' | translate}}</div>
+          <div *ngIf="screenType == 'Desktop' && !isCompact" class="cpu-model top">{{cpuModel ? cpuModel : 'gathering info...' | translate}}</div>
           
           <!-- Chart -->
           <div [ngClass]="{'mobile': screenType == 'Mobile'}" id="cpu-load-wrapper" fxLayout="{{ isCompact ? 'column' : 'row wrap' }}" fxLayoutAlign="space-around center" fxLayoutGap="{{isCompact ? '24px' : 0 }}">
 
-            <h3 fxFlex="33" fxFlex.xs="100" id="cpu-load-label">{{"LOAD" | translate}}</h3>
+            <h3 [fxFlex]=" isCompact && screenType == 'Desktop' ? 100 : 33" fxFlex.xs="100" id="cpu-load-label">{{"LOAD" | translate}}</h3>
 
-            <div class="viewchartgauge" fxFlex="34" fxFlex.xs="100">
+            <div class="viewchartgauge" [fxFlex]="isCompact ? 100 : 34" fxFlex.xs="100">
               <viewchartgauge [config]="cpuAvg" #load *ngIf="cpuAvg && cpuAvg.data; else loader"></viewchartgauge>
             </div>
 
@@ -38,13 +38,20 @@
               <mat-spinner [diameter]="40" style="margin: 0 auto;"></mat-spinner>
             </ng-template>
 
-            <div *ngIf="screenType == 'Desktop'" fxFlex="33" fxFlex.xs="100" id="cpu-load-cores">
-              <h3 class="core-count">{{coreCount}}</h3>
-              <h4 class="core-count-label">{{"Threads" | translate}}</h4>
+            <div *ngIf="screenType == 'Desktop'" [fxFlex]="isCompact ? 100 : 33" fxFlex.xs="100" id="cpu-load-cores">
+              <ng-container *ngIf="!isCompact">
+                <h3 class="core-count">{{coreCount}}</h3>
+                <h4 class="core-count-label">{{"Threads" | translate}}</h4>
+              </ng-container>
+
+              <ng-container *ngIf="isCompact">
+                <h4 class="threadcount">{{coreCount}} {{'Threads' | translate}}</h4>
+              </ng-container>
+
+              <div *ngIf="screenType == 'Desktop' && isCompact" class="cpu-model bottom">{{cpuModel ? cpuModel : 'gathering info...' | translate}}</div>
             </div>
 
           </div>
-
 
         <div *ngIf="screenType == 'Mobile'" fxLayout="column" class="mobile" >
           <div fxFlex="65" class="bottom">

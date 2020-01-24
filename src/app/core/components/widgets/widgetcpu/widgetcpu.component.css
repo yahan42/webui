@@ -23,10 +23,13 @@
   margin-bottom:32px;
 }
 
+.widget.compact #cpu-load-wrapper{
+  height: calc(100% - 96px);
+}
+
 #cpu-load-wrapper{
   position:relative;
   height:170px;
-
 }
 
 #cpu-load-cores{
@@ -65,11 +68,25 @@
   opacity:0.5;
 }
 
+.cpu-model.bottom{
+  width: 70%;
+  margin: 16px 15% 0;
+}
+
 #cpu-load-label,
-.core-count{
+.core-count,
+.threadcount{
   margin-bottom:0;
   font-weight:400;
   font-size:1.65rem;
+}
+
+.widget.compact #cpu-load-label {
+  margin-top: 24px;
+}
+
+.widget.compact .threadcount{
+  font-size:1.5rem;
 }
 
 #cpu-load-value{
@@ -137,8 +154,13 @@
   right:8px;
 }
 
-/*:host ::ng-deep .c3-axis-y g:nth-child(2n){
-  visibility:hidden;
+/*.widget.compact .core-count{
+  width: 40%;
+  text-align:right;
+}
+
+.widget.compact .core-count-label{
+  width:60%;
 }*/
 
 /* MARKER */
@@ -149,19 +171,11 @@
   fill:var(--bg2) !important;
 }
 
-/*.widget .bar-chart-wrapper{
-  position: static;
-  opacity: 1;
-  z-index:1
-}*/
-
 /* NARROW SCREENS */
 .xs.widget{
   width:100vw;
   height: calc(100vh - 96px);
   position: absolute;
-  /*top: 88px;
-  z-index: 2;*/
 }
 
 .xs.widget .mat-card{
