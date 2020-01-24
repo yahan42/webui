@@ -58,7 +58,7 @@
         </div>
 
         <!-- Chart --> 
-        <div *ngIf="screenType == 'Mobile' || !isCompact" fxFlex.xs="100" fxFlex.gt-xs="60" id="memory-usage-chart" class="bar-chart">
+        <div [fxHide.gt-xs]="screenType == 'Desktop' && isCompact" fxFlex.xs="100" fxFlex.gt-xs="60" id="memory-usage-chart" class="bar-chart">
           <canvas></canvas>
         </div>
 

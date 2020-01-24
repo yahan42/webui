@@ -83,7 +83,7 @@
 
 
         <!-- Start Cores Wrapper -->
-          <div *ngIf="!isCompact" id="cpu-cores-wrapper" class="bar-chart-wrapper" fxLayout="column">
+        <div [fxHide.gt-xs]="isCompact && screenType == 'Desktop'" id="cpu-cores-wrapper" class="bar-chart-wrapper" fxLayout="column">
               
             <div [ngClass]="{ 'mobile': screenType == 'Desktop'}" fxFlex="100" id="cpu-load-cores-legend" fxLayout="row wrap">
                 <div *ngIf="legendData && screenType == 'Desktop'; else noLegend" id="cpu-load-cores-legend-values" fxFlex fxLayout="row wrap" fxLayoutAlign="space-around center">
