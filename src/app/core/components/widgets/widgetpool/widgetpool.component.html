@@ -95,6 +95,10 @@
                     </span>
                 </div>
 
+                <div *ngIf="volumeData && screenType != 'Mobile'">
+                  <span *ngIf="volumeData.used_pct" class="value-used">{{"USED" | translate}} {{volumeData.used_pct}}</span>&nbsp;&nbsp;
+                </div>
+
               </div>
             </div>
 
