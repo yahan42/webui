@@ -1,5 +1,5 @@
 <div (window:resize)="onMobileResize($event)">  
-  <button *ngIf="screenType == 'Desktop'" mat-fab (click)="toggleCompact()" class="fn-theme-primary" style="position:fixed; right:64px; bottom: 64px; z-index:100;">
+  <button *ngIf="screenType == 'Desktop'" mat-fab (click)="toggleCompact()" color="warn" style="position:fixed; right:64px; bottom: 64px; z-index:100;">
     <mat-icon *ngIf="isCompact" role="img" fontSet="mdi-set" fontIcon="mdi-arrow-expand-all"></mat-icon>
     <mat-icon *ngIf="!isCompact" role="img" fontSet="mdi-set" fontIcon="mdi-arrow-collapse-all"></mat-icon>
   </button>
