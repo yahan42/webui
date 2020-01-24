@@ -170,7 +170,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.widgetStates = updatedStates;
     //this.sortOrder = this.widgetStates.map(w => w.weight.toString() );
     this.cdr.detectChanges();
-    this.test();
+    //this.test();
 
   }
 

@@ -2,7 +2,7 @@
   <button *ngIf="screenType == 'Desktop'" mat-fab (click)="toggleCompact()" class="fn-theme-primary" style="position:fixed; right:64px; bottom: 64px; z-index:100;"><mat-icon>autorenew</mat-icon></button>
   <button *ngIf="screenType == 'Desktop'" mat-fab (click)="test()" class="fn-theme-primary" style="position:fixed; right:144px; bottom: 64px; z-index:100;"><mat-icon>play_arrow</mat-icon></button>
   <div class="widgets-wrapper"
-       ix-dnd [sortOrder]="sortOrder"  
+       ix-dnd [sortOrder]="sortOrder" cdkDropList
        fxLayout="row wrap"
        fxLayoutAlign="center center"
        fxLayoutAlign.gt-sm="space-around center">

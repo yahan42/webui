@@ -1,7 +1,9 @@
-import { Directive, Input, AfterViewInit, OnDestroy, ElementRef, Renderer2, OnChanges, SimpleChanges, HostListener } from '@angular/core';
+import { Directive, Input, AfterViewInit, OnDestroy, ElementRef, Renderer2, OnChanges, SimpleChanges, HostListener, EventEmitter } from '@angular/core';
 import { AnimationBuilder } from '@angular/animations';
+import { DragDropModule, DragDrop, DragRef, DropListRef, CdkDragDrop, CdkDragEnter } from '@angular/cdk/drag-drop';
 import { iXAnimateDirective, AnimationState, TweenConfig, KeyframesConfig } from 'app/core/directives/ix-animate/ix-animate.directive';
 import { styler } from 'popmotion';
+import { CoreEvent } from 'app/core/services/core.service';
 
 export interface Location {
   x: number;
@@ -10,16 +12,18 @@ export interface Location {
 
 export interface DragTarget {
   element: any;
-  startLocation?: Location;
-  currentLocation?: Location;
   displayIndex: number;
-  dragListener?: any;
-  dropListener?: any;
-  dragStartListener: any;
-  dragEndListener?: any; 
-  dragOverListener?: any; 
-  dragEnterListener?: any; 
-  dragLeaveListener?: any; 
+  cdkDragRef: DragRef;
+}
+
+interface DropZoneConfig {
+  disabled: boolean;
+  //data?: T;
+  sortingDisabled: boolean;
+  autoScrollDisabled: boolean;
+  //dropped: EventEmitter<CdkDragDrop<T, any>>;
+  //entered: EventEmitter<CdkDragEnter<T>>;
+  //connectedTo: (CdkDropList | string)[] | CdkDropList | string;
 }
 
 @Directive({
@@ -31,14 +35,21 @@ export class iXDndDirective extends iXAnimateDirective implements AfterViewInit,
   @Input('sortOrder') sortOrder: string[]; // numbers as strings to avoid 0 interpreted as false
 
   protected layout: Location[];
+  
+  protected dropZone: DropListRef;
+  //public dropZoneConfig: DropZoneConfig;
+  protected displayList: DragTarget[] = [];
+  //protected enterPredicate: (drag: CdkDrag, drop: CdkDropList) => boolean = () => true;
+
+  /*
   protected windowWidth;
   protected mouseListener;
-  protected displayList: DragTarget[] = [];
   protected dragTarget: DragTarget;
   protected dragImage: any;
   protected placeholder: any;
+  */
 
-  constructor(protected renderer:Renderer2, protected el:ElementRef, protected builder:AnimationBuilder) { 
+  constructor(protected renderer:Renderer2, protected el:ElementRef, protected builder:AnimationBuilder, protected cdk:DragDrop) { 
     super(renderer, el, builder)
   }
 
@@ -48,6 +59,34 @@ export class iXDndDirective extends iXAnimateDirective implements AfterViewInit,
     setTimeout(() => {
       this.mapLayout();
       console.log(this.el);
+
+      // DropZone setup
+      /*this.dropZoneConfig = {
+        autoScrollDisabled:false,
+        disabled: false,
+        //data: T;
+        sortingDisabled: false,
+        autoScrollDisabled: false,
+        dropped: new EventEmitter<CdkDragDrop<T, any>>(),
+        entered: new EventEmitter<CdkDragEnter<T>>(),
+        //connectedTo: (CdkDropList | string)[] | CdkDropList | string; // For dropping in another container
+      }*/
+
+      // Create the DropZone
+      this.dropZone = this.cdk.createDropList(this.el);
+      //this.dropZone.data = this.dropZoneConfig;
+      /*this.dropZone.enterPredicate = (drag: DragRef<CdkDrag>, drop: DropListRef<CdkDropList>) => {
+        return this.enterPredicate(drag.data, drop.data);
+      };*/
+
+      //DropZone Subscriptions
+      this.dropZone.dropped.subscribe(e => {this.onDrop(e)})
+      this.dropZone.entered.subscribe(e => {this.onDrop(e)})
+      this.dropZone.exited.subscribe(e => {this.onDrop(e)})
+      this.dropZone.beforeStarted.subscribe(e => {this.onDrop(e)})
+      this.dropZone.sorted.subscribe(e => {this.onDrop(e)})
+      console.log(this.dropZone);
+
       for(let i = 0; i < this.el.nativeElement.children.length; i++){
         const child = this.el.nativeElement.children[i];
         this.addListeners(child, i);
@@ -72,15 +111,23 @@ export class iXDndDirective extends iXAnimateDirective implements AfterViewInit,
     }
   }
 
-  onDrag(e, el, displayIndex){
+  onEnter(e){
+    console.log(e);
+  }
 
-    if(e.type == 'drop' || e.type == 'dragend')console.log(e.type);
+  onDrop(e){
+    console.log(e);
+  }
+
+  /*onDrag(e, el, displayIndex){
+
+    //if(e.type == 'drop' || e.type == 'dragend')console.log(e.type);
 
     switch(e.type){
     case 'dragstart':
       this.dragTarget = this.displayList[displayIndex];
       this.placeholder = el.cloneNode(true);
-      this.placeholder.style.position = "fixed"; /*this.placeholder.style.top = "500px"; this.placeholder.style.left = "500px";*/
+      this.placeholder.style.position = "fixed"; 
 
       this.renderer.appendChild(el.parentNode, this.placeholder);
       this.renderer.appendChild(el.parentNode, this.dragImage);
@@ -102,7 +149,8 @@ export class iXDndDirective extends iXAnimateDirective implements AfterViewInit,
       break;
     case 'drag':
       e.preventDefault();
-      this.followCursor( this.placeholder, {x: e.x, y: e.y} )
+      //this.followCursor( this.placeholder, {x: e.x, y: e.y} )
+      console.log(e.type);
       break;
     case 'drop': 
       this.renderer.removeChild(el.parentNode, this.placeholder);
@@ -111,7 +159,7 @@ export class iXDndDirective extends iXAnimateDirective implements AfterViewInit,
       break;
     }
 
-  }
+  }*/
 
   updateChildren(duration: number = 150){
     
@@ -145,14 +193,19 @@ export class iXDndDirective extends iXAnimateDirective implements AfterViewInit,
 
   }
 
-  moveChild(child: any, location: Location, duration: number = 150){
+  moveChild(child: any, location: Location, duration: number = 150, onComplete?:any){
     const options = {
-      to: { transform: 'translate(' + location.x + 'px, ' + location.y + 'px)'},
+      //to: { transform: 'translate(' + location.x + 'px, ' + location.y + 'px)'},
+      to: { transform: 'translate3d(' + location.x + 'px, ' + location.y + 'px, 0px)'},
       duration: duration
     }
 
     const target = this.engine == 'popmotion' ? styler(child) : child;
     this.tween(options, target);
+
+    if(onComplete){
+      setTimeout(() => { onComplete() } , duration);
+    }
   }
 
   followCursor(child: any, location: Location){
@@ -180,26 +233,60 @@ export class iXDndDirective extends iXAnimateDirective implements AfterViewInit,
   }
 
   addListeners(el, index){
-    this.renderer.setProperty(el, 'draggable', true);
-
-    // Deal with ugly drag image
-    this.dragImage = this.renderer.createElement('div');
-    this.renderer.setStyle(this.dragImage, 'display', 'none');
-
 
     const dragTarget = {
       element: el,
-      dragListener: this.renderer.listen(el, 'drag', (e) => {this.onDrag(e, el, index)} ),
-      dropListener: this.renderer.listen(el, 'drop', (e) => {this.onDrag(e, el, index)} ),
-      dragStartListener: this.renderer.listen(el, 'dragstart', (e) => {this.onDrag(e, el, index)} ),
-      dragEndListener: this.renderer.listen(el, 'dragend', (e) => {this.onDrag(e, el, index)} ),
-      dragOverListener: this.renderer.listen(el, 'dragover', (e) => {this.onDrag(e, el, index)} ),
-      dragEnterListener: this.renderer.listen(el, 'dragenter', (e) => {this.onDrag(e, el, index)} ),
-      //dragLeaveListener: this.renderer.listen(el, 'dragleave', (e) => {this.onDrag(e, el, index)} ),
-      displayIndex: index
+      displayIndex: index,
+      cdkDragRef: this.cdk.createDrag(el),
     }
 
+    //dragTarget.cdkDragRef._dropContainer = this.dropZone;
+
     this.displayList[index] = dragTarget;
+
+    this.renderer.listen(el, 'click', (e) => { 
+      //console.log(this.displayList[index]);
+      /*if(dragTarget.cdkDragRef._hasStartedDragging){
+        console.log('DRAGGING!');
+      }*/
+    });
+
+    // Listen for drag events via cdk
+    dragTarget.cdkDragRef.started.subscribe((e) => { this.onDragEvent({name:'Started', data: dragTarget});});
+    dragTarget.cdkDragRef.released.subscribe((e) => { this.onDragEvent({name:'Released', data: dragTarget});});
+    dragTarget.cdkDragRef.ended.subscribe((e) => { this.onDragEvent({name:'Ended', data: dragTarget});});
+    /*dragTarget.cdkDragRef.moved.subscribe((e) => { this.onDragEvent({name:'Moved', data: dragTarget});});
+    dragTarget.cdkDragRef.exited.subscribe((e) => { this.onDragEvent({name:'Exited', data: dragTarget});});
+    */
+    dragTarget.cdkDragRef.entered.subscribe((e) => { this.onDragEvent({name:'Entered', data: dragTarget});});
+    dragTarget.cdkDragRef.dropped.subscribe((e) => { this.onDragEvent({name:'Dropped', data: dragTarget});});
+
+  }
+
+  onDragEvent(e:CoreEvent){
+
+    //let el = e.data.source._rootElement;
+    let el = e.data.element;
+    if(e.name == 'Dropped'){
+      console.log(e);
+    }
+
+    switch(e.name){
+      case 'Ended':
+      case 'Released':
+        //console.log(e.name);
+        el.style['box-shadow'] = '';
+        el.style['z-index'] = 1;
+        el.style['transform'] = '';
+        //this.moveChild(el,this.layout[e.data.displayIndex], e.data.cdkDragRef.reset());
+        e.data.cdkDragRef.reset();
+        break;
+      case 'Started':
+        el.style['box-shadow'] = `0 10px 10px rgba(0,0,0,0.5)`;
+        el.style['z-index'] = 100;
+        el.style['transform'] = 'scale(1.05)';
+        break;
+    }
   }
 
 

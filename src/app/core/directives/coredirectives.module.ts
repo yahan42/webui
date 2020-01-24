@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../appMaterial.module';
@@ -16,6 +17,7 @@ import { iXDndDirective } from './ix-dnd/ix-dnd.directive';
   imports: [
     CommonModule,
     MaterialModule,
+    DragDropModule,
     OverlayModule,
     PortalModule,
     FlexLayoutModule,
@@ -31,6 +33,7 @@ import { iXDndDirective } from './ix-dnd/ix-dnd.directive';
   exports: [ // Modules and Components here
     CommonModule,
     MaterialModule,
+    DragDropModule,
     OverlayModule,
     PortalModule,
     FlexLayoutModule,
