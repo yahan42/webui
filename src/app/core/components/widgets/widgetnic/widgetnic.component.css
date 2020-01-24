@@ -130,7 +130,7 @@
 }
 
 .nic-name{
-  font-size:300%;
+  font-size:240%;
 }
 
 .link-state .icon-wrapper{
@@ -208,7 +208,7 @@
 
 .nic-traffic{
   display:table;
-  margin-left:8px;
+  width:100%;
 }
 
 .nic-traffic .tr{

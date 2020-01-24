@@ -55,13 +55,18 @@
 
               <div fxFlex="66" class="left-content">
                 <div class="nic-name" [ngClass]="{ 'up': nicState.link_state == 'LINK_STATE_UP', 'down': nicState.link_state !== 'LINK_STATE_UP' }">
-                  <span textLimiter threshold="7" >{{nicState.name}}</span>
+                  <span textLimiter threshold="11" >{{nicState.name}}</span>
                 </div> 
 
                 <div class="link-state" [ngClass]="{'up': nicState.link_state == 'LINK_STATE_UP', 'down': nicState.link_state !== 'LINK_STATE_UP'}">
                   {{linkState | translate }}
                     <mat-icon *ngIf="nicState.link_state == 'LINK_STATE_UP' " role="img" fontSet="mdi-set" fontIcon="mdi-check-circle"></mat-icon>
                     <mat-icon *ngIf="nicState.link_state !== 'LINK_STATE_UP' " role="img" fontSet="mdi-set" fontIcon="mdi-close-circle"></mat-icon>
+
+                  <div *ngIf="nicState.link_state !== 'LINK_STATE_UP'" class="no-nic-traffic">
+                    No Traffic
+                  </div> 
+                </div>
 
                   <div *ngIf="traffic && nicState.link_state == 'LINK_STATE_UP'" class="nic-traffic">
                     <div class="tr">
@@ -77,11 +82,6 @@
                   <div *ngIf="!traffic && nicState.link_state == 'LINK_STATE_UP'" class="nic-traffic-gathering">
                     {{ "Gathering data" | translate }}...
                   </div> 
-
-                  <div *ngIf="nicState.link_state !== 'LINK_STATE_UP'" class="no-nic-traffic">
-                    No Traffic
-                  </div> 
-                </div>
 
               </div>
               </div>
