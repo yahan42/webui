@@ -5,6 +5,10 @@
   z-index: 10;
 }
 
+.mat-fab .mat-icon{
+  font-size:24px;
+}
+
 .mobile-viewport{
   position:fixed; 
   z-index:2;
@@ -33,9 +37,4 @@
 
 .widgets-wrapper > * {
   margin-bottom:32px;
-}
-
-/* Animate an item that has been dropped. */
-.cdk-drag-animating {
-  transition: transform 300ms cubic-bezier(0, 0, 0.2, 1);
 }

@@ -30,7 +30,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   //private timer; /****************************** DEMO*/
   public widgetStates: WidgetLayout[] = [];
-  public sortOrder: string[]; 
   public isCompact: boolean = false;
   public large: string = "lg";
   public medium: string = "md";
@@ -168,29 +167,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     this.widgetStates = updatedStates;
-    //this.sortOrder = this.widgetStates.map(w => w.weight.toString() );
     this.cdr.detectChanges();
-    //this.test();
 
-  }
-
-  test(){
-    /******************************** DEMO*/
-
-    //const plusOne = () => {
-      const clone = Object.assign([], this.widgetStates);
-      const updated = clone.map((v) => {
-        let cloneV = Object.assign({}, v);
-        cloneV.weight = v.weight + 1 == this.widgetStates.length ? 0 : v.weight + 1;
-        return cloneV;
-      });
-
-      this.widgetStates = updated;
-      this.sortOrder = this.widgetStates.map(w => w.weight.toString() );
-      this.cdr.detectChanges();
-    //}
- 
-    /******************************** END DEMO*/
   }
 
   ngOnInit(){
@@ -407,7 +385,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       return {name: item.name, weight: index, isCompact: this.isCompact}
     });
     this.widgetStates = initialStates;
-    this.sortOrder = this.widgetStates.map(w => w.weight.toString() );
     this.cdr.detectChanges();
 
     return conf;

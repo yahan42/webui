@@ -11,7 +11,6 @@ import { CommonDirectivesModule } from '../../directives/common/common-directive
 import { TextLimiterDirective } from './text-limiter/text-limiter.directive';
 import { TextLimiterTooltipComponent } from './text-limiter/text-limiter-tooltip/text-limiter-tooltip.component';
 import { iXAnimateDirective } from './ix-animate/ix-animate.directive';
-import { iXDndDirective } from './ix-dnd/ix-dnd.directive';
 
 @NgModule({
   imports: [
@@ -28,7 +27,6 @@ import { iXDndDirective } from './ix-dnd/ix-dnd.directive';
     TextLimiterDirective,
     TextLimiterTooltipComponent,
     iXAnimateDirective,
-    iXDndDirective,
   ],
   exports: [ // Modules and Components here
     CommonModule,
@@ -42,7 +40,6 @@ import { iXDndDirective } from './ix-dnd/ix-dnd.directive';
     TextLimiterDirective,
     TextLimiterTooltipComponent,
     iXAnimateDirective,
-    iXDndDirective,
   ],
   entryComponents:[
     TextLimiterTooltipComponent,
