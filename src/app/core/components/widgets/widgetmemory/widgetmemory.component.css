@@ -228,3 +228,8 @@ h1.memory-used span.memory-used-units{
   padding-left:0;
 }
 
+.widget.compact #cpu-load-cores-legend .legend-item{
+  width: 100%;
+  padding-left:16px;
+}
+
