@@ -226,6 +226,7 @@ h1.memory-used span.memory-used-units{
 
 .xs #cpu-load-cores-legend .legend-item{
   padding-left:0;
+  width: 100%;
 }
 
 .widget.compact #cpu-load-cores-legend .legend-item{
