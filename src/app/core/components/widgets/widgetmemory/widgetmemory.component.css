@@ -5,6 +5,7 @@
 
 .widget mat-card-content{
   width: 100%;
+  height: 100%;
 }
 
 #cpu-cores-chart{
@@ -16,7 +17,7 @@
 }
 
 #cpu-cores-wrapper{
-  padding-top: 3%;
+  height: calc(100% - 48px);
 }
 
 #cpu-load-wrapper{
@@ -107,7 +108,7 @@
 h1.memory-used{
   margin: 32px 0 0;
   font-weight: 400;
-  font-size: 350%;
+  font-size: 320%;
 }
 
 h1.memory-used span.memory-used-units{
@@ -162,7 +163,7 @@ h1.memory-used span.memory-used-units{
 }
 
 #memory-usage-chart{
-  height:260px;
+  height:220px;
   padding:16px;
   position: relative;
 }
@@ -220,7 +221,10 @@ h1.memory-used span.memory-used-units{
   font-weight:500;
 }
 
-.xs #cpu-load-cores-legend .legend-item{
-  padding-left:0;
+.xs #cpu-load-cores-legend .legend-item {
+  padding-left: 0;
 }
 
+.xs #cpu-cores-wrapper{
+  height: auto;
+}

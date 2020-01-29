@@ -206,8 +206,8 @@ export class WidgetCpuComponent extends WidgetComponent implements AfterViewInit
     let config: any = {}
     config.title = data[0];
     config.units = "%";
-    config.diameter = 136;
-    config.fontSize = 24;
+    config.diameter = 88;
+    config.fontSize = 16;
     config.max = 100;
     config.data = data;
     this.cpuAvg = config;
@@ -282,7 +282,7 @@ export class WidgetCpuComponent extends WidgetComponent implements AfterViewInit
         },
         scales: {
           xAxes: [{
-            maxBarThickness: 16,
+            maxBarThickness: 10, // was 16
             type: 'category',
             labels: this.labels
           }],

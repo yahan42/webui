@@ -232,12 +232,12 @@ span.passive{
 }
 
 .freenas .mat-icon.generic{
-  width:calc(240px * 0.5);
+  width:calc(500px * 0.4 / 2);
   height:auto;
 }
 
 img.platform-logo{
-  width: 10rem;
+  width: 9rem;
 }
 
 .xs.carousel img.platform-logo{

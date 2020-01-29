@@ -95,7 +95,7 @@
                   </div>
 
                   <div fxFlex="26" fxFlex.xs="calc(50% - 16px)" *ngIf="legendData[1]" class="legend-item temperature">
-                    <div class="legend-swatch" style="background-color: var(--accent)"></div><span class="label">{{legendData[1].label}}:</span> {{legendData[1].data[legendIndex]}}°C
+                    <div class="legend-swatch" style="background-color: var(--accent)"></div><span class="label">{{"Temp" | translate}}:</span> {{legendData[1].data[legendIndex]}}°C
                   </div>
                 
                 </div>
@@ -111,7 +111,7 @@
                   </div>
 
                   <div fxFlex="26" fxFlex.xs="calc(50% - 16px)"  class="legend-item temperature">
-                    <div class="legend-swatch" style="background-color: var(--accent)"></div><span class="label">{{"Temperature" | translate}}</span> 
+                    <div class="legend-swatch" style="background-color: var(--accent)"></div><span class="label">{{"Temp" | translate}}</span> 
                   </div>
   
                 </div>

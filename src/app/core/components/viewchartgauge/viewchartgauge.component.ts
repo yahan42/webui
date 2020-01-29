@@ -84,7 +84,7 @@ export class ViewChartGaugeComponent /*extends DisplayObject*/ implements AfterV
   }
 
   render(){ 
-    let lineWidth = 10;
+    let lineWidth = 6;
     this.arc = d3.arc()
         .innerRadius(this.config.diameter / 2 - lineWidth) // 80
         .outerRadius(this.config.diameter / 2) // 90
