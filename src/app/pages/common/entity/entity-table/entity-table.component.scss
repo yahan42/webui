@@ -121,6 +121,11 @@
         width: auto;
     }
 
+    ::ng-deep datatable-body-cell {
+        width: auto;
+        font-size: 12px;
+    }
+
     mat-icon.widget-icon {
         cursor: pointer;
         font-size: 24px;
