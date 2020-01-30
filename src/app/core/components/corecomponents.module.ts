@@ -120,6 +120,7 @@ import { ConvertPipe } from './pipes/convert.pipe';
     WidgetNicComponent,
     WidgetCpuComponent,
     WidgetMemoryComponent,
+    TextLimiterDirective,
     TextLimiterTooltipComponent,
     WidgetPoolComponent,
     WidgetControllerComponent,
