@@ -10,8 +10,8 @@ import * as _ from 'lodash';
 
 @Component({
   selector: 'app-vmserial-shell',
-  templateUrl: 'app/pages/shell/shell.component.html',
-  styleUrls: ['app/pages/shell/shell.component.css'],
+  templateUrl: '../../shell/shell.component.html',
+  styleUrls: ['../../shell/shell.component.css'],
   providers: [ShellService],
 })
 
