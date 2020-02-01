@@ -4,6 +4,9 @@ import { TranslateService } from "@ngx-translate/core";
 import { ShellService, WebSocketService } from "../../services/";
 import helptext from "./../../helptext/shell/shell";
 import { CopyPasteMessageComponent } from "./copy-paste-message.component";
+import { Terminal } from 'xterm';
+import { FitAddon } from 'xterm-addon-fit'; 
+import { AttachAddon } from 'xterm-addon-attach'; 
 
 @Component({
   selector: 'app-shell',
@@ -20,9 +23,15 @@ export class ShellComponent implements AfterViewInit, OnChanges, OnDestroy {
   cols: number;
   rows: number;
   rowCount: number;
+  private currentRowPosition: number;
   font_size = 14;
+
   public token: any;
-  public xterm: any;
+
+  public xterm: Terminal;
+  protected fitAddon: FitAddon;
+  protected attachAddon: AttachAddon;
+
   public resize_terminal = true;
   protected shellSubscription: any;
   public lastWidth: number;
@@ -42,13 +51,9 @@ export class ShellComponent implements AfterViewInit, OnChanges, OnDestroy {
       this.initializeWebShell(res);
       this.shellSubscription = this.ss.shellOutput.subscribe((value) => {
         if (value !== undefined){
-          if(this.filteredValue(value)){ return; }
-
-          this.xterm.write(value); 
         } 
       }); 
-      this.initializeTerminal(); });
-      this.overflowParent('hidden'); 
+    });
   }
 
   ngOnDestroy() { if (this.ss.connected){
@@ -72,6 +77,7 @@ export class ShellComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   resetDefault() {
     this.font_size = 14;
+    this.xterm.setOption('fontSize', this.font_size);
   }
 
   ngOnChanges(changes: {
@@ -94,109 +100,57 @@ export class ShellComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   initializeTerminal() {
-    this.setTermDimensions();
-    this.xterm = new (<any>window).Terminal({
+    console.log("BOOM");
+    this.xterm = new Terminal({
       'cursorBlink': true,
-      'tabStopWidth': 8,
-      'focus': true,
-      'cols': this.cols,
-      'rows': this.rows,
-      'convertEol': true,
+      //'tabStopWidth': 8,
+      //'focus': true,
+      //'cols': this.cols,
+      //'rows': this.rows,
+      'fontSize': this.font_size,
+      //'convertEol': true,
     });
 
-    this.xterm.open(this.container.nativeElement, true);
-    this.xterm.attach(this.ss);
-    this.xterm._initialized = true;
-    this.fitTerm();
-    this.rowCount = this.getRowCount(); 
+    this.fitAddon = new FitAddon();
+    this.attachAddon = new AttachAddon(this.ss.socket);
 
+    this.xterm.loadAddon(this.fitAddon);
+    this.xterm.loadAddon(this.attachAddon);
+
+    this.xterm.open(this.container.nativeElement);
+
+    this.fitAddon.fit();
     this.setupListeners();
-
-    this.forceDimensions();
+    this.setTermDimensions();
   }
 
   setupListeners(){
-    this.xterm.on('key',(key, e) =>{
+    this.xterm.onKey((e) =>{
+      if(this.currentRowPosition && this.prompt){
+        this.currentRowPosition++
+      }
 
       if(e.key == "Enter"){
-        this.resetScrollBottom();
+        //this.resetScrollBottom();
       }
 
     });
   }
 
-  filteredValue(value){
-    let filtered = false;
-    const cc = [
-      value.charCodeAt(0),
-      value.charCodeAt(1),
-      value.charCodeAt(2),
-      value.charCodeAt(3)
-    ]
-
-    if(cc[0] == 27 && cc[1] == 91 && cc[2] == 49 && cc[3] == 109){
-      filtered = true;
-    } 
-    return filtered;
-  }
-
-  getRowCount(){
-    const rows = document.querySelectorAll('.terminal .xterm-rows > div'); 
-    return rows.length;
-  }
-
-  resetScrollBottom(){
-    this.xterm.parser._terminal.buffer.scrollBottom = this.getRowCount() - 2;
-    this.xterm.write(this.prompt);
-  }
-
-  getTermDimensions(){
-    const target:HTMLElement = document.querySelector('.terminal .xterm-viewport'); 
-    return {width: target.offsetWidth, height: target.offsetHeight};
-  }
-
-  getCursorDimensions(){
-    const target:HTMLElement = document.querySelector('.terminal .terminal-cursor'); 
-    return {
-      width: target ? target.offsetWidth : this.font_size * 0.45 , 
-      height: target ? target.offsetHeight : this.font_size
-    };
-  }
-
-  getTermParentDimensions(){
-    const target:HTMLElement = document.querySelector('#terminal'); 
-    return {width: target.offsetWidth, height: target.offsetHeight};
-  }
-
   setTermDimensions(c?: number, r?: number){
-    if(!c || !r){
-      let dimensions = this.getTermParentDimensions();
-      const cursor = this.getCursorDimensions();
-      const cols = Math.floor(dimensions.width / (cursor.width));
-      const rows = Math.floor((dimensions.height / cursor.height) - 3);
-      this.cols = cols;
-      this.rows = rows;
-    } else {
-      this.cols = c;
-      this.rows = r;
+    if(this.ss.connectionID){
+      console.log([this.ss.connectionID, this.xterm.rows, this.xterm.cols]);
+      this.ws.call('core.resize_shell', [this.ss.connectionID, this.xterm.rows, this.xterm.cols]);
     }
   }
 
-  forceDimensions(){
-    this.setTermDimensions();
-    this.ss.configTTY(this.rows, this.cols, this.xterm);
+  fitTerm(){
+    this.fitAddon.fit();
   }
 
-  fitTerm(){
-    const dimensions = this.getTermParentDimensions();
-    const vp:HTMLElement = document.querySelector('.terminal .xterm-viewport'); 
-    const sel:HTMLElement = document.querySelector('.terminal .xterm-selection'); 
-
-    this.xterm.fit();
-    sel.style.height = dimensions.height.toString() + 'px';
-    vp.style.height = dimensions.height.toString() + 'px';
-   
-    this.setTermDimensions();
+  onFontResize(e){
+    this.xterm.setOption('fontSize', this.font_size);
+    this.fitTerm();
   }
 
   initializeWebShell(res: string) {
@@ -205,9 +159,10 @@ export class ShellComponent implements AfterViewInit, OnChanges, OnDestroy {
 
     this.ss.shellConnected.subscribe((res)=> {
       this.shellConnected = res;
+      this.initializeTerminal(); 
     })
   }
-
+  
   getAuthToken() {
     return this.ws.call('auth.generate_token');
   }

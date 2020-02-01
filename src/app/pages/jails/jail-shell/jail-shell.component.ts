@@ -36,16 +36,15 @@ export class JailShellComponent extends ShellComponent implements AfterViewInit 
         this.initializeWebShell(res);
         this.shellSubscription = this.ss.shellOutput.subscribe((value) => {
           if (value !== undefined) {
-            if(this.filteredValue(value)){ return; }
+            //if(this.filteredValue(value)){ return; }
             this.xterm.write(value);
 
             if (_.trim(value) == "logout") {
-              this.xterm.destroy();
+              //this.xterm.destroy();
               this.router.navigate(new Array('/').concat(this.route_success));
             }
           }
         });
-        this.initializeTerminal();
       });
     });
   }
@@ -57,6 +56,7 @@ export class JailShellComponent extends ShellComponent implements AfterViewInit 
 
     this.ss.shellConnected.subscribe((res) => {
       this.shellConnected = res;
+      this.initializeTerminal();
     });
   }
 

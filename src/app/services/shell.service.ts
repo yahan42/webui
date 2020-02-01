@@ -20,6 +20,7 @@ export class ShellService {
   redirectUrl = '';
   public token: string;
   public jailId: string;
+  public connectionID: string;
 
   //input and output and eventEmmitter
   private shellCmdOutput: any;
@@ -79,6 +80,7 @@ export class ShellService {
     }
 
     if (data.msg === "connected") {
+      this.connectionID = data.id;
       this.connected = true;
       this.onconnect();
       this.shellConnected.emit(this.connected);

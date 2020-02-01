@@ -36,28 +36,28 @@ export class  VMSerialShellComponent extends ShellComponent implements AfterView
         this.initializeWebShell(res);
         this.shellSubscription = this.ss.shellOutput.subscribe((value) => {
           if (value !== undefined) {
-            if(this.filteredValue(value)){ return; }
+            //if(this.filteredValue(value)){ return; }
             this.xterm.write(value);
 
-            /*if (_.trim(value) == "logout") {
-              this.xterm.destroy();
+            if (_.trim(value) == "logout") {
+              //this.xterm.destroy();
               this.router.navigate(new Array('/').concat(this.route_success));
-            }*/
+            }
           }
         });
-        //this.initializeTerminal();
       });
     });
   }
 
-  /*initializeWebShell(res: string) {
+  initializeWebShell(res: string) {
     this.ss.token = res;
     this.ss.jailId = this.pk;
     this.ss.connect();
 
     this.ss.shellConnected.subscribe((res) => {
       this.shellConnected = res;
+      this.initializeTerminal();
     });
-  }*/
+  }
 
 }
