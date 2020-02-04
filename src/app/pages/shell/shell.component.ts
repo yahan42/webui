@@ -2,6 +2,7 @@ import { Component, ElementRef, Input, OnChanges, OnDestroy, AfterViewInit, Simp
 import { MatDialog } from "@angular/material";
 import { TranslateService } from "@ngx-translate/core";
 import { ShellService, WebSocketService } from "../../services/";
+import { ThemeService } from 'app/services/theme/theme.service';
 import helptext from "./../../helptext/shell/shell";
 import { CopyPasteMessageComponent } from "./copy-paste-message.component";
 import { Terminal } from 'xterm';
@@ -39,6 +40,7 @@ export class ShellComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   protected ws: WebSocketService;
   protected ss: ShellService;
+  protected themeService: ThemeService;
   protected translate: TranslateService;
   protected dialog: MatDialog;
   public usage_tooltip = helptext.usage_tooltip;
@@ -122,6 +124,7 @@ export class ShellComponent implements AfterViewInit, OnChanges, OnDestroy {
     this.fitAddon.fit();
     this.setupListeners();
     this.setTermDimensions();
+    this.setTermTheme();
   }
 
   setupListeners(){
@@ -171,9 +174,44 @@ export class ShellComponent implements AfterViewInit, OnChanges, OnDestroy {
     this.ss.connect();
   }
 
-  constructor(protected _ws: WebSocketService, protected _ss: ShellService, protected _translate: TranslateService, protected _dialog: MatDialog) {
+  // load UI theme to terminal
+  setTermTheme(){
+    const propToHex = (prop) => {
+      return this.themeService.currentTheme()[this.themeService.colorFromMeta(prop)];
+    }
+
+    const theme = {
+      selection: propToHex('var(--bg2)'),
+      background: propToHex('var(--bg1)'),
+      foreground: propToHex('var(--fg2)'),
+      black: '#333',
+      brightBlack: '#000',
+      white: '#efefef',
+      brightWhite: '#fff',
+      blue: propToHex('var(--blue)'),
+      brightCyan: propToHex('var(--cyan)'),
+      brightGreen: propToHex('var(--green)'),
+      brightMagenta: propToHex('var(--violet)'),
+      brightRed: propToHex('var(--red)'),
+      brightYellow: propToHex('var(--yellow)'),
+      cursor: propToHex('var(--fg1)'),
+      cursorAccent: propToHex('var(--fg2)'),
+      cyan: propToHex('var(--cyan)'),
+      green: propToHex('var(--green)'),
+      magenta: propToHex('var(--violet)'),
+      red: propToHex('var(--red)'),
+      yellow: propToHex('var(--yellow)'),
+    }
+
+    let colors = Object.assign({},theme);
+    console.log(colors);
+    this.xterm.setOption('theme', theme)
+  }
+
+  constructor(protected _ws: WebSocketService, protected _ss: ShellService, protected _translate: TranslateService, protected _dialog: MatDialog, protected _themeService: ThemeService) {
     this.ws = _ws;
     this.ss = _ss;
+    this.themeService = _themeService;
     this.translate = _translate;
     this.dialog = _dialog
   }

@@ -6,6 +6,7 @@ import { CopyPasteMessageComponent } from 'app/pages/shell/copy-paste-message.co
 import { ShellComponent } from 'app/pages/shell/shell.component';
 import helptext from '../../../helptext/vm/vm-cards/vm-cards';
 import { ShellService, WebSocketService } from '../../../services/';
+import { ThemeService } from 'app/services/theme/theme.service';
 import * as _ from 'lodash';
 
 @Component({
@@ -24,8 +25,9 @@ export class JailShellComponent extends ShellComponent implements AfterViewInit 
               protected aroute: ActivatedRoute,
               protected __translate: TranslateService,
               protected router: Router,
+              protected __themeService: ThemeService,
               protected __dialog: MatDialog) {
-    super(__ws,__ss,__translate,__dialog);
+    super(__ws,__ss,__translate,__dialog, __themeService);
   }
 
 
