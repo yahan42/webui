@@ -50,7 +50,7 @@
     <topbar [sidenav]="sidenav" [notificPanel]="notificationPanel" (onLangChange)="language.setMiddlewareLanguage($event)"></topbar>
     <!-- App content -->
     <app-breadcrumb [is_freenas]="is_freenas"></app-breadcrumb>
-    <div class="rightside-content-hold" [ngClass]="{'has-footer':isShowFooterConsole}">
+    <div class="rightside-content-hold {{shellPage}}" [ngClass]="{'has-footer':isShowFooterConsole}">
       <router-outlet></router-outlet>
     </div>
     <div class="footer-console-bar" *ngIf="isShowFooterConsole" ix-auto ix-auto-type="shell" ix-auto-identifier="footer-console">

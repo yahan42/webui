@@ -185,7 +185,7 @@ export class ShellComponent implements AfterViewInit, OnChanges, OnDestroy {
       background: propToHex('var(--bg1)'),
       foreground: propToHex('var(--fg2)'),
       black: '#333',
-      brightBlack: '#000',
+      brightBlack: propToHex('var(--blue)'),
       white: '#efefef',
       brightWhite: '#fff',
       blue: propToHex('var(--blue)'),

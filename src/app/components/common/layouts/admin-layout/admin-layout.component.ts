@@ -30,6 +30,7 @@ export class AdminLayoutComponent implements OnInit, AfterViewChecked {
   public logoPath: string = 'assets/images/light-logo.svg';
   public logoTextPath: string = 'assets/images/light-logo-text.svg';
   public currentTheme: string = "";
+  public shellPage : string = '';
   // we will just have to add to this list as more languages are added
 
   @ViewChild(MatSidenav, { static: false}) private sideNave: MatSidenav;
@@ -58,6 +59,12 @@ export class AdminLayoutComponent implements OnInit, AfterViewChecked {
     router.events.subscribe((routeChange) => {
       if (routeChange instanceof NavigationEnd && this.isMobile) {
         this.sideNave.close();
+      } else if (routeChange instanceof NavigationEnd) {
+        const spl = routeChange.urlAfterRedirects.split('/');
+        const page = spl[spl.length - 1];
+        console.log(page);
+        this.shellPage = routeChange.urlAfterRedirects.includes('shell') ? 'shell' : '';
+        console.log(this.shellPage);
       }
     });
     // Watches screen size and open/close sidenav
