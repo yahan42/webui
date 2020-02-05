@@ -20,7 +20,7 @@ msgid " Plugin"
 msgstr " Plugin"
 
 msgid " Service"
-msgstr " Servizi"
+msgstr " Servizio"
 
 msgid ""
 " When the <b>UPS Mode</b> is set to <i>slave</i>. Enter the open network "
@@ -40,7 +40,9 @@ msgstr ""
 msgid ""
 " addresses. When this has been chosen, additional addresses cannot be "
 "selected."
-msgstr " indirizzi. Quando selezionato, altri indirizzi non possono essere selected."
+msgstr ""
+" indirizzi. Quando è selezionato, altri indirizzi non possono essere "
+"selezionati."
 
 msgid " and "
 msgstr " e "
@@ -49,10 +51,10 @@ msgid " and all snapshots of it?"
 msgstr " e tutti i suoi snapshot?"
 
 msgid " and will be disrupted if the pool is locked:"
-msgstr ""
+msgstr " e verrà interrotto se il pool è bloccato:"
 
 msgid " but datastore "
-msgstr ""
+msgstr " ma archivio dati"
 
 msgid " disks"
 msgstr " dischi"
@@ -80,15 +82,23 @@ msgid ""
 " seconds unless KEEP PERMANENTLY is chosen. Adjust the delay time to allow "
 "for testing."
 msgstr ""
+" secondi a meno che non sia stato scelto KEEP PERMANENTLY. Regola il tempo "
+"di ritardo per consentire il test."
 
 msgid " service has been enabled."
-msgstr " il servizio è stato abilitato"
+msgstr " il servizio è stato abilitato."
+
+msgid " should be greater than "
+msgstr ""
+
+msgid " should be less than "
+msgstr ""
 
 msgid " system is powered on and connected to the network."
 msgstr " il sistema è acceso e connesso alla rete."
 
 msgid " to include all "
-msgstr " per includere tutto"
+msgstr " per includere tutto "
 
 msgid " update successful"
 msgstr " aggiornato con successo"
@@ -105,9 +115,16 @@ msgid ""
 "encrypted pools, download and safely store the encryption key and any "
 "passphrase for it."
 msgstr ""
+"' è crittografato! Se la frase d'ordine per questa pool crittografata viene "
+"persa, i dati diverranno PERMANENTEMENTE NON RECUPERABILI! Prima di "
+"exportare/disconnettere pool crittografate, scarica e archivia in modo "
+"sicuro la chiave di crittografia e qualsiasi frase d'ordine."
 
 msgid "'. All data on that pool was destroyed."
 msgstr "'. Tutti i dati su quella pool sono stati distrutti."
+
+msgid "(24 Hours)"
+msgstr ""
 
 msgid "(No description)"
 msgstr "(Nessuna descrizione)"
@@ -131,7 +148,7 @@ msgid ". Is this correct?"
 msgstr ". È corretto?"
 
 msgid "... Make sure the "
-msgstr "... Assicurati che sia "
+msgstr "... Assicurati che "
 
 msgid "0=Disabled, blank=inherit"
 msgstr "0=Disabilitato, blank=ereditato"
@@ -187,6 +204,8 @@ msgid ""
 "</i>is in the database but not connected to the machine. If it was exported "
 "by  mistake, reconnect the hardware and use <b>Import Pool</b>.<br /><br />"
 msgstr ""
+"</i>è nel database ma non è connesso alla macchina. Se è stato esportato "
+"per  errore, riconettere l'hardware e usare <b>Importa Pool</b>.<br /><br />"
 
 msgid ""
 "<a href=\"--docurl--/sharing.html#block-iscsi\" target=\"_blank\">iSCSI</a> "
@@ -194,6 +213,10 @@ msgid ""
 "discover valid devices. <i>None</i> allows anonymous discovery while "
 "<i>CHAP</i> and <i>Mutual CHAP</i> require authentication."
 msgstr ""
+"<a href=\"--docurl--/sharing.html#block-iscsi\" target=\"_blank\">iSCSI</a> "
+"supporta più metodi di autenticazione utilizzati dal target per rilevare "
+"nuovi dispositivi. <i>Nessuno</i> consente il rilevamento anonimo mentre "
+"<i>CHAP</i> e <i>Mutual CHAP</i> richiedono l'autenticazione."
 
 msgid ""
 "<a "
@@ -206,6 +229,15 @@ msgid ""
 "region_endpoints  target=\"_blank\">Simple Storage Service Website "
 "Endpoints</a>."
 msgstr ""
+"href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteEndpoints."
+"html\"  target=\"_blank\">S3 API endpoint URL</a>. Quando si usa AWS,  il "
+"campo dell'endpoint può essere lasciato vuoto per usare l'endpoint "
+"predefinito  per la regione e i bucket disponibili saranno recuperati "
+"automaticamente. Fare riferimento alla documentazione AWS per un elenco "
+"degli endpoint <a "
+"href=\"https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_website_"
+"region_endpoints  target=\"_blank\">Simple Storage Service Website "
+"Endpoints</a>."
 
 msgid ""
 "<a href=\"https://docs.aws.amazon.com/general/latest/gr/rande-manage.html\" "
@@ -277,10 +309,10 @@ msgstr ""
 msgid ""
 "<a "
 "href=\"https://www.freebsd.org/cgi/man.cgi?query=geli&manpath=FreeBSD+11.1-"
-"RELEASE+and+Ports\" target=\"_blank\">GELI</a> encryption is available for "
-"ZFS pools. <b>WARNING:</b> Read the <a "
+"RELEASE+and+Ports\" target=\"_blank\">GELI</a>  encryption is available for "
+"ZFS pools. <b>WARNING:</b> Read the  <a "
 "href=\"--docurl--/storage.html#managing-encrypted-pools\" "
-"target=\"_blank\">Encryption section</a> of the guide before activating "
+"target=\"_blank\">Encryption section</a>  of the guide before activating "
 "this option."
 msgstr ""
 
@@ -1269,6 +1301,9 @@ msgstr ""
 msgid "Amount of locked memory in bytes for the jail."
 msgstr ""
 
+msgid "An ACL is present in this path"
+msgstr ""
+
 msgid "An update is already applied. Please reboot the system."
 msgstr ""
 
@@ -1726,6 +1761,9 @@ msgid ""
 "nesting additional pools, datasets, or symbolic links beneath this path."
 msgstr ""
 
+msgid "Browse to the pool or dataset to store received  data."
+msgstr ""
+
 msgid "Bucket"
 msgstr ""
 
@@ -2052,6 +2090,9 @@ msgid ""
 "the  destination system. Click a dataset to set it as the target."
 msgstr ""
 
+msgid "Choose a date format."
+msgstr ""
+
 msgid "Choose a device for your report."
 msgstr ""
 
@@ -2107,6 +2148,9 @@ msgstr ""
 msgid ""
 "Choose a saved SSH Keypair or select  <i>Generate New</i> to create a new "
 "keypair and use it for this  connection."
+msgstr ""
+
+msgid "Choose a time format."
 msgstr ""
 
 msgid "Choose an alert service to display options for that service."
@@ -2169,6 +2213,9 @@ msgstr ""
 msgid ""
 "Choose one of the presets or choose <i>Custom</i> to use the advanced "
 "scheduler."
+msgstr ""
+
+msgid "Choose permissions for this rsync module."
 msgstr ""
 
 msgid ""
@@ -2892,6 +2939,9 @@ msgstr ""
 msgid "Datastore"
 msgstr ""
 
+msgid "Date Format"
+msgstr ""
+
 msgid "Day of Month"
 msgstr ""
 
@@ -2974,6 +3024,9 @@ msgstr ""
 msgid "Default umask"
 msgstr ""
 
+msgid "Define Periodic Snapshots to Replicate"
+msgstr ""
+
 msgid ""
 "Define a length of time to retain the snapshot on this system. After the "
 "time expires, the snapshot is removed. Snapshots which have been replicated "
@@ -2994,10 +3047,10 @@ msgstr ""
 
 msgid ""
 "Define any additional settings for use by some Kerberos applications. The "
-"available settings and syntax is listed in the <a "
+"available settings and syntax is listed in the  <a "
 "href=\"https://web.mit.edu/kerberos/krb5-1.12/doc/admin/conf_files/krb5_"
 "conf.html#appdefaults\" target=\"_blank\">appdefaults section of "
-"krb.conf(5).</a>."
+"krb.conf(5)</a>."
 msgstr ""
 
 msgid ""
@@ -3005,7 +3058,7 @@ msgid ""
 "and their syntax are listed in the <a "
 "href=\"https://web.mit.edu/kerberos/krb5-1.12/doc/admin/conf_files/krb5_"
 "conf.html#libdefaults\" target=\"_blank\">libdefaults section of "
-"krb.conf(5).</a>."
+"krb.conf(5)</a>."
 msgstr ""
 
 msgid ""
@@ -3140,6 +3193,9 @@ msgid "Describe the VM or its purpose."
 msgstr ""
 
 msgid "Describe the scrub task."
+msgstr ""
+
+msgid "Describe this module."
 msgstr ""
 
 msgid "Describe this service."
@@ -3577,7 +3633,7 @@ msgstr ""
 msgid "Enable"
 msgstr ""
 
-msgid "Enable (requires password)"
+msgid "Enable (requires password or Kerberos principal)"
 msgstr ""
 
 msgid "Enable Atime"
@@ -4114,6 +4170,12 @@ msgstr ""
 
 msgid ""
 "Enter any additional parameters from <a "
+"href=\"https://www.samba.org/ftp/rsync/rsyncd.conf.html\" "
+"target=\"_blank\">rsyncd.conf(5)</a>."
+msgstr ""
+
+msgid ""
+"Enter any additional settings from <a "
 "href=\"https://www.samba.org/ftp/rsync/rsyncd.conf.html\" "
 "target=\"_blank\">rsyncd.conf(5)</a>."
 msgstr ""
@@ -4759,9 +4821,10 @@ msgid "Filename Encryption"
 msgstr ""
 
 msgid ""
-"Files are split into chunks of this size before upload. Up to «--transfers» "
-"chunks can be in progress at one time. The single largest file being "
-"transferred must fit into no more than 10,000 chunks."
+"Files are split into chunks of this size  before upload. The number of "
+"chunks that can be simultaneously  transferred is set by the "
+"<b>Transfers</b> number. The single  largest file being transferred must "
+"fit into no more than 10,000  chunks."
 msgstr ""
 
 msgid ""
@@ -4884,6 +4947,20 @@ msgid "Fri"
 msgstr ""
 
 msgid "From"
+msgstr ""
+
+msgid ""
+"From <a  href=\"https://www.samba.org/ftp/rsync/rsyncd.conf.html\"  "
+"target=\"_blank\">rsyncd.conf(5)</a>. A list of patterns to match with  the "
+"hostname and IP address of a connecting client. The connection is  rejected "
+"if no patterns match. Separate patterns with whitespace or a  comma."
+msgstr ""
+
+msgid ""
+"From <a  href=\"https://www.samba.org/ftp/rsync/rsyncd.conf.html\"  "
+"target=\"_blank\">rsyncd.conf(5)</a>. A list of patterns to match with  the "
+"hostname and IP address of a connecting client. The connection is  rejected "
+"when the patterns match. Separate patterns with whitespace  or a comma."
 msgstr ""
 
 msgid "From E-mail"
@@ -5034,6 +5111,9 @@ msgid ""
 "only be used as the last character of the username."
 msgstr ""
 
+msgid "Group to run as during file transfers to and  from this module."
+msgstr ""
+
 msgid "Group to which this ACL entry applies."
 msgstr ""
 
@@ -5137,9 +5217,6 @@ msgid "HipChat cluster name."
 msgstr ""
 
 msgid "History"
-msgstr ""
-
-msgid "Hold Pending Snapshots"
 msgstr ""
 
 msgid "Home Directory"
@@ -5502,6 +5579,9 @@ msgid "In"
 msgstr ""
 
 msgid "In KiB/s. A default of <i>0</i> means unlimited."
+msgstr ""
+
+msgid "Include Dataset Properties"
 msgstr ""
 
 msgid "Include Password Secret Seed"
@@ -6205,7 +6285,9 @@ msgstr ""
 msgid ""
 "Maximum Transmission Unit, the largest protocol data  unit that can be "
 "communicated. The largest workable MTU size varies  with network interfaces "
-"and equipment. *1500* and *9000* are standard  Ethernet MTU sizes."
+"and equipment. <i>1500</i> and <i>9000</i>  are standard Ethernet MTU "
+"sizes. Leaving blank restores the field to  the default value of "
+"<i>1500</i>."
 msgstr ""
 
 msgid ""
@@ -6243,6 +6325,9 @@ msgid "Maximum client idle time in seconds before client is disconnected."
 msgstr ""
 
 msgid "Maximum connections"
+msgstr ""
+
+msgid "Maximum connections to this module. <i>0</i>  is unlimited."
 msgstr ""
 
 msgid "Maximum number of SysV message queues."
@@ -6386,6 +6471,9 @@ msgid ""
 "target=\"_blank\">AAM</a>."
 msgstr ""
 
+msgid "Module name that matches the name requested by  the rsync client."
+msgstr ""
+
 msgid "Mon"
 msgstr ""
 
@@ -6443,11 +6531,6 @@ msgid "Multipath Name"
 msgstr ""
 
 msgid "Multipaths"
-msgstr ""
-
-msgid ""
-"Must match Peer Secret (Confirm) and be between 12 and 16 characters in "
-"length. Cannot be the same as Secret."
 msgstr ""
 
 msgid ""
@@ -7328,6 +7411,9 @@ msgid ""
 "setting."
 msgstr ""
 
+msgid "Please select a valid SSH Connection"
+msgstr ""
+
 msgid "Please select a valid path"
 msgstr ""
 
@@ -7548,9 +7634,6 @@ msgstr ""
 msgid "Promote Dataset"
 msgstr ""
 
-msgid "Properties"
-msgstr ""
-
 msgid "Protocol"
 msgstr ""
 
@@ -7643,6 +7726,9 @@ msgid "Read Only"
 msgstr ""
 
 msgid "Read Only Access"
+msgstr ""
+
+msgid "Read and Write"
 msgstr ""
 
 msgid "Read-Only"
@@ -7821,9 +7907,6 @@ msgid ""
 "Datasets</b> becomes available."
 msgstr ""
 
-msgid "Replicate from scratch if incremental is not possible"
-msgstr ""
-
 msgid ""
 "Replicate snapshots that have not been  created by an automated snapshot "
 "task. Requires setting a naming schema  for the custom snapshots."
@@ -7836,9 +7919,6 @@ msgid "Replication <i>"
 msgstr ""
 
 msgid "Replication Schedule"
-msgstr ""
-
-msgid "Replication Status"
 msgstr ""
 
 msgid "Replication Tasks"
@@ -8183,6 +8263,9 @@ msgstr ""
 msgid "STOP"
 msgstr ""
 
+msgid "Samba Authentication"
+msgstr ""
+
 msgid "Samba Schema"
 msgstr ""
 
@@ -8211,6 +8294,9 @@ msgid "Save License"
 msgstr ""
 
 msgid "Save Network Interface Changes"
+msgstr ""
+
+msgid "Save Pending Snapshots"
 msgstr ""
 
 msgid "Save Without Restarting"
@@ -8357,6 +8443,9 @@ msgid "Secret Encryption Key"
 msgstr ""
 
 msgid "Secret Key"
+msgstr ""
+
+msgid "Secret and Peer Secret can not be the same."
 msgstr ""
 
 msgid "Secure mode"
@@ -8531,8 +8620,9 @@ msgid "Select a screen resolution to use for VNC sessions."
 msgstr ""
 
 msgid ""
-"Select a sector size in bytes. <i>Default</i> leaves the leaves the sector "
-"size unset."
+"Select a sector size in bytes. <i>Default</i> leaves the sector size unset "
+"and uses the ZFS volume values. Setting a sector size changes both the "
+"logical and physical sector size."
 msgstr ""
 
 msgid "Select a stream mode if system is to be used for streaming."
@@ -8650,12 +8740,14 @@ msgid ""
 "from <i>Best effort (default)</i>  to <i>Network control (highest)</i>."
 msgstr ""
 
-msgid ""
-"Select the IP address associated with an interface or the wildcard address "
-"of <i>0.0.0.0</i> (any interface)."
+msgid "Select the IP addresses SMB will listen for."
 msgstr ""
 
-msgid "Select the IP addresses SMB will listen for."
+msgid ""
+"Select the IP addresses to be listened on  by the portal. Click ADD to add "
+"IP addresses with a different network  port. The address <i>0.0.0.0</i> can "
+"be selected to listen on all IPv4  addresses, or <i>::</i> to listen on all "
+"IPv6 addresses."
 msgstr ""
 
 msgid ""
@@ -8950,10 +9042,16 @@ msgstr ""
 msgid "Services"
 msgstr ""
 
+msgid "Set Frequency"
+msgstr ""
+
 msgid "Set Keep Flag"
 msgstr ""
 
 msgid "Set Passphrase"
+msgstr ""
+
+msgid "Set Warning Level"
 msgstr ""
 
 msgid ""
@@ -8997,9 +9095,6 @@ msgid ""
 msgstr ""
 
 msgid "Set for ypbind to bind to the server that responds the fastest."
-msgstr ""
-
-msgid "Set frequency"
 msgstr ""
 
 msgid "Set if NFS clients need to use UDP."
@@ -9141,6 +9236,9 @@ msgid ""
 "access control."
 msgstr ""
 
+msgid "Set to allow group to be used for Samba permissions and authentication."
+msgstr ""
+
 msgid ""
 "Set to allow privileged users inside the jail to mount and unmount "
 "filesystem types marked as jail-friendly."
@@ -9212,6 +9310,9 @@ msgstr ""
 msgid ""
 "Set to allow the share to host user home directories. Only one share can be "
 "the home share."
+msgstr ""
+
+msgid "Set to allow user to authenticate to Samba shares."
 msgstr ""
 
 msgid ""
@@ -9817,9 +9918,6 @@ msgstr ""
 msgid "Snapshot Lifetime"
 msgstr ""
 
-msgid "Snapshot Replication Schedule"
-msgstr ""
-
 msgid "Snapshot Retention Policy"
 msgstr ""
 
@@ -10157,6 +10255,9 @@ msgstr ""
 msgid "Sync to peer succeeded."
 msgstr ""
 
+msgid "Synchronize Destination Snapshots With Source"
+msgstr ""
+
 msgid "Syslog"
 msgstr ""
 
@@ -10347,7 +10448,7 @@ msgstr ""
 msgid "Test email sent!"
 msgstr ""
 
-msgid "Tests are not performed when the system enters the selected power mode."
+msgid "Tests are only performed when <i>Never</i>  is selected."
 msgstr ""
 
 msgid ""
@@ -10511,6 +10612,9 @@ msgstr ""
 msgid ""
 "The legacy user interface is deprecated. All management should be performed "
 "through the new user interface."
+msgstr ""
+
+msgid "The length of "
 msgstr ""
 
 msgid "The lifetime of the CA specified in days."
@@ -10844,6 +10948,9 @@ msgid ""
 "connection with the remote system."
 msgstr ""
 
+msgid "Time Format"
+msgstr ""
+
 msgid "Time Machine"
 msgstr ""
 
@@ -10909,6 +11016,9 @@ msgid "Transfers"
 msgstr ""
 
 msgid "Transport"
+msgstr ""
+
+msgid "Transport Options"
 msgstr ""
 
 msgid "Traverse"
@@ -11343,6 +11453,9 @@ msgstr ""
 msgid "User password. Must be at least 12 and no more than 16 characters long."
 msgstr ""
 
+msgid "User to run as during file transfers to and from  this module."
+msgstr ""
+
 msgid ""
 "User who controls the dataset. This user always has permissions to read or "
 "write the ACL and read or write attributes. Users created manually or "
@@ -11359,7 +11472,7 @@ msgid "Username for logging in to the remote system."
 msgstr ""
 
 msgid "Username for this service."
-msgstr ""
+msgstr "Nome utente per il dispositivo"
 
 msgid ""
 "Username of the SNMP  <a "
@@ -11383,16 +11496,19 @@ msgid ""
 msgstr ""
 
 msgid "Users"
-msgstr ""
+msgstr "Utenti"
 
 msgid "Users & Groups"
-msgstr ""
+msgstr "Utenti e Gruppi"
 
 msgid ""
 "Uses the SMB Service <i>NetBIOS Name</i> to advertise  the server to "
 "WS-Discovery clients. This causes the computer appear in  the <i>Network "
 "Neighborhood</i> of modern Windows OSes."
 msgstr ""
+"Yandex  <a "
+"href=\"https://tech.yandex.com/direct/doc/dg-v4/concepts/auth-token-docpage/"
+"\"  target=\"_blank\">Token di accesso</a>."
 
 msgid "Using pool "
 msgstr ""
@@ -11722,6 +11838,9 @@ msgstr ""
 msgid "Write Errors"
 msgstr ""
 
+msgid "Write Only"
+msgstr ""
+
 msgid "Write a percentage limit of a single CPU core."
 msgstr ""
 
@@ -11735,430 +11854,435 @@ msgid ""
 msgstr ""
 
 msgid "Years"
-msgstr ""
+msgstr "Anni"
 
 msgid "Yes"
-msgstr ""
+msgstr "Si"
 
 msgid "Yes I understand the risks"
-msgstr ""
+msgstr "Sì, capisco i rischi"
 
 msgid "Yes, decrypt the disks"
-msgstr ""
+msgstr "Si, decodifica il disco"
 
 msgid "You have left the domain."
-msgstr ""
+msgstr "Hai lasciato il dominio."
 
 msgid "ZFS"
-msgstr ""
+msgstr "ZFS"
 
 msgid "ZFS Cache"
-msgstr ""
+msgstr "Cache ZFS"
 
 msgid "ZFS Deduplication"
-msgstr ""
+msgstr "Deduplication ZFS"
 
 msgid "ZFS Filesystem"
-msgstr ""
+msgstr "Filesystem ZFS"
 
 msgid "ZFS deduplication"
-msgstr ""
+msgstr "deduplicazione ZFS"
 
 msgid ""
-"ZFS pools must conform to strict naming <a "
+"ZFS pools must conform to strict naming  <a "
 "href=\"https://docs.oracle.com/cd/E23824_01/html/821-1448/gbcpt.html\" "
-"target=\"_blank\">conventions</a>. Choose a memorable name."
+"target=\"_blank\">conventions</a>.  Choose a memorable name."
 msgstr ""
 
 msgid "Zero Device Numbers"
-msgstr ""
+msgstr "Zero Dispositivi "
 
 msgid "Zvol Location"
-msgstr ""
+msgstr "Posizione Zvol"
 
 msgid "Zvol name"
-msgstr ""
+msgstr "nome Zvol"
 
 msgid ""
 "[Use fewer transactions in exchange for more "
 "RAM.](https://rclone.org/docs/#fast-list) This can also speed up or slow "
 "down the transfer."
 msgstr ""
+"[Usa meno transazioni in cambio di più "
+"RAM.](https://rclone.org/docs/#fast-list) Questo può anche accelerare o "
+"rallentare il trasferimento."
 
 msgid "allow_chflags"
-msgstr ""
+msgstr "allow_chflags"
 
 msgid "allow_mlock"
-msgstr ""
+msgstr "allow_mlock"
 
 msgid "allow_mount"
-msgstr ""
+msgstr "allow_mount"
 
 msgid "allow_mount_devfs"
-msgstr ""
+msgstr "allow_mount_devfs"
 
 msgid "allow_mount_fusefs"
-msgstr ""
+msgstr "allow_mount_fusefs"
 
 msgid "allow_mount_nullfs"
-msgstr ""
+msgstr "allow_mount_nullfs"
 
 msgid "allow_mount_procfs"
-msgstr ""
+msgstr "allow_mount_procfs"
 
 msgid "allow_mount_tmpfs"
-msgstr ""
+msgstr "allow_mount_tmpfs"
 
 msgid "allow_mount_zfs"
-msgstr ""
+msgstr "allow_mount_zfs"
 
 msgid "allow_quotas"
-msgstr ""
+msgstr "allow_quotas"
 
 msgid "allow_raw_sockets"
-msgstr ""
+msgstr "allow_raw_sockets"
 
 msgid "allow_set_hostname"
-msgstr ""
+msgstr "allow_set_hostname"
 
 msgid "allow_socket_af"
-msgstr ""
+msgstr "allow_socket_af"
 
 msgid "allow_sysvipc"
-msgstr ""
+msgstr "allow_sysvipc"
 
 msgid "allow_tun"
-msgstr ""
+msgstr "allow_tun"
 
 msgid "allow_vmm"
-msgstr ""
+msgstr "allow_vmm"
 
 msgid "assign_localhost"
-msgstr ""
+msgstr "assign_localhost"
 
 msgid "below to confirm."
-msgstr ""
+msgstr "sotto per confermare."
 
 msgid "boot"
-msgstr ""
+msgstr "boot"
 
 msgid "children_max"
-msgstr ""
+msgstr "children_max"
 
 msgid "close"
-msgstr ""
+msgstr "chiuso"
 
 msgid "comment"
-msgstr ""
+msgstr "commento"
 
 msgid "coredumpsize"
-msgstr ""
+msgstr "coredumpsize"
 
 msgid "cpuset"
-msgstr ""
+msgstr "cpuset"
 
 msgid "cputime"
-msgstr ""
+msgstr "cputime"
 
 msgid "createcomputer"
-msgstr ""
+msgstr "createcomputer"
 
 msgid "datasize"
-msgstr ""
+msgstr "datasize"
 
 msgid "days"
-msgstr ""
+msgstr "giorni"
 
 msgid "depends"
-msgstr ""
+msgstr "dipende"
 
 msgid "destroy"
-msgstr ""
+msgstr "distrutto"
 
 msgid "devfs_ruleset"
-msgstr ""
+msgstr "devfs_ruleset"
 
 msgid "email"
-msgstr ""
+msgstr "email"
 
 msgid "empty"
-msgstr ""
+msgstr "vuoto"
 
 msgid "enforce_statfs"
-msgstr ""
+msgstr "enforce_statfs"
 
 msgid "error"
-msgstr ""
+msgstr "errore"
 
 msgid "exec_clean"
-msgstr ""
+msgstr "exec_clean"
 
 msgid "exec_fib"
-msgstr ""
+msgstr "exec_fib"
 
 msgid "exec_jail_user"
-msgstr ""
+msgstr "exec_jail_user"
 
 msgid "exec_poststart"
-msgstr ""
+msgstr "exec_poststart"
 
 msgid "exec_poststop"
-msgstr ""
+msgstr "exec_poststop"
 
 msgid "exec_prestart"
-msgstr ""
+msgstr "exec_prestart"
 
 msgid "exec_prestop"
-msgstr ""
+msgstr "exec_prestop"
 
 msgid "exec_start"
-msgstr ""
+msgstr "exec_start"
 
 msgid "exec_stop"
-msgstr ""
+msgstr "exec_stop"
 
 msgid "exec_system_jail_user"
-msgstr ""
+msgstr "exec_system_jail_user"
 
 msgid "exec_system_user"
-msgstr ""
+msgstr "exec_system_user"
 
 msgid "exec_timeout"
-msgstr ""
+msgstr "exec_timeout"
 
 msgid "expires in"
-msgstr ""
+msgstr "scade tra"
 
 msgid "gathering info..."
-msgstr ""
+msgstr "raccolta informazioni..."
 
 msgid "group"
-msgstr ""
+msgstr "gruppo"
 
 msgid "host_domainname"
-msgstr ""
+msgstr "host_domainname"
 
 msgid "host_hostname"
-msgstr ""
+msgstr "host_hostname"
 
 msgid "host_time"
-msgstr ""
+msgstr "host_time"
 
 msgid "hostid"
-msgstr ""
+msgstr "hostid"
 
 msgid "hostid_strict_check"
-msgstr ""
+msgstr "hostid_strict_check"
 
 msgid "iSCSI"
-msgstr ""
+msgstr "iSCSI"
 
 msgid "iSCSI Group"
-msgstr ""
+msgstr "iSCSI Group"
 
 msgid "interfaces"
-msgstr ""
+msgstr "interfacce"
 
 msgid "ip4"
-msgstr ""
+msgstr "ip4"
 
 msgid "ip4.saddrsel"
-msgstr ""
+msgstr "ip4.saddrsel"
 
 msgid "ip6"
-msgstr ""
+msgstr "ip6"
 
 msgid "ip6.saddrsel"
-msgstr ""
+msgstr "ip6.saddrsel"
 
 msgid "ip_hostname"
-msgstr ""
+msgstr "ip_hostname"
 
 msgid "is already in use."
-msgstr ""
+msgstr "è già in uso."
 
 msgid "jail_zfs"
-msgstr ""
+msgstr "jail_zfs"
 
 msgid "jail_zfs_dataset"
-msgstr ""
+msgstr "jail_zfs_dataset"
 
 msgid "jail_zfs_mountpoint"
-msgstr ""
+msgstr "jail_zfs_mountpoint"
 
 msgid "list"
-msgstr ""
+msgstr "lista"
 
 msgid "login_flags"
-msgstr ""
+msgstr "login_flags"
 
 msgid "mDNS"
-msgstr ""
+msgstr "mDNS"
 
 msgid "mac_prefix"
-msgstr ""
+msgstr "mac_prefix"
 
 msgid "maxproc"
-msgstr ""
+msgstr "maxproc"
 
 msgid "memorylocked"
-msgstr ""
+msgstr "memorylocked"
 
 msgid "memoryuse"
-msgstr ""
+msgstr "memoryuse"
 
 msgid "mount_devfs"
-msgstr ""
+msgstr "mount_devfs"
 
 msgid "mount_fdescfs"
-msgstr ""
+msgstr "mount_fdescfs"
 
 msgid "mount_linprocfs"
-msgstr ""
+msgstr "mount_linprocfs"
 
 msgid "mount_procfs"
-msgstr ""
+msgstr "mount_procfs"
 
 msgid "mountd(8) bind port"
-msgstr ""
+msgstr "mountd(8) bind port"
 
 msgid "msgqqueued"
-msgstr ""
+msgstr "msgqqueued"
 
 msgid "msgqsize"
-msgstr ""
+msgstr "msgqsize"
 
 msgid "multipath"
-msgstr ""
+msgstr "multipath"
 
 msgid "name"
-msgstr ""
+msgstr "nome"
 
 msgid "nmsgq"
-msgstr ""
+msgstr "nmsgq"
 
 msgid "no"
-msgstr ""
+msgstr "no"
 
 msgid "nsemop"
-msgstr ""
+msgstr "nsemop"
 
 msgid "nshm"
-msgstr ""
+msgstr "nshm"
 
 msgid "nthr"
-msgstr ""
+msgstr "nthr"
 
 msgid "openfiles"
-msgstr ""
+msgstr "openfiles"
 
 msgid "overview"
-msgstr ""
+msgstr "panoramica"
 
 msgid "owner"
-msgstr ""
+msgstr "proprietario"
 
 msgid "password"
-msgstr ""
+msgstr "password"
 
 msgid "pcpu"
-msgstr ""
+msgstr "pcpu"
 
 msgid "priority"
-msgstr ""
+msgstr "priorità"
 
 msgid "pseudoterminals"
-msgstr ""
+msgstr "pseudoterminali"
 
 msgid "resolver"
-msgstr ""
+msgstr "risolvere"
 
 msgid "rlimits"
-msgstr ""
+msgstr "rlimits"
 
 msgid "rpc.lockd(8) bind port"
-msgstr ""
+msgstr "rpc.lockd(8) bind port"
 
 msgid "rpc.statd(8) bind port"
-msgstr ""
+msgstr "rpc.statd(8) bind port"
 
 msgid "safe"
-msgstr ""
+msgstr "sicura"
 
 msgid "seconds unless KEEP CHANGES is chosen to make them permanent."
 msgstr ""
+"secondi a meno che MANTENERE I CAMBIAMENTI sia scelto per renderli "
+"permanenti."
 
 msgid "securelevel"
-msgstr ""
+msgstr "securelevel"
 
 msgid "service failed to start."
-msgstr ""
+msgstr "il servizio non è riuscito ad avviarsi."
 
 msgid "service failed to stop."
-msgstr ""
+msgstr "il servizio non è riuscito a fermarsi."
 
 msgid "shmsize"
-msgstr ""
+msgstr "shmsize"
 
 msgid "stacksize"
-msgstr ""
+msgstr "stacksize"
 
 msgid "stop_timeout"
-msgstr ""
+msgstr "stop_timeout"
 
 msgid "swapuse"
-msgstr ""
+msgstr "swapuse"
 
 msgid "sysvmsg"
-msgstr ""
+msgstr "sysvmsg"
 
 msgid "sysvsem"
-msgstr ""
+msgstr "sysvsem"
 
 msgid "sysvshm"
-msgstr ""
+msgstr "sysvshm"
 
 msgid "template"
-msgstr ""
+msgstr "modello"
 
 msgid "total memory installed"
-msgstr ""
+msgstr "memoria totale installata"
 
 msgid "used"
-msgstr ""
+msgstr "usato"
 
 msgid "vmemoryuse"
-msgstr ""
+msgstr "vmemoryuse"
 
 msgid "vnet0_mac"
-msgstr ""
+msgstr "vnet0_mac"
 
 msgid "vnet1_mac"
-msgstr ""
+msgstr "vnet1_mac"
 
 msgid "vnet2_mac"
-msgstr ""
+msgstr "vnet2_mac"
 
 msgid "vnet3_mac"
-msgstr ""
+msgstr "vnet3_mac"
 
 msgid "vnet_default_interface"
-msgstr ""
+msgstr "vnet_default_interface"
 
 msgid "vnet_interfaces"
-msgstr ""
+msgstr "vnet_interfaces"
 
 msgid "wallclock"
-msgstr ""
+msgstr "orologio da parete"
 
 msgid "warn"
-msgstr ""
+msgstr "avvisare"
 
 msgid "was successfully attached."
-msgstr ""
+msgstr "è stata collegata correttamente."
 
 msgid "while pool is encrypted"
-msgstr ""
+msgstr "mentre la pool è crittografata"
 
 msgid "yes"
-msgstr ""
+msgstr "si"
