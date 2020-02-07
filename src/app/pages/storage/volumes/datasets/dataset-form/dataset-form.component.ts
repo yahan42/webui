@@ -17,6 +17,7 @@ import globalHelptext from '../../../../../helptext/global-helptext';
 import { forbiddenValues } from 'app/pages/common/entity/entity-form/validators/forbidden-values-validation';
 import { Validators, ValidationErrors, FormControl } from '@angular/forms';
 import { filter } from 'rxjs/operators';
+import userChangePw from 'app/helptext/account/user-change-pw';
 
 interface DatasetFormData {
   name: string;
@@ -550,6 +551,43 @@ export class DatasetFormComponent implements Formconfiguration{
         disabled: true,
         isHidden: true,
       }]
+    },
+    {
+      name: 'User and Group Quotas',
+      class: "user_group_quotas",
+      label:true,
+      config: [
+        {
+          type: 'select',
+          name: 'user',
+          placeholder: "User",
+          tooltip: 'Select a user on whom to place a quota.',
+          options: [],
+          width: '50%'
+        },
+        {
+          type: 'input',
+          name: 'user_quota',
+          placeholder: "User Quota",
+          tooltip: 'Set a quota.',
+          width: '50%'
+        },
+        {
+          type: 'select',
+          name: 'group',
+          placeholder: "Group",
+          tooltip: 'Select a group on which to place a quota.',
+          options: [],
+          width: '50%'
+        },
+        {
+          type: 'input',
+          name: 'group_quota',
+          placeholder: "Group Quota",
+          tooltip: 'Set a quota.',
+          width: '50%'
+        }
+      ]
     }
   ];
 
@@ -789,6 +827,24 @@ export class DatasetFormComponent implements Formconfiguration{
       }
     });
     this.setBasicMode(this.isBasicMode);
+
+    this.ws.call('user.query').subscribe((res) => {
+      let user = _.find(this.fieldConfig, {'name' : 'user'});
+      res.forEach((item) => {
+        user.options.push(
+          { label : item.username, value : item.uid}
+        )
+      })
+    })
+
+    this.ws.call('group.query').subscribe((res) => {
+      let group = _.find(this.fieldConfig, {'name' : 'group'});
+      res.forEach((item) => {
+        group.options.push(
+          { label : item.group, value : item.gid}
+        )
+      })
+    })
   }
 
   preInit(entityForm: EntityFormComponent) {
