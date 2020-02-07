@@ -86,6 +86,7 @@ export class DatasetFormComponent implements Formconfiguration{
 
   private minquota = 1024 * 1024 * 1024; // 1G minimum
   private minrefquota = 1024 * 1024 * 1024;
+  private maxUserGroupQuota: number;
 
   public parent: string;
   public data: any;
@@ -570,7 +571,39 @@ export class DatasetFormComponent implements Formconfiguration{
           name: 'user_quota',
           placeholder: "User Quota",
           tooltip: 'Set a quota.',
-          width: '50%'
+          width: '50%',
+          blurEvent: this.blurEventUserQuota,
+          blurStatus: true,
+          parent: this,
+          validation: [
+            (control: FormControl): ValidationErrors => {
+              const config = this.fieldConfig.find(c => c.name === 'user_quota');
+              
+              const size = this.convertHumanStringToNum(control.value, 'user_quota');
+              const errors = control.value && isNaN(size)
+                ? { invalid_byte_string: true }
+                : null
+  
+              if (errors) {
+                config.hasErrors = true;
+                config.errors = globalHelptext.human_readable.input_error;
+              } else {
+                const size_err = control.value && (size != 0) && (size >= this.maxUserGroupQuota)
+                  ? { invalid_size: true }
+                  : null
+  
+                if (size_err) {
+                  config.hasErrors = true;
+                  config.errors = 'Too big, man!';
+                } else {
+                  config.hasErrors = false;
+                  config.errors = '';
+                }
+              }
+  
+              return errors;
+            }
+          ],
         },
         {
           type: 'select',
@@ -585,7 +618,39 @@ export class DatasetFormComponent implements Formconfiguration{
           name: 'group_quota',
           placeholder: "Group Quota",
           tooltip: 'Set a quota.',
-          width: '50%'
+          width: '50%',
+          blurEvent: this.blurEventGroupQuota,
+          blurStatus: true,
+          parent: this,
+          validation: [
+            (control: FormControl): ValidationErrors => {
+              const config = this.fieldConfig.find(c => c.name === 'group_quota');
+              
+              const size = this.convertHumanStringToNum(control.value, 'group_quota');
+              const errors = control.value && isNaN(size)
+                ? { invalid_byte_string: true }
+                : null
+  
+              if (errors) {
+                config.hasErrors = true;
+                config.errors = globalHelptext.human_readable.input_error;
+              } else {
+                const size_err = control.value && (size != 0) && (size >= this.maxUserGroupQuota)
+                  ? { invalid_size: true }
+                  : null
+  
+                if (size_err) {
+                  config.hasErrors = true;
+                  config.errors = 'Too big, man!';
+                } else {
+                  config.hasErrors = false;
+                  config.errors = '';
+                }
+              }
+  
+              return errors;
+            }
+          ],
         }
       ]
     }
@@ -753,6 +818,18 @@ export class DatasetFormComponent implements Formconfiguration{
   blurEventRefReservation(parent){
     if (parent.entityForm) {
         parent.entityForm.formGroup.controls['refreservation'].setValue(parent.humanReadable['refreservation']);
+    }
+  }
+
+  blurEventUserQuota(parent){
+    if (parent.entityForm) {
+        parent.entityForm.formGroup.controls['user_quota'].setValue(parent.humanReadable['user_quota']);
+    }
+  }
+
+  blurEventGroupQuota(parent){
+    if (parent.entityForm) {
+        parent.entityForm.formGroup.controls['group_quota'].setValue(parent.humanReadable['group_quota']);
     }
   }
 
@@ -1057,6 +1134,7 @@ export class DatasetFormComponent implements Formconfiguration{
   }
 
   resourceTransformIncomingRestData(wsResponse): any {
+    this.maxUserGroupQuota = wsResponse.refquota.parsed;
     const quota_warning = this.getFieldValueOrNone(wsResponse.quota_warning) ? this.getFieldValueOrNone(wsResponse.quota_warning) : this.warning;
     const quota_warning_inherit = this.isInherited(wsResponse.quota_warning, quota_warning);
     const quota_critical = this.getFieldValueOrNone(wsResponse.quota_critical) ? this.getFieldValueOrNone(wsResponse.quota_critical) : this.critical;
