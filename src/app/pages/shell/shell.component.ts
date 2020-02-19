@@ -102,7 +102,6 @@ export class ShellComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   initializeTerminal() {
-    console.log("BOOM");
     this.xterm = new Terminal({
       'cursorBlink': true,
       //'tabStopWidth': 8,
@@ -143,7 +142,8 @@ export class ShellComponent implements AfterViewInit, OnChanges, OnDestroy {
   setTermDimensions(c?: number, r?: number){
     if(this.ss.connectionID){
       console.log([this.ss.connectionID, this.xterm.rows, this.xterm.cols]);
-      this.ws.call('core.resize_shell', [this.ss.connectionID, this.xterm.rows, this.xterm.cols]);
+      this.xterm.refresh(0, this.xterm.rows);
+      //this.ws.call('core.resize_shell', [this.ss.connectionID, this.xterm.rows, this.xterm.cols]);
     }
   }
 

@@ -62,7 +62,6 @@ export class AdminLayoutComponent implements OnInit, AfterViewChecked {
       } else if (routeChange instanceof NavigationEnd) {
         const spl = routeChange.urlAfterRedirects.split('/');
         const page = spl[spl.length - 1];
-        console.log(page);
         this.shellPage = routeChange.urlAfterRedirects.includes('shell') ? 'shell' : '';
       }
     });
