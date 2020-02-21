@@ -164,6 +164,14 @@ export class GeneralPreferencesFormComponent implements OnInit, AfterViewInit, O
         },
         {
           type: 'checkbox',
+          name: 'showClassicBranding',
+          placeholder: T('Show Classic Branding'),
+          value:prefs.showClassicBranding,
+          tooltip: T('Replace the TrueNAS logos with the classic FreeNAS look.'),
+          class:'inline'
+        },
+        {
+          type: 'checkbox',
           name: 'tableDisplayedColumns',
           placeholder: T('Reset Table Columns to Default'),
           value: false,
