@@ -13,6 +13,12 @@ export class FormParagraphComponent implements Field {
   config: FieldConfig;
   group: FormGroup;
   fieldShow: string;
+  paratextArr: any;
 
   constructor(public translate: TranslateService) {}
+
+  ngOnInit() {
+    console.log(this.config.paratextArr);
+    this.paratextArr = this.config.paratextArr;
+  }
 }

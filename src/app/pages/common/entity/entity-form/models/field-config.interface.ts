@@ -23,7 +23,7 @@ export interface FieldConfig {
   customEventActionLabel?: string, explorerType?: string, explorerParam?: any, customTemplateStringOptions?: any,
   required?: boolean, deleteButtonOnFirst?: boolean, addBtnMessage?: string,
   acceptedFiles?: string, fileLocation?: string, fileType?: string,width?:string,
-  message?: any, updater?:any, parent?:any,togglePw?:boolean, paraText?: any,
+  message?: any, updater?:any, parent?:any,togglePw?:boolean, paraText?: any, paratextArr?: any[],
   noexec?: boolean, blurStatus?:boolean,blurEvent?:any,noMinutes?:boolean,
   warnings?: string, hideButton?:boolean, searchOptions?: any[], hideDirs?: any,
   listFields?: Array<FieldConfig>[], templateListField?: FieldConfig[],

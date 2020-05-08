@@ -4,6 +4,12 @@
         <p [class.large]="config.isLargeText" [innerHTML]="config.paraText | translate | docreplace"></p>
         <tooltip class="paratext-tooltip" *ngIf="config.tooltip" [header]="config.placeholder" [message]="config.tooltip"></tooltip>
     </div>
+    <div>
+        <mat-icon class="paragraph-icon" *ngIf="config.paragraphIcon">{{ config.paragraphIcon }}</mat-icon>
+        <span *ngFor="let item of paratextArr" [innerHtml]="item | translate"></span>
+        <p [class.large]="config.isLargeText" [innerHTML]="config.paraText | translate | docreplace"></p>
+        <tooltip class="paratext-tooltip" *ngIf="config.tooltip" [header]="config.placeholder" [message]="config.tooltip"></tooltip>
+    </div>
     <mat-error *ngIf="config['hasErrors']">{{config['errors']}}</mat-error>
     <mat-form-field class="full-width" style="display:none">
       <input matInput [type]="config.inputType ? config.inputType : 'text'"
