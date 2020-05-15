@@ -554,10 +554,10 @@ export class VolumesListTableConfig implements InputTableConf {
               fieldConfig: [{
                 type: 'paragraph',
                 name: 'pool_detach_warning',
-                paraText: helptext.detachDialog_pool_detach_warning_paratext_a + row1.name +
-                  helptext.detachDialog_pool_detach_warning_paratext_b,
+                paratextArr: [helptext.detachDialog_pool_detach_warning_paratext_a, row1.name, 
+                  helptext.detachDialog_pool_detach_warning_paratext_b],
                 isHidden: rowData.status === 'UNKNOWN' ? true : false
-              }, {
+                }, {
                 type: 'paragraph',
                 name: 'unknown_status_detach_warning',
                 paraText: `${helptext.detachWarningForUnknownState.message_a} ${row1.name} ${helptext.detachWarningForUnknownState.message_b}`,

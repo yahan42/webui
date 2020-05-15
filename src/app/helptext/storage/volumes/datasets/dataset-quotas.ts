@@ -60,7 +60,8 @@ export default {
  if there are no matches.')
             },
     data_quota: {
-      placeholder: T('Group Data Quota ') + globalHelptext.human_readable.suggestion_label,
+      placeholder: T('Group Data Quota '),
+      placeholder_extra: globalHelptext.human_readable.suggestion_label,
       tooltip: T('Amount of disk space that can be used by the selected groups. \
  Entering <code>0</code> (zero) allows all disk space.') + globalHelptext.human_readable.suggestion_tooltip
     },

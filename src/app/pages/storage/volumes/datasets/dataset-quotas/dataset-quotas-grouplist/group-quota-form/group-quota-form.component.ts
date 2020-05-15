@@ -6,6 +6,8 @@ import { FieldConfig } from 'app/pages/common/entity/entity-form/models/field-co
 import { FieldSet } from 'app/pages/common/entity/entity-form/models/fieldset.interface';
 import { DialogService, StorageService, WebSocketService, AppLoaderService, UserService } from 'app/services';
 import helptext from 'app/helptext/storage/volumes/datasets/dataset-quotas';
+import { TranslateService } from '@ngx-translate/core';
+import globalHelptext from 'app/helptext/global-helptext';
 
 @Component({
   selector: 'app-group-quota-form',
@@ -27,6 +29,7 @@ export class GroupQuotaFormComponent {
   private entryErrBool = false;
   public save_button_enabled = false;
   private differ: any;
+  arr = [];
   public fieldConfig: FieldConfig[] = []
   public fieldSets: FieldSet[] = [
     {
@@ -93,13 +96,16 @@ export class GroupQuotaFormComponent {
   constructor(protected ws: WebSocketService, protected storageService: StorageService,
     protected aroute: ActivatedRoute, protected loader: AppLoaderService,
     protected router: Router, protected userService: UserService, private dialog: DialogService,
-    protected differs: IterableDiffers) {
+    protected differs: IterableDiffers, private translate: TranslateService) {
       this.differ = differs.find([]).create(null);
   }
 
   preInit(entityForm: EntityFormComponent) {
+    this.tempPlaceholder = 'Hmmm';
     const paramMap: any = (<any>this.aroute.params).getValue();
     this.pk = paramMap.pk;
+  
+    this.convertObjValuesToArray(helptext);
   }
 
   async validateEntry(value) {
@@ -111,6 +117,17 @@ export class GroupQuotaFormComponent {
     this.entryErrs = document.getElementsByClassName('chip-warn');
     this.entryErrBool = this.entryErrs.length === 0 ? false : true;
     this.allowSubmit();
+  }
+
+  convertObjValuesToArray(obj) {
+    for (var key in obj) {
+      var value = obj[key];
+      if (typeof value === 'object') {
+        this.convertObjValuesToArray(value);
+      } else {
+        this.arr.push(value);
+      }
+    }
   }
 
   allowSubmit() {
@@ -134,6 +151,12 @@ export class GroupQuotaFormComponent {
   }
 
   afterInit(entityEdit: any) {
+    setTimeout(() => {
+      this.translate.get(this.arr).subscribe(res => {
+        console.log(res);
+      })
+    }, 2000)
+
     this.entityForm = entityEdit;
     this.route_success = ['storage', 'pools', 'group-quotas', this.pk];
     this.selectedEntriesField = _.find(this.fieldConfig, {name: "system_entries"});
