@@ -171,8 +171,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isFooterConsoleOpen = res.consolemsg;
       }
     });
-
-    if(this.isFN.toString() == 'false'){
+    console.log(this.isFN);
+    if(this.isFN !== null && this.isFN.toString() == 'false'){
       this.ws.call('failover.licensed').subscribe((res)=> {
         if (res) {
           this.isHA = true;
