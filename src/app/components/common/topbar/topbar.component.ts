@@ -13,6 +13,7 @@ import { EntityUtils } from '../../../pages/common/entity/utils';
 import { AppLoaderService } from '../../../services/app-loader/app-loader.service';
 import { DialogService } from '../../../services/dialog.service';
 import { LanguageService } from "../../../services/language.service";
+import { LocaleService } from 'app/services/locale.service';
 import { NotificationAlert, NotificationsService } from '../../../services/notifications.service';
 import { RestService } from "../../../services/rest.service";
 import { PreferencesService } from 'app/core/services/preferences.service';
@@ -97,6 +98,7 @@ export class TopbarComponent extends ViewControllerComponent implements OnInit, 
     public translate: TranslateService,
     private prefServices: PreferencesService,
     protected loader: AppLoaderService,
+    private localeService: LocaleService,
     public mediaObserver: MediaObserver) {
       super();
       this.sysGenService.updateRunningNoticeSent.subscribe(() => {
@@ -217,7 +219,12 @@ export class TopbarComponent extends ViewControllerComponent implements OnInit, 
       this.showWelcome = evt.data.showWelcomeDialog;
       
       setTimeout(() => {
-        if (this.showWelcome) {
+        // If showWelcome comes back as undefined, set it to true and set date/time formats
+        if (this.showWelcome !== false) {
+          this.showWelcome = true;
+          if (!evt.data.dateFormat || !evt.data.timeFormat) {
+            this.localeService.saveDateTimeFormat('YYYY-MM-DD', 'HH:mm:ss');
+          }
           this.onShowAbout();
         }
       }, 3500)
