@@ -35,6 +35,11 @@ export class SigninComponent implements OnInit, OnDestroy {
   private interval: any;
   public exposeLegacyUI = false;
   public tokenObservable:Subscription;
+<<<<<<< HEAD
+=======
+  public HAInterval;
+  public isTwoFactor = false;
+>>>>>>> d7deabd15... Ensure intervals are cleared before logging in to prevent memory leak
 
   signinData = {
     username: '',
@@ -79,9 +84,16 @@ export class SigninComponent implements OnInit, OnDestroy {
         if (this.interval) {
           clearInterval(this.interval);
         }
+<<<<<<< HEAD
         if (!this.is_freenas) {
+=======
+        if (this.product_type === 'ENTERPRISE' || this.product_type === 'SCALE') {
+          if (this.HAInterval) {
+            clearInterval(this.HAInterval);
+          }
+>>>>>>> d7deabd15... Ensure intervals are cleared before logging in to prevent memory leak
           this.getHAStatus();
-          setInterval(() => {
+          this.HAInterval = setInterval(() => {
             this.getHAStatus();
           }, 6000);
         } else {
@@ -124,6 +136,12 @@ export class SigninComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+      if (this.interval) {
+        clearInterval(this.interval);
+      }
+      if (this.HAInterval) {
+        clearInterval(this.HAInterval);
+      }
       this.core.unregister({observerClass:this});
       if(this.tokenObservable){
         this.tokenObservable.unsubscribe();
@@ -268,6 +286,12 @@ export class SigninComponent implements OnInit, OnDestroy {
 
   redirect() {
     if (this.ws.token) {
+      if (this.interval) {
+        clearInterval(this.interval);
+      }
+      if (this.HAInterval) {
+        clearInterval(this.HAInterval);
+      }
       if (this.ws.redirectUrl) {
         this.router.navigateByUrl(this.ws.redirectUrl);
         this.ws.redirectUrl = '';
