@@ -110,6 +110,7 @@ def the_user_edit_page_should_open(driver):
 @then('Change the users email and click save')
 def change_the_users_email_and_click_save(driver):
     """Change the users email and click save."""
+    wait_on_element(driver, 0.5, 30, 'xpath', '//input[@ix-auto="input__Email"]')
     driver.find_element_by_xpath('//input[@ix-auto="input__Email"]').clear()
     driver.find_element_by_xpath('//input[@ix-auto="input__Email"]').send_keys('eturgeon@ixsystems.com')
     wait_on_element(driver, 0.5, 30, 'xpath', '//button[@ix-auto="button__SAVE"]')
