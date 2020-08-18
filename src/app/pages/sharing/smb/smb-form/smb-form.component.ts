@@ -409,7 +409,7 @@ export class SMBFormComponent {
      * nav to SMB shares list view.
      */
     const promptUserACLEdit = () => 
-      this.ws.call('filesystem.acl_is_trivial', [sharePath]).pipe(
+      this.checkAcl(sharePath).pipe(
         switchMap((isTrivialACL: boolean) =>
           /* If share does not have trivial ACL, move on. Otherwise, perform some async data-gathering operations */
           !isTrivialACL || !datasetId.includes('/') || this.productType.includes('SCALE')
@@ -524,8 +524,8 @@ export class SMBFormComponent {
       }
 
       if (!this.stripACLWarningSent) {
-        this.ws.call('filesystem.acl_is_trivial', [path]).subscribe(res => {
-          if (res === false && !entityForm.formGroup.controls['acl'].value) {
+        this.checkAcl(path).subscribe(res => {
+          if (!res && !entityForm.formGroup.controls['acl'].value) {
             this.stripACLWarningSent = true;
             this.showStripACLWarning();
           }
@@ -534,15 +534,19 @@ export class SMBFormComponent {
     });
 
     const path_fc = entityForm.formGroup.controls['path'];
-    entityForm.formGroup.controls['acl'].valueChanges.debounceTime(100).subscribe(res => { 
-      if (!res && path_fc.value && !this.stripACLWarningSent) {
-        this.ws.call('filesystem.acl_is_trivial', [path_fc.value]).subscribe (res => {
-          if (!res) {
-            this.stripACLWarningSent = true;
-            this.showStripACLWarning();
-          }
-        })
-      }
+    entityForm.formGroup.controls['acl'].valueChanges
+      .pipe(
+        debounceTime(100)
+      )
+      .subscribe(res => { 
+        if (!res && path_fc.value && !this.stripACLWarningSent) {
+          this.checkAcl(path_fc.value).subscribe (res => {
+            if (!res) {
+              this.stripACLWarningSent = true;
+              this.showStripACLWarning();
+            }
+          })
+        }
     });
 
     setTimeout(() => {
@@ -565,6 +569,10 @@ export class SMBFormComponent {
         }
       }
     });
+  }
+
+  checkAcl(path) {
+    return this.ws.call('filesystem.acl_is_trivial', [path]);
   }
 
   showStripACLWarning() {
