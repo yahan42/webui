@@ -213,7 +213,8 @@ export class EntityFormComponent implements OnInit, OnDestroy, OnChanges, AfterV
       if (this.conf.isEntity) {
         if (this.conf.rowid) {
           this.pk = this.conf.rowid;
-          // delete this.conf.rowid;
+          console.log('hmmm')
+          delete this.conf.rowid;
         } else {
           this.pk = params['pk'];
         }
