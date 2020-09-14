@@ -29,6 +29,11 @@ export class CredentialsComponent implements OnInit {
     this.router.navigate(['system', link])
   }
 
+  cloudCredentialsNav(link) {
+    console.log(link)
+    this.router.navigate(['credentials', link])
+  }
+
   nav(link) {
     this.router.navigate([link]);
   }
