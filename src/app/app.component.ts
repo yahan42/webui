@@ -28,7 +28,7 @@ import productText from './helptext/product';
 })
 export class AppComponent {
   appTitle = 'TrueNAS';
-  protected accountUserResource: string = 'account/users/1';
+  protected accountUserResource: string = 'credentials/users/1';
   protected user: any;
   public product_type: string = '';
 

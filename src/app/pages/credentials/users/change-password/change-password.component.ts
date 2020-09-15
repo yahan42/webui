@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from "@angular/router";
-import { WebSocketService, DialogService } from "../../../../services/";
+import { WebSocketService, DialogService } from "../../../../services";
 import { AppLoaderService } from "../../../../services/app-loader/app-loader.service";
 import { FieldConfig } from '../../../common/entity/entity-form/models/field-config.interface';
 import { FieldSet } from '../../../common/entity/entity-form/models/fieldset.interface';

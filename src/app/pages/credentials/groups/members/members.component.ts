@@ -67,12 +67,13 @@ export class MembersComponent implements OnInit {
           this.members.push(usr);
         }
       }
+      console.log(this.members)
     }, err => console.log(err));
     this.showSpinner = false;
   }
 
   cancel() {
-    this.router.navigate(['/', 'account', 'groups']);
+    this.router.navigate(['/', 'credentials', 'groups']);
   }
 
   updateUsers() {
@@ -80,7 +81,7 @@ export class MembersComponent implements OnInit {
     const grp = this.ws.call('group.update', [this.group.id, {users}]);
     this.loading.open(helptext.update_users_message);
     grp.subscribe(res => {
-      this.router.navigate(['/', 'account', 'groups']);
+      this.router.navigate(['/', 'credentials', 'groups']);
       this.loading.close();
     })
   }

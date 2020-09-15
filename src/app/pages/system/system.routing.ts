@@ -44,7 +44,6 @@ import { ReportingComponent } from './reporting/reporting.component';
 import { EulaComponent } from './support/eula/eula.component';
 import { KmipComponent} from './kmip/kmip.component';
 import { T } from '../../translate-marker';
-import { TwoFactorComponent } from './two-factor/two-factor.component';
 import { CredentialsComponent } from './../credentials/credentials.component';
 
 export const routes: Routes = [
@@ -361,11 +360,6 @@ export const routes: Routes = [
           data: { title: T('EULA'), breadcrumb: T('EULA')}
         }
       ]
-    },
-    {
-      path: 'two-factor',
-      component: TwoFactorComponent,
-      data: { title: T('Two-Factor Auth'), breadcrumb: T('Two-Factor Auth') },
     },
     {
       path: 'temp-misc',

@@ -71,7 +71,7 @@ export class NavigationService {
       type: 'slideOut',
       tooltip: T('Credentials'),
       icon: 'vpn_key',
-      state: 'credentials', // rename to credentials
+      state: 'credentials',
       sub: [
         { name: T('Local Users'), state: 'users' },
         { name: T('Local Groups'), state: 'groups' },

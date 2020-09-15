@@ -20,9 +20,9 @@ export class GroupListComponent {
   public title = "Groups";
   protected queryCall = 'group.query';
   protected wsDelete = 'group.delete';
-  protected route_add: string[] = ['account', 'groups', 'add' ];
+  protected route_add: string[] = ['credentials', 'groups', 'add' ];
   protected route_add_tooltip = T("Add Group");
-  protected route_edit: string[] = [ 'account', 'groups', 'edit' ];
+  protected route_edit: string[] = [ 'credentials', 'groups', 'edit' ];
   protected entityList: any;
   refreshTableSubscription: any;
   protected loaderOpen = false;
@@ -111,7 +111,7 @@ export class GroupListComponent {
       icon: 'people',
       onClick : (members) => {
         this._router.navigate(new Array('/').concat(
-          [ "account", "groups", "members", members.id ]));
+          [ "credentials", "groups", "members", members.id ]));
       }
     });
     if (row.builtin === !true){
