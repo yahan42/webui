@@ -80,7 +80,6 @@ export class BackupCredentialsComponent implements OnInit {
       case 'sshKeypairs':
         addComponent = this.sshKeypairs;
     }
-    console.log('id', id)
     this.modalService.open('slide-in-form', addComponent, id);
   }
 

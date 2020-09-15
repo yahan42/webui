@@ -32,8 +32,6 @@ import { CloudCredentialsListComponent } from './CloudCredentials/CloudCredentia
 import { CloudCredentialsFormComponent } from './CloudCredentials/cloudcredentials-form/';
 import { SshConnectionsListComponent } from './ssh-connections/ssh-connections-list/ssh-connections-list.component';
 import { SshConnectionsFormComponent } from './ssh-connections/ssh-connections-form/ssh-connections-form.component';
-import { SshKeypairsListComponent } from './ssh-keypairs/ssh-keypairs-list/ssh-keypairs-list.component';
-import { SshKeypairsFormComponent } from './ssh-keypairs/ssh-keypairs-form/ssh-keypairs-form.component';
 import { CertificateAuthorityListComponent } from './ca/ca-list/';
 import { CertificateAuthorityAddComponent } from './ca/ca-add/';
 import { CertificateAuthorityEditComponent } from './ca/ca-edit/';
@@ -94,8 +92,6 @@ import { QRDialog } from './two-factor/two-factor.component';
     CloudCredentialsFormComponent,
     SshConnectionsListComponent,
     SshConnectionsFormComponent,
-    SshKeypairsListComponent,
-    SshKeypairsFormComponent,
     CertificateAuthorityListComponent,
     CertificateAuthorityAddComponent,
     CertificateAuthorityEditComponent,

@@ -100,12 +100,12 @@ export class SshKeypairsFormComponent {
     constructor(private aroute: ActivatedRoute, private ws: WebSocketService, private loader: AppLoaderService,
         private dialogService: DialogService, private storage: StorageService) { }
 
-    preInit() {
-        this.aroute.params.subscribe(params => {
-            if (params['pk']) {
-                this.queryCallOption[0].push(params['pk']);
+
+    preInit(entityForm) {
+        this.entityForm = entityForm;
+            if (this.entityForm.conf.recordId) {
+                this.queryCallOption[0].push(this.entityForm.conf.recordId);
             }
-        });
     }
 
     downloadKey(key_type) {
@@ -117,7 +117,6 @@ export class SshKeypairsFormComponent {
     }
 
     afterInit(entityForm) {
-        this.entityForm = entityForm;
         this.fieldConfig = entityForm.fieldConfig;
         this.entityForm.formGroup.controls['private_key'].valueChanges.subscribe((res) => {
             this.clearPreviousErrors();
@@ -135,7 +134,7 @@ export class SshKeypairsFormComponent {
     }
 
     resourceTransformIncomingRestData(wsResponse) {
-        console.log(wsResponse)
+        console.log('hey', wsResponse)
         for (const item in wsResponse.attributes) {
             wsResponse[item] = wsResponse.attributes[item];
         }
