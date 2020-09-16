@@ -8,6 +8,7 @@ import helptext from 'app/helptext/system/ssh-keypairs';
 import { AppLoaderService } from '../../../../services/app-loader/app-loader.service';
 import { EntityUtils } from '../../../common/entity/utils';
 import { WebSocketService, DialogService, StorageService } from '../../../../services';
+import { ModalService } from 'app/services/modal.service';
 import { atLeastOne } from 'app/pages/common/entity/entity-form/validators/at-least-one-validation';
 
 @Component({
@@ -59,7 +60,7 @@ export class SshKeypairsFormComponent {
         }
     ]
 
-    protected custActions = [
+    protected compactCustomActions = [
         {
             id: 'generate_key',
             name: helptext.generate_key_button,
@@ -98,7 +99,7 @@ export class SshKeypairsFormComponent {
     ];
 
     constructor(private aroute: ActivatedRoute, private ws: WebSocketService, private loader: AppLoaderService,
-        private dialogService: DialogService, private storage: StorageService) { }
+        private dialogService: DialogService, private storage: StorageService, private modalService: ModalService) { }
 
 
     preInit(entityForm) {
@@ -134,7 +135,6 @@ export class SshKeypairsFormComponent {
     }
 
     resourceTransformIncomingRestData(wsResponse) {
-        console.log('hey', wsResponse)
         for (const item in wsResponse.attributes) {
             wsResponse[item] = wsResponse.attributes[item];
         }
@@ -156,4 +156,10 @@ export class SshKeypairsFormComponent {
         delete data['public_key'];
         return data;
     }
+
+    afterSubmit() {
+        this.modalService.refreshTable();
+    }
+
+
 }

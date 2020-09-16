@@ -25,7 +25,7 @@ export class BackupCredentialsComponent implements OnInit, OnDestroy {
   protected sshConnections = new SshConnectionsFormComponent(this.aroute,this.keychainCredentialService,
     this.ws,this.loader, this.dialogService, this.replicationService, this.modalService);
   protected sshKeypairs = new SshKeypairsFormComponent(this.aroute,this.ws,this.loader,
-    this.dialogService,this.storage);
+    this.dialogService,this.storage,this.modalService);
   protected cloudCredentials = new CloudCredentialsFormComponent(this.router, this.aroute,this.ws,
     this.cloudCredentialsService, this.dialogService, this.replicationService,this.modalService);
   
