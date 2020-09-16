@@ -103,9 +103,9 @@ export class SshKeypairsFormComponent {
 
     preInit(entityForm) {
         this.entityForm = entityForm;
-            if (this.entityForm.conf.recordId) {
-                this.queryCallOption[0].push(this.entityForm.conf.recordId);
-            }
+            // if (this.entityForm.conf.recordId) {
+                this.queryCallOption[0].push('3');
+            // }
     }
 
     downloadKey(key_type) {

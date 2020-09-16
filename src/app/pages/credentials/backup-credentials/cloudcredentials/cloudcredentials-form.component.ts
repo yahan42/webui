@@ -1243,7 +1243,8 @@ export class CloudCredentialsFormComponent {
               protected ws: WebSocketService,
               protected cloudcredentialService: CloudCredentialService,
               protected dialog: DialogService,
-              protected replicationService: ReplicationService) {
+              protected replicationService: ReplicationService,
+              private modalService: ModalService) {
     const basicFieldset = _.find(this.fieldSets, {'class': 'basic'});
     this.providerField = _.find(basicFieldset.config, {'name': 'provider'});
     this.cloudcredentialService.getProviders().subscribe(
@@ -1285,12 +1286,12 @@ export class CloudCredentialsFormComponent {
   }
 
   preInit() {
-    this.aroute.params.subscribe(params => {
-      if (params['pk']) {
-        this.queryCallOption[0].push(params['pk']);
-        this.id = params['pk'];
-      }
-    });
+    // this.aroute.params.subscribe(params => {
+    //   if (params['pk']) {
+        this.queryCallOption[0].push(1);
+        this.id = 1;
+    //   }
+    // });
   }
 
   setFieldRequired(name: string, required: boolean, entityform: any) {
@@ -1457,10 +1458,12 @@ export class CloudCredentialsFormComponent {
     this.entityForm.submitFunction(value).subscribe(
       (res) => {
           this.entityForm.loader.close();
-          // this.entityForm.router.navigate(new Array('/').concat(this.route_success));
+          this.modalService.close('slide-in-form');
+          this.modalService.refreshTable();
       },
       (err) => {
           this.entityForm.loader.close();
+          this.modalService.refreshTable();
           if (err.hasOwnProperty("reason") && (err.hasOwnProperty("trace"))) {
               new EntityUtils().handleWSError(this, err, this.dialog);
           } else {

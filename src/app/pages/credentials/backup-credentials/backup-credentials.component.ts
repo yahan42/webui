@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WebSocketService, KeychainCredentialService, AppLoaderService, 
   DialogService, ReplicationService, StorageService, CloudCredentialService } from 'app/services';
@@ -6,8 +6,7 @@ import { ModalService } from '../../../services/modal.service';
 import { SshConnectionsFormComponent } from './ssh-connections/ssh-connections-form.component';
 import { SshKeypairsFormComponent } from './ssh-keypairs/ssh-keypairs-form.component';
 import { CloudCredentialsFormComponent } from './cloudcredentials/cloudcredentials-form.component';
-
-
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-backup-credentials',
@@ -15,19 +14,20 @@ import { CloudCredentialsFormComponent } from './cloudcredentials/cloudcredentia
   styleUrls: ['./backup-credentials.component.scss'],
   providers: [KeychainCredentialService, ReplicationService, CloudCredentialService]
 })
-export class BackupCredentialsComponent implements OnInit {
+export class BackupCredentialsComponent implements OnInit, OnDestroy {
   cloudCreds = [];
   SSHKeypairs = [];
   SSHCreds = [];
   cards: any;
+  refreshTable: Subscription;
 
   // Components included in this dashboard
   protected sshConnections = new SshConnectionsFormComponent(this.aroute,this.keychainCredentialService,
-    this.ws,this.loader, this.dialogService, this.replicationService);
+    this.ws,this.loader, this.dialogService, this.replicationService, this.modalService);
   protected sshKeypairs = new SshKeypairsFormComponent(this.aroute,this.ws,this.loader,
     this.dialogService,this.storage);
   protected cloudCredentials = new CloudCredentialsFormComponent(this.router, this.aroute,this.ws,
-    this.cloudCredentialsService, this.dialogService, this.replicationService);
+    this.cloudCredentialsService, this.dialogService, this.replicationService,this.modalService);
   
 
   constructor(private aroute: ActivatedRoute, private keychainCredentialService: KeychainCredentialService,
@@ -38,14 +38,20 @@ export class BackupCredentialsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCreds();
+    this.refreshTable = this.modalService.refreshTable$.subscribe(() => {
+      this.getCreds();
+    })
   }
 
   getCreds() {
     this.ws.call('cloudsync.credentials.query').subscribe(credentials => {
+      this.cloudCreds = [];
       credentials.forEach(cred => {
         this.cloudCreds.push(cred);
       })
       this.ws.call('keychaincredential.query').subscribe(credentials=> {
+        this.SSHKeypairs = [];
+        this.SSHCreds = [];
         credentials.forEach(cred => {
           if (cred.type === 'SSH_KEY_PAIR') {
             this.SSHKeypairs.push(cred);
@@ -84,7 +90,24 @@ export class BackupCredentialsComponent implements OnInit {
   }
 
   doDelete(form: string, id: number ) {
-    console.log(form)
+    const apiCall = form === 'cloudCredentials' ? 'cloudsync.credentials.delete' : 'keychaincredential.delete';
+    this.dialogService.confirm('Delete?', 'You sure about that?', 
+    false, 'Delete').subscribe(res => {
+      if (res) {
+        this.loader.open();
+        this.ws.call(apiCall, [id]).subscribe(res => {
+          this.loader.close();
+          this.getCreds();
+        }, err => {
+          this.loader.close();
+          this.dialogService.errorReport('Error', err.reason, err.trace.formatted);
+        })
+      }
+    })
+  }
+
+  ngOnDestroy() {
+    this.refreshTable.unsubscribe();
   }
 
 }

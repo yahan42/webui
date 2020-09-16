@@ -6,6 +6,7 @@ import { FieldConfig } from '../../../common/entity/entity-form/models/field-con
 import { FieldSet } from '../../../common/entity/entity-form/models/fieldset.interface';
 import helptext from '../../../../helptext/system/ssh-connections';
 import { KeychainCredentialService, WebSocketService, DialogService, ReplicationService } from '../../../../services';
+import { ModalService } from 'app/services/modal.service';
 import * as _ from 'lodash';
 import { AppLoaderService } from '../../../../services/app-loader/app-loader.service';
 import { EntityUtils } from '../../../common/entity/utils';
@@ -239,7 +240,7 @@ export class SshConnectionsFormComponent {
         private ws: WebSocketService,
         private loader: AppLoaderService,
         private dialogService: DialogService,
-        private replicationService: ReplicationService) {
+        private replicationService: ReplicationService, private modalService: ModalService) {
 
     }
 
@@ -358,10 +359,12 @@ export class SshConnectionsFormComponent {
         this.entityForm.submitFunction(data).subscribe(
             (res) => {
                 this.loader.close();
-                // this.entityForm.router.navigate(new Array('/').concat(this.route_success));
+                this.modalService.close('slide-in-form');
+                this.modalService.refreshTable();
             },
             (err) => {
                 this.loader.close();
+                this.modalService.refreshTable();
                 if (err.hasOwnProperty("reason") && (err.hasOwnProperty("trace"))) {
                     new EntityUtils().handleWSError(this, err, this.dialogService);
                 } else {
