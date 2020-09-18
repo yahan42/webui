@@ -12,17 +12,19 @@
             <div class="fieldset" fxFlex="100%" fxLayout="row wrap">
               <h4 class="fieldset-label" fxFlex="100%">Pool Setup</h4>
   
-                <div fxFlex="100%" class="form-element">
+                <div fxFlex="300px" class="form-element form-input">
                   <div class="label-container">
-                    <label class="label input-text">Pool Name <span>*</span></label>
+                    <label class="label input-text">{{ 'Pool Name' | translate }} <span>*</span></label>
                     <tooltip class="volumeTooltip" [message]=name_tooltip></tooltip>
                   </div>
-                  <mat-form-field>
-                    <input matInput name="poolname" id="pool-manager__name-input-field" placeholder="{{'Name' | translate}}" [(ngModel)]="name" (input)="checkPoolName()" required>
-                  </mat-form-field>
+                  <!--<mat-form-field>-->
+                  <div class="full-width">
+                    <input matInput type="text" name="poolname" id="pool-manager__name-input-field" [(ngModel)]="name" (input)="checkPoolName()" required>
+                  </div>
+                  <!--</mat-form-field>-->
                 </div>
     
-                <div fxFlex="50%" class="form-element" style="padding-top:12px;">
+                <div fxFlex="150px" class="form-element" style="padding-top:3px;">
                   <div class="label-container">
                     <label class="label input-text">Encryption <span>*</span></label>
                     <tooltip class="volumeTooltip" [message]=encryption_tooltip></tooltip>
@@ -37,7 +39,7 @@
                   </mat-checkbox>
                 </div>
     
-                <div fxFlex="50%" *ngIf="isEncrypted" fxFlex="100" class="form-element encryption-select">
+                <div fxFlex="300px" *ngIf="isEncrypted" class="form-element encryption-select">
                   <div class="label-container">
                     <label class="label input-text">Encryption Standard <span>*</span></label>
                   </div>
@@ -259,12 +261,13 @@
       </div>
 
       <!-- DISK TABLES -->
-      <div fxFlex="100%" fxLayout="row wrap" class="wrapper">
+      <div fxFlex="100%" fxLayout="row wrap"  fxLayoutGap="16px" class="wrapper">
 
         <!-- AVAILABLE -->
-        <div fxFlex.sm="100%" fxFlex.gt-sm="100%" class="disks">
+        <div fxFlex="500px" fxLayout="column" class="disks">
             <h4 id="avail-disks-title">{{"Available Disks" | translate }}</h4>
               <ngx-datatable
+                style="margin:0 !important; overflow: visible;"
                 id="pool-manager__disks-table"
                 #table
                 class="material ml-1 mt-1 mb-1 mr-1 mat-box-shadow"
@@ -335,32 +338,49 @@
                   </ng-template>
                 </ngx-datatable-column>
               </ngx-datatable>
-              <div id="filter-wrapper">
-                <mat-form-field fxFlex="1 1 40%">
-                  <input matInput
-                    id="pool-manager__nameFilter"
-                    type='text'
-                    [(ngModel)]="nameFilterField"
-                    placeholder="{{ 'Filter disks by name' | translate }}"
-                    (keyup)='updateFilter($event)'
-                  />
-                </mat-form-field>
-                <div fxFlex="5%"></div>
-                <mat-form-field fxFlex="1 1 40%">
-                  <input matInput
-                    id="pool-manager__capacityFilter"
-                    type='text'
-                    [(ngModel)]="capacityFilterField"
-                    placeholder="{{ 'Filter disks by capacity' | translate }}"
-                    (keyup)='updateFilter($event)'
-                  />
-                </mat-form-field>
+              <div fxFlex="100%" fxLayout="row" fxLayoutGap="8px" id="filter-wrapper">
+
+                <div fxFlex="48%" class="form-element">
+                  <div class="label-container">
+                    <label class="label input">
+                      {{ 'Filter disks by name' | translate }}
+                    </label>
+                  </div>
+                  <div class="full-width">
+                    <input matInput
+                      id="pool-manager__nameFilter"
+                      type='text'
+                      [(ngModel)]="nameFilterField"
+                      (keyup)='updateFilter($event)'
+                    />
+                  </div>
+                </div>
+
+                <div fxFlex="48%" class="form-element">
+                  <!--<div fxFlex="5%"></div>-->
+                  <div class="label-container">
+                    <label class="label input">
+                      {{ 'Filter disks by capacity' | translate }}
+                    </label>
+                  </div>
+                  <!--<mat-form-field fxFlex="1 1 40%">-->
+                  <div class="full-width">
+                    <input matInput
+                      id="pool-manager__capacityFilter"
+                      type='text'
+                      [(ngModel)]="capacityFilterField"
+                      (keyup)='updateFilter($event)'
+                    />
+                  </div>
+                    <!--</mat-form-field>-->
+                </div>
+
                 <mat-error *ngIf="re_has_errors">{{"Invalid regex filter" | translate}}</mat-error>
               </div>
         </div>
 
         <!-- POOLS/VDEVS -->
-        <div fxFlex.sm="100%" fxFlex.gt-sm="50%" class="pool">
+        <div fxFlex="500px" class="pool">
           <div>
             <div class="data-div">
               <div class="data-title"><h4 class="vdev-h4">{{"Data VDevs" | translate}}</h4></div>

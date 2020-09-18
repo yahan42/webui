@@ -173,6 +173,8 @@ entity-table .mat-toolbar.mat-card-toolbar{
 .form-element{
   margin: 16px 0;
   text-align:left;
+  line-height: normal;
+  min-height: 70px;
 }
 .form-element .label{
 }
