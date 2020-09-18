@@ -21,7 +21,7 @@ import { VdevComponent } from './vdev/';
 @Component({
   selector: 'app-manager',
   templateUrl: 'manager.component.html',
-  styleUrls: ['manager.component.css'],
+  //styleUrls: ['manager.component.css'],
   providers: [DialogService],
 })
 export class ManagerComponent implements OnInit, OnDestroy, AfterViewInit {

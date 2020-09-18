@@ -1,52 +1,78 @@
 <mat-card class="m-0 ml-1 mr-1 p-0" id="create-pool-card">
-  <div class="mat-toolbar mat-card-toolbar">
-    <div class="mat-card-title-text pool-manager-title">{{"Pool Manager" | translate}}</div>
-  </div>
-  <div class="mat-content p-1">
-    <div class="manager">
-      <div fxLayout="column" class="fields m-3">
+  <mat-toolbar-row class="">
+    <h3>{{"Pool Manager" | translate}}</h3>
+  </mat-toolbar-row>
+  <mat-card-content class="mat-card-content-padded">
+    <div class="1" fxLayout="column" fxLayoutGap="16px">
+      <div class="2" fxFlex="100%" fxLayout="row wrap" fxLayoutAlign="start start" fxLayoutGap="32px" style="display:block">
         <ng-container *ngIf="isNew;else extend">
-          <div fxLayout="row wrap" fxLayoutAlign="baseline" class="TEST">
-            <div fxFlex="40%" class="inline">
-              <mat-form-field>
-                <input matInput name="poolname" id="pool-manager__name-input-field" placeholder="{{'Name' | translate}}" [(ngModel)]="name" (input)="checkPoolName()" required>
-              </mat-form-field>
-              <tooltip class="volumeTooltip" [message]=name_tooltip></tooltip>
-            </div>
-            <div fxFlex="25%" class="inline" style="padding-top:12px;">
-              <mat-checkbox
-                id="pool-manager__encryption-checkbox"
-                [(ngModel)]="isEncrypted"
-                class="form-control"
-                placeholder="{{Encryption | translate}}"
-                (change)="isEncryptedChecked()" >
-                  {{"Encryption" | translate}}
-              </mat-checkbox>
-              <tooltip class="volumeTooltip" [message]=encryption_tooltip></tooltip>
-            </div>
-            <div fxFlex class="inline encryption-select" style="padding-top:17px;">
-              <mat-select
-                *ngIf="isEncrypted"
-                id="pool-manager__encryption_algorithm-select"
-                [(ngModel)]="encryption_algorithm"
-                class="form-control"
-                placeholder="{{'Encryption Algorithm' | translate}}"
-              >
-                <mat-option *ngFor="let option of encryption_algorithm_options" [value]="option.value"
-                  id="encryption_algorithm_option_{{option.label}}">
-                    {{ option.label }}
-                </mat-option>
+          <div fxFlex="100%" fxLayout="row wrap" fxLayoutAlign="start stretch">
+            
+          <div class="fieldset-container" fxFlex="100%" fxLayout="row wrap" fxLayoutAlign="start stretch">
+            <div class="fieldset" fxFlex="100%" fxLayout="row wrap">
+              <h4 class="fieldset-label" fxFlex="100%">Pool Setup</h4>
   
-              </mat-select>
-            </div>
+                <div fxFlex="100%" class="form-element">
+                  <div class="label-container">
+                    <label class="label input-text">Pool Name <span>*</span></label>
+                    <tooltip class="volumeTooltip" [message]=name_tooltip></tooltip>
+                  </div>
+                  <mat-form-field>
+                    <input matInput name="poolname" id="pool-manager__name-input-field" placeholder="{{'Name' | translate}}" [(ngModel)]="name" (input)="checkPoolName()" required>
+                  </mat-form-field>
+                </div>
+    
+                <div fxFlex="50%" class="form-element" style="padding-top:12px;">
+                  <div class="label-container">
+                    <label class="label input-text">Encryption <span>*</span></label>
+                    <tooltip class="volumeTooltip" [message]=encryption_tooltip></tooltip>
+                  </div>
+                  <mat-checkbox
+                    id="pool-manager__encryption-checkbox"
+                    [(ngModel)]="isEncrypted"
+                    class="form-control"
+                    placeholder="{{Encryption | translate}}"
+                    (change)="isEncryptedChecked()" >
+                      {{"Encrypt Pool" | translate}}
+                  </mat-checkbox>
+                </div>
+    
+                <div fxFlex="50%" *ngIf="isEncrypted" fxFlex="100" class="form-element encryption-select">
+                  <div class="label-container">
+                    <label class="label input-text">Encryption Standard <span>*</span></label>
+                  </div>
+
+                  <mat-form-field>
+                    <mat-select
+                      id="pool-manager__encryption_algorithm-select"
+                      [(ngModel)]="encryption_algorithm"
+                      class="form-control"
+                      placeholder="{{'Encryption Algorithm' | translate}}"
+                    >
+                      <mat-option *ngFor="let option of encryption_algorithm_options" [value]="option.value"
+                        id="encryption_algorithm_option_{{option.label}}">
+                          {{ option.label }}
+                      </mat-option>
+        
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+    
+                <div fxFlex="100%" *ngIf="poolError" [style.color]="'red'" [innerHTML]="poolError"></div>
+    
+              <!--</div><!-- END Fieldset -->
+            <!--</div><!-- END Fieldset Container -->
           </div>
 
-          <div fxFlex="100%" *ngIf="poolError" [style.color]="'red'" [innerHTML]="poolError"></div>
+            
+          <!--<div class="fieldset-container" fxFlex="50%" fxLayout="column" fxLayoutAlign="space-evenly">
+            <div class="fieldset" fxFlex="100%" fxLayout="row wrap">
+            <h4 class="fieldset-label" fxFlex="100%">Pool Layout</h4>-->
 
-          <div fxFlex="100%" class="button-bar">
-            <div><button id="pool-manager__reset-layout-button" mat-button class="btn btn-accent mat-accent" [disabled]="!dirty" (click)="resetLayout()">{{"Reset Layout" | translate}}</button></div>
+          <div fxFlex="100%" fxLayout="row" fxLayoutGap="8px" class="button-bar">
+            <div ><button id="pool-manager__reset-layout-button" mat-button class="btn btn-accent mat-accent" [disabled]="!dirty" (click)="resetLayout()">{{"Reset Layout" | translate}}</button></div>
             <div><button id="pool-manager__suggest-layout-button" *ngIf="suggestable_disks.length <= 8" [disabled]="dirty" mat-button class="btn btn-accent mat-accent" (click)="suggestLayout()">{{"Suggest Layout" | translate}}</button></div>
-            <div><tooltip class="volumeTooltip" [message]=suggested_layout_tooltip></tooltip></div>
+            <!--<div><tooltip class="volumeTooltip" [message]=suggested_layout_tooltip></tooltip></div>-->
             <div class="button-spacer"></div>
             <div><button mat-button [matMenuTriggerFor]="menu" color="primary" class="menu-toggle"
               [disabled]="disks.length === 0"
@@ -130,6 +156,10 @@
               </button>
             </mat-menu>
           </div> <!-- END BUTTON BAR -->
+
+              </div><!-- END Fieldset -->
+            </div><!-- END Fieldset Container -->
+
         </ng-container>
 
         <ng-template #extend>
@@ -227,8 +257,12 @@
         </div>
         </ng-template>
       </div>
-      <div class="wrapper">
-        <div class="disks">
+
+      <!-- DISK TABLES -->
+      <div fxFlex="100%" fxLayout="row wrap" class="wrapper">
+
+        <!-- AVAILABLE -->
+        <div fxFlex.sm="100%" fxFlex.gt-sm="100%" class="disks">
             <h4 id="avail-disks-title">{{"Available Disks" | translate }}</h4>
               <ngx-datatable
                 id="pool-manager__disks-table"
@@ -324,7 +358,9 @@
                 <mat-error *ngIf="re_has_errors">{{"Invalid regex filter" | translate}}</mat-error>
               </div>
         </div>
-        <div class="pool">
+
+        <!-- POOLS/VDEVS -->
+        <div fxFlex.sm="100%" fxFlex.gt-sm="50%" class="pool">
           <div>
             <div class="data-div">
               <div class="data-title"><h4 class="vdev-h4">{{"Data VDevs" | translate}}</h4></div>
@@ -354,18 +390,24 @@
           </div>
         </div>
       </div>
-      <div class="sizeMessage">{{ sizeMessage | translate}}: {{ size }}</div>
-      <div *ngIf="disknumError" [style.color]="'red'" [innerHTML]="disknumError"></div>
-      <div *ngIf="vdevtypeError" [style.color]="'red'" [innerHTML]="vdevtypeError"></div>
-      <div *ngIf="specialVdevTypeError" [style.color]="'red'" [innerHTML]="specialVdevTypeError"></div>
-      <div *ngIf="error" [style.color]="'red'" [innerHTML]="error"></div>
-      <div class="forceCreateCheckbox" *ngIf="has_savable_errors">
-        <mat-checkbox id="pool-manager__force-submit-checkbox" [(ngModel)]="force" (click)="forceCheckboxChecked()"></mat-checkbox> {{'Force' | translate}}
+
+      <div fxFlex="100%">
+        <div class="sizeMessage">{{ sizeMessage | translate}}: {{ size }}</div>
+        <div *ngIf="disknumError" [style.color]="'red'" [innerHTML]="disknumError"></div>
+        <div *ngIf="vdevtypeError" [style.color]="'red'" [innerHTML]="vdevtypeError"></div>
+        <div *ngIf="specialVdevTypeError" [style.color]="'red'" [innerHTML]="specialVdevTypeError"></div>
+        <div *ngIf="error" [style.color]="'red'" [innerHTML]="error"></div>
+        
+        <div class="forceCreateCheckbox" *ngIf="has_savable_errors">
+          <mat-checkbox id="pool-manager__force-submit-checkbox" [(ngModel)]="force" (click)="forceCheckboxChecked()"></mat-checkbox> {{'Force' | translate}}
+        </div>
+  
+        <div class="buttons" id="pool-manager__button-group">
+          <button id="pool-manager__create-button" mat-button name="create-button" class="btn btn-primary" (click)="checkSubmit()" color="primary" [disabled]="!canSave()">{{submitTitle | translate }}</button>
+          <button id="pool-manager__cancel-button" mat-button class="btn  btn-block btn-lg btn-primary" type="button" (click)="goBack()" color="accent">{{"Cancel" | translate}}</button>
+        </div>
       </div>
-      <div class="buttons" id="pool-manager__button-group">
-        <button id="pool-manager__create-button" mat-button name="create-button" class="btn btn-primary" (click)="checkSubmit()" color="primary" [disabled]="!canSave()">{{submitTitle | translate }}</button>
-        <button id="pool-manager__cancel-button" mat-button class="btn  btn-block btn-lg btn-primary" type="button" (click)="goBack()" color="accent">{{"Cancel" | translate}}</button>
-      </div>
+      
     </div>
-  </div>
+  </mat-card-content>
 </mat-card>
