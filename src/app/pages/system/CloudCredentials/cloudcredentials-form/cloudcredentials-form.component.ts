@@ -57,6 +57,23 @@ export class CloudCredentialsFormComponent {
           required: true,
           validation: helptext.provider.validation,
         },
+        {
+          type: 'input',
+          name: 'max_upload_parts-S3',
+          placeholder: helptext.max_upload_parts_s3.placeholder,
+          tooltip: helptext.max_upload_parts_s3.tooltip,
+          inputType: 'number',
+          validation: helptext.max_upload_parts_s3.validation,
+          relation: [
+            {
+              action: 'SHOW',
+              when: [{
+                name: 'provider',
+                value: 'S3',
+               }]
+            }
+          ]
+        },
       ]
     },
     { name: 'spacer', label: false, width: '2%' },
@@ -1476,6 +1493,7 @@ export class CloudCredentialsFormComponent {
   }
 
   beforeSubmit(value) {
+    console.log(value)
     if (!this.credentialsOauth) {
       delete value['client_id'];
       delete value['client_secret'];
