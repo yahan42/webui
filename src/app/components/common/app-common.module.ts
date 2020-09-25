@@ -18,6 +18,7 @@ import { DialogService } from '../../services/dialog.service';
 import { CustomizerComponent } from './customizer/customizer.component';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { ModalComponent } from './modal/modal.component';
+import { FirstWizardModalComponent } from './firstwizard-modal/firstwizard-modal.component';
 //import { LineChartComponent } from './lineChart';
 //import { LineChartService } from './lineChart/lineChart.service';
 import { LanguageService } from '../../services/language.service';
@@ -47,6 +48,7 @@ import { AngularSvgIconModule, SvgIconRegistryService } from 'angular-svg-icon';
     TopbarComponent,
     NavigationComponent,
     ModalComponent,
+    FirstWizardModalComponent,
     NotificationsComponent, CustomizerComponent, BreadcrumbComponent, //LineChartComponent
   ],
   providers: [ThemeService, DialogService, /*LineChartService,*/ LanguageService, LocaleService, SvgIconRegistryService],

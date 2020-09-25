@@ -89,3 +89,6 @@ jw-modal {
     display: block;
 }
 
+firstwizard-modal {
+  display: none;
+}
