@@ -1234,9 +1234,9 @@ $primary-dark: darken( map-get($md-primary, 500), 8% );
       opacity: 0.38;
     }
     entity-form-list .form-list > div  {
-      padding: 15px;
-      background-color: var(--contrast-darker);
-      margin: 16px;
+      //padding: 15px;
+      //background-color: var(--contrast-darker);
+      margin: 0 16px;
     }
 
     entity-form-list .form-list .form-list-item > div.form-line  {

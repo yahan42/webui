@@ -25,6 +25,7 @@ export class FormListComponent implements Field, OnInit {
       this.listsFromArray = this.group.controls[this.config.name] as FormArray;
       if (this.listsFromArray.length === 0) {
         this.add();
+        console.log(this.config);
       }
     }, 0);
   }
