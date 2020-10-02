@@ -1,30 +1,62 @@
 import { Component, ElementRef, Input, OnInit, OnDestroy } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { DialogService } from '../../../services/';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
+
+import { EntityFormService } from '../../../pages/common/entity/entity-form/services/entity-form.service';
+import { FieldRelationService } from '../../../pages/common/entity/entity-form/services/field-relation.service';
 
 import { ModalService } from '../../../services/modal.service';
+import { RestService, WebSocketService } from '../../../services';
+
+import { EntityWizardComponent } from '../../../pages/common/entity/entity-wizard/entity-wizard.component';
+import { Wizard } from '../../../pages/common/entity/entity-form/models/wizard.interface';
+import { AppLoaderService } from 'app/services';
+import { T } from '../../../translate-marker';
 
 @Component({
     selector: 'firstwizard-modal',
-    template: 
-        `
-        <div class="firstwizard-modal-bar">
-            <div class="firstwizard-modal-bar-body">
-                <p>this is the top</p>
-            </div>
-        </div>
-        <div class="firstwizard-modal">
-            <div class="firstwizard-modal-body">
-                <p>this is the body</p>
-            </div>
-        </div>
-        <div class="firstwizard-modal-background"></div>`,
+    templateUrl: './firstwizard-modal.component.html',
     styleUrls: ['./firstwizard-modal.component.css'],
+    providers: [EntityFormService, FieldRelationService]
 
 })
-export class FirstWizardModalComponent implements OnInit, OnDestroy {
+export class FirstWizardModalComponent extends EntityWizardComponent implements OnInit, OnDestroy {
     @Input() id: string;
+    public conf = this;
     private element: any;
 
-    constructor(private modalService: ModalService, private el: ElementRef) {
+      public summary = {};
+    isLinear = true;
+    firstFormGroup: FormGroup;
+    protected dialogRef: any;
+    objectKeys = Object.keys;
+    summary_title = "Onboarding Wizard Summary";
+    public subs: any;
+    public saveSubmitText = T("Finish");
+    public entityWizard: any;
+    protected productType: any;
+    protected importIndex = 2;
+
+    public wizardConfig: Wizard[] = [{
+        label: 'foo',
+        fieldConfig: [
+          {
+            type: 'input',
+            name: 'dummy',
+            placeholder: 'test',
+          },
+        ]
+      }];
+
+    constructor(rest: RestService, ws: WebSocketService,
+        formBuilder: FormBuilder, entityFormService: EntityFormService,
+        loader: AppLoaderService, fieldRelationService: FieldRelationService,
+        router: Router, aroute: ActivatedRoute,
+        dialog: DialogService, translate: TranslateService,
+        private modalService: ModalService, private el: ElementRef) {
+        super(rest, ws, formBuilder, entityFormService, loader, fieldRelationService, router, aroute, dialog, translate);
         this.element = el.nativeElement;
     }
 
@@ -49,6 +81,7 @@ export class FirstWizardModalComponent implements OnInit, OnDestroy {
 
         // add self (this modal instance) to the modal service so it's accessible from controllers
         this.modalService.add(this);
+        super.ngOnInit();
     }
 
     // remove self from modal service when component is destroyed
