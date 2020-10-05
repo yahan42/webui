@@ -5,10 +5,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid " Built-in Groups"
-msgstr ""
+msgstr "기본정의 그룹"
 
 msgid " Builtin Users"
-msgstr ""
+msgstr "기본정의 사용자"
 
 msgid " Check Notifications for more details."
 msgstr ""
