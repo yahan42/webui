@@ -12011,19 +12011,19 @@ msgid "System Dataset Pool"
 msgstr ""
 
 msgid "System Info"
-msgstr ""
+msgstr "시스템 정보"
 
 msgid "System Information"
-msgstr ""
+msgstr "시스템 기본정보"
 
 msgid "System Serial"
-msgstr ""
+msgstr "시스템 일련번호"
 
 msgid "System Settings"
-msgstr ""
+msgstr "시스템 설정"
 
 msgid "System Time Zone:"
-msgstr ""
+msgstr "시스템 타임존"
 
 msgid "System domain name, like <i>example.com</i>"
 msgstr ""
@@ -12039,16 +12039,16 @@ msgid "System host time to synchronize the time between jail and host."
 msgstr ""
 
 msgid "System hostname."
-msgstr ""
+msgstr "시스템 호스트이름"
 
 msgid "System is failing over..."
-msgstr ""
+msgstr "시스템 장애가 감지 되었습니다..."
 
 msgid "System is restarting..."
-msgstr ""
+msgstr "시스템이 재시작 중입니다..."
 
 msgid "System is shutting down..."
-msgstr ""
+msgstr "시스템이 중단되고 있어요..."
 
 msgid ""
 "System network interface that remaps jail  network addresses into a "
@@ -12057,7 +12057,7 @@ msgid ""
 msgstr ""
 
 msgid "System-Generated Settings"
-msgstr ""
+msgstr "시스템-기본 설정"
 
 msgid "TCP"
 msgstr ""
