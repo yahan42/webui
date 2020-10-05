@@ -85,7 +85,7 @@ msgid " is "
 msgstr "이다"
 
 msgid " is a required field."
-msgstr ""
+msgstr "필드값이 필요합니다."
 
 msgid " is required."
 msgstr "요구됩니다."
@@ -120,7 +120,7 @@ msgid " service has been enabled."
 msgstr "서비스가 활성화 되었습니다."
 
 msgid " should be at least "
-msgstr ""
+msgstr "최소한 이어야 합니다."
 
 msgid " should be no more than "
 msgstr ""
@@ -154,7 +154,7 @@ msgid ""
 msgstr ""
 
 msgid "'. All data on that pool was destroyed."
-msgstr ""
+msgstr ". 풀의 모든 데이타가 삭제되었습니다."
 
 msgid "(24 Hours)"
 msgstr "(24 시간)"
@@ -169,7 +169,7 @@ msgid "(No description)"
 msgstr "(설명이 없슴)"
 
 msgid "(Remove pool from database)"
-msgstr "(데이타베이스로 부터 풀을 제거)"
+msgstr "(데이타베이스에서 풀이 제거됨)"
 
 msgid "(top-right), then"
 msgstr ""
